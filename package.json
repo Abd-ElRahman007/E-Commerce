@@ -1,18 +1,18 @@
 {
   "name": "e-commerce",
   "version": "1.0.0",
-  "description": "and e-commerce project",
+  "description": "e-commerce project",
   "main": "index.js",
   "scripts": {
     "install:frontend":"cd frontend && npm install",
     "install:backend":"cd backend && npm install",
-    "install":"npm install:frontend && npm install:backend"
+    "install":"npm run install:frontend && npm run install:backend"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Mohammad-Osama/E-Commerce.git"
   },
-  "author": "collab",
+  "author": "Team 7",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/Mohammad-Osama/E-Commerce/issues"
