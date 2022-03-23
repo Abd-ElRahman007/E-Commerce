@@ -6,7 +6,7 @@ const app = express();
 
 //configre the server to listen to port and running it
 app.listen(port, ():void=>{
-    console.log(`srever running on port ${port}`);
+    console.log(`server running on port ${port}`);
 });
 
 
