@@ -2,8 +2,7 @@ import { Container } from 'react-bootstrap'
 import { Routes, Route } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
-import ProductOverview from './components/ProductOverview';
-
+import ProductOverview from './components/productOverview';
 /*   <NavBar/> */
 function App() {
   return (
