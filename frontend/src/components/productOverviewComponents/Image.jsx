@@ -60,7 +60,7 @@ const useStyles = createStyles((theme, _params, getRef) => {
 });
 
 
-export function ImageCard({ image, title, author }) {
+export function Image({ image, title, author }) {
   const { classes } = useStyles();
 
   return (

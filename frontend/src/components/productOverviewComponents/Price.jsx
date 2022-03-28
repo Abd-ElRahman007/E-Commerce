@@ -1,6 +1,6 @@
 import { Box, Text, Paper } from "@mantine/core";
 
-export default function ProductPrice({ price, currency }) {
+export default function Price({ price, currency }) {
   return (
     <Paper withBorder radius="md">
     <Box className="bg-white text-center">

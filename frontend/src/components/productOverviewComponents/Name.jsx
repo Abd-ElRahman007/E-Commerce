@@ -1,6 +1,6 @@
 import { Box, Text, Paper } from "@mantine/core";
 
-export default function ProductName({ name }) {
+export default function Name({ name }) {
   return (
     <Paper withBorder radius="md">
       <Box className="bg-white">

@@ -7,13 +7,13 @@ const icons = {
   down: ArrowDownRight,
 };
 
-export default function ProductRating({ data }) {
+export default function Rating({ data }) {
   const Icon = icons[data.icon];
     return (
       <SimpleGrid cols={1} breakpoints={[{ maxWidth: 'sm', cols: 1 }]}>
       <Paper withBorder radius="md" p="xs" key={data.label}>
         <Group>
-          <RingProgress
+          <RingProgress className='m-auto'
             size={80}
             roundCaps
             thickness={8}
