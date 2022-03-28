@@ -1,5 +1,5 @@
-import { Container, Grid, SimpleGrid} from '@mantine/core';
-import { Image, Name, Rating, Price, Description } from './productOverviewComponents';
+import { Container, Grid, SimpleGrid } from '@mantine/core';
+import { Image, Name, Rating, Price, Description } from './productOverviewComponents/componentExport';
 
 export default function ProductOverview() {
 
@@ -23,11 +23,11 @@ export default function ProductOverview() {
                             color: 'green',
                             icon: 'up',
                             progress: 45
-                        }}/>
+                        }} />
                     </Grid.Col>
                 </Grid>
             </SimpleGrid>
-            <Description description="adklfja;ddfjdkfj" label="Description"/>
+            <Description description="adklfja;ddfjdkfj" label="Description" />
         </Container>
     );
 }
