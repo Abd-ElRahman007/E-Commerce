@@ -1,9 +1,11 @@
-import { Box, Text } from "@mantine/core";
+import { Box, Text, Paper } from "@mantine/core";
 
 export default function ProductPrice({ price, currency }) {
   return (
-    <Box className="bg-white border border-secondary rounded text-center">
+    <Paper withBorder radius="md">
+    <Box className="bg-white text-center">
       <Text className="fs-4 py-4 px-1">{`${price} ${currency}`}</Text>
     </Box>
+    </Paper>
   );
 }
