@@ -3,17 +3,9 @@ import { Box, Text } from "@mantine/core";
 export default function ProductName({ name }) {
   return (
     <Box
-      display="flex"
-      alignItems="center"
-      justifyContent="center"
-      bg="white"
-      border="1px solid"
-      borderColor="gray.300"
-      py={4}
-      px={6}
-      borderRadius={4}
+      className="d-flex justify-content-center align-items-center "
     >
-      <Text fontSize="lg">{name}</Text>
-    </Box>
+      <Text className="fs-4" >{name}</Text>
+    </Box >
   );
 }
