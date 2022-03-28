@@ -27,7 +27,7 @@ export default function ProductOverview() {
                     <Grid.Col span={6}>
                         <ProductRating data={{
                             label: 'Rating',
-                            stats: '4.5',
+                            stats: '4.5 / 10',
                             color: 'green',
                             icon: 'up',
                             progress: 45
@@ -35,7 +35,7 @@ export default function ProductOverview() {
                     </Grid.Col>
                 </Grid>
             </SimpleGrid>
-            <ProductDescription description="adklfja;ddfjdkfj" label="custom"/>
+            <ProductDescription description="adklfja;ddfjdkfj" label="Description"/>
         </Container>
     );
 }
