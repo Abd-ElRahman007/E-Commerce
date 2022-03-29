@@ -6,4 +6,4 @@ create table orders(id serial primary key, status varchar(20), total float,time_
 create table order_product (id serial primary key, quantity int ,order_id bigint references orders(id)on delete cascade, product_id bigint references product(id));
 create table comment(id serial primary key, subject varchar(200), message text, created_time timestamp, user_id bigint references users(id)on delete cascade, product_id bigint references product(id)on delete cascade);
 create table product_images (id serial primary key, image bytea,product_id bigint references product(id)on delete cascade);
-create table coupon(id serial primary key, code varchar(50),value int, user_id bigint references users(id))
+create table coupon(id serial primary key, code varchar(50),value int, user_id bigint references users(id));
