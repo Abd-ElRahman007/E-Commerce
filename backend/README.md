@@ -1,0 +1,17 @@
+.env file
+
+{
+port = 5000
+
+db_user = marwan
+db_password = marwan
+db_host = 127.0.0.1
+db_name = store
+db_name_test = store_test
+env = dev
+
+
+extra = marwan
+round = 5
+token = lkdfg
+}
