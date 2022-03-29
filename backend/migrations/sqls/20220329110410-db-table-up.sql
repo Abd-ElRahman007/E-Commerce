@@ -1,5 +1,5 @@
-create table catogery(id serial primary key, name varchar(100));
-create table brand (id serial primary key, name varchar(100), description text);
+create table catogery(id serial primary key, name varchar(100) unique not null);
+create table brand (id serial primary key, name varchar(100)unique not null, description text);
 create table users(id serial primary key, f_name varchar(50), l_name varchar(50), email varchar(500) unique not null, password varchar(500) not null, birthday date, phone varchar(11),city varchar(150),address varchar(500));
 create table product (id serial primary key, code varchar(50),name varchar(50),model varchar(150),image bytea, description text,category_id bigint references catogery(id)on delete cascade, price float, currency varchar(20), vote_count int, vote_ratio int,stock bigint, brand_id bigint references brand(id)on delete cascade);
 create table orders(id serial primary key, status varchar(20),time_start timestamp, time_arrival timestamp, compelete_at timestamp, user_id bigint references users(id)on delete cascade);
