@@ -1,12 +1,12 @@
 import { useRef } from 'react';
 import { Text, Group, Button, createStyles, useMantineTheme } from '@mantine/core';
-import { Dropzone, MIME_TYPES } from '@mantine/dropzone';
+import { Dropzone, IMAGE_MIME_TYPE } from '@mantine/dropzone';
 import { CloudUpload } from 'tabler-icons-react';
 
 const useStyles = createStyles((theme) => ({
   wrapper: {
     position: 'relative',
-    marginBottom: 30,
+    marginBottom: 20,
   },
 
   dropzone: {
@@ -48,8 +48,8 @@ export default function PhotoImport() {
         onDrop={() => { }}
         className={classes.dropzone}
         radius="md"
-        accept={[MIME_TYPES.pdf]}
-        maxSize={30 * 1024 ** 2}
+        accept={IMAGE_MIME_TYPE}
+        maxSize={10 * 1024 **2}
       >
         {(status) => (
           <div style={{ pointerEvents: 'none' }}>
@@ -66,12 +66,12 @@ export default function PhotoImport() {
               {status.accepted
                 ? 'Drop files here'
                 : status.rejected
-                  ? 'Pdf file less than 30mb'
-                  : 'Upload resume'}
+                  ? 'JPG file less than 10mb'
+                  : 'Upload Photo'}
             </Text>
             <Text align="center" size="sm" mt="xs" color="dimmed">
-              Drag&apos;n&apos;drop files here to upload. We can accept only <i>.pdf</i> files that
-              are less than 30mb in size.
+              Drag&apos;n&apos;drop files here to upload. We can accept only <i>.jpg</i> files that
+              are less than 10mb in size.
             </Text>
           </div>
         )}
