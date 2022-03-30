@@ -4,6 +4,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import ProductOverview from './components/productOverview';
 import Home from './components/Home';
+import AdminOverview from './components/AdminOverview';
 
 /*   <NavBar/> */
 function App() {
@@ -12,6 +13,7 @@ function App() {
       <Routes>
         <Route exact path='/' element={<Home />} />
         <Route exact path='/overView' element={<ProductOverview />} />
+        <Route exact path='/adminOverview' element={<AdminOverview />} />
       </Routes>
     </Container>
   );
