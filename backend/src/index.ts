@@ -2,7 +2,8 @@ import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import bodyParser from 'body-parser';
-
+import productRoute from './handlars/products';
+import categoriesRoute from './handlars/catogery';
 dotenv.config();
 
 //initial port and app
@@ -16,6 +17,12 @@ app.use(cors());
 app.listen(port, (): void => {
     console.log(`server running on port ${port}`);
 });
+
+//run modules of the project
+//userRoute(app);
+//orderRoute(app);
+productRoute(app);
+categoriesRoute(app);
 
 //export the app to use when importing the file
 export default app;
