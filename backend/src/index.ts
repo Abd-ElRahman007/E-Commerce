@@ -3,7 +3,9 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import productRoute from './handlars/products';
+import brandRoute from './handlars/brand';
 import categoriesRoute from './handlars/catogery';
+
 dotenv.config();
 
 //initial port and app
@@ -22,6 +24,7 @@ app.listen(port, (): void => {
 //userRoute(app);
 //orderRoute(app);
 productRoute(app);
+brandRoute(app);
 categoriesRoute(app);
 
 //export the app to use when importing the file

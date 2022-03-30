@@ -8,7 +8,9 @@ Database Schema:
 
 
         index  --> /products     [get] no content in body
+
         show   --> /products/:id [get] no content in body
+
         create --> /products     [post] body{code,  name,  model,  image,  description,category_id, price, currency, vote_count,    vote_total, stock, brand_id} header{token}
 
         update --> /products/:id [patch]  body{code,  name,  model,  image,  description,category_id, price, currency , vote_count, vote_total, stock, brand_id} header{token}
@@ -26,3 +28,28 @@ Database Schema:
         delete     --> /categories/:id      [delete] header{token}
 
    
+
+    Brand Table:
+
+        table brand (id serial primary key, name varchar(100)unique not null, description text);
+
+        index      --> /brands          [get]
+        show       --> /brands/:id      [get]
+        create     --> /brands          [post] body{name,description} header{token}
+        update     --> /brands/:id      [patch] body{name,description} header{token}
+        delete     --> /brands/:id      [delete] header{token}
+
+
+
+   "code":"",
+    "name":"",  
+    "model":"",  
+    "image":"",  
+    "description":"",
+    "category_id":"", 
+    "price":"", 
+    "currency":"", 
+    "vote_count":"",    
+    "vote_total":"", 
+    "stock":"", 
+    "brand_id":""

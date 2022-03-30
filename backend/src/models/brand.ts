@@ -51,7 +51,7 @@ export class Brand {
         try {
             const conn = await Client.connect();
             const sql =
-        'update brand set name=($1), description($2) where id=($3) RETURNING *; ';
+        'update brand set name=($1), description=($2) where id=($3) RETURNING *; ';
             const res = await conn.query(sql, [b.name, b.description, b.id]);
             conn.release();
             return 'updated';
