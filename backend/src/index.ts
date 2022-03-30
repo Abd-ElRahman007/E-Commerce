@@ -5,6 +5,7 @@ import bodyParser from 'body-parser';
 import productRoute from './handlars/products';
 import brandRoute from './handlars/brand';
 import categoriesRoute from './handlars/catogery';
+import couponRoute from './handlars/coupon';
 
 dotenv.config();
 
@@ -25,6 +26,7 @@ app.listen(port, (): void => {
 //orderRoute(app);
 productRoute(app);
 brandRoute(app);
+couponRoute(app);
 categoriesRoute(app);
 
 //export the app to use when importing the file

@@ -1,21 +1,20 @@
-
-
-//create table coupon(id serial primary key, code varchar(50),value int, user_id bigint references users(id));
 import Client from '../database';
 
-//create table catogery(id serial primary key, name varchar(100) unique not null);
+//create table coupon(id serial primary key, code varchar(50),value_of_100 int);
 
-export type catogery = {
+
+export type coupon = {
     id?: number;
-    name: string;
+    code: string;
+    value_of_100:number;
   };
 
 
-export class Catogery {
-    async index(): Promise<catogery[]> {
+export class Coupon {
+    async index(): Promise<coupon[]> {
         try {
             const conn = await Client.connect();
-            const sql = 'select * from catogery;';
+            const sql = 'select * from coupon;';
             const res = await conn.query(sql);
             conn.release();
             return res.rows;
@@ -24,10 +23,10 @@ export class Catogery {
         }
     }
 
-    async show(id: number): Promise<catogery> {
+    async show(id: number): Promise<coupon> {
         try {
             const conn = await Client.connect();
-            const sql = 'select * from catogery where id =($1);';
+            const sql = 'select * from coupon where id =($1);';
             const res = await conn.query(sql, [id]);
             conn.release();
             return res.rows[0];
@@ -36,11 +35,11 @@ export class Catogery {
         }
     }
 
-    async create(c: catogery): Promise<string> {
+    async create(c: coupon): Promise<string> {
         try {
             const conn = await Client.connect();
-            const sql = 'insert into catogery (name) values($1)RETURNING *;';
-            const res = await conn.query(sql, [c.name]);
+            const sql = 'insert into coupon (code,value_of_100) values($1,$2)RETURNING *;';
+            const res = await conn.query(sql, [c.code,c.value_of_100]);
             conn.release();
             return 'created';
         } catch (e) {
@@ -48,11 +47,11 @@ export class Catogery {
         }
     }
 
-    async update(c: catogery): Promise<string> {
+    async update(c: coupon): Promise<string> {
         try {
             const conn = await Client.connect();
-            const sql = 'update catogery set name=($1) where id=($2) RETURNING *; ';
-            const res = await conn.query(sql, [c.name, c.id]);
+            const sql = 'update coupon set code=($1), value_of_100=($2) where id=($3) RETURNING *; ';
+            const res = await conn.query(sql, [c.code, c.value_of_100, c.id]);
             conn.release();
             return 'updated';
         } catch (e) {
@@ -63,7 +62,7 @@ export class Catogery {
     async delete(id: number): Promise<string> {
         try {
             const conn = await Client.connect();
-            const sql = 'delete from catogery where id =($1);';
+            const sql = 'delete from coupon where id =($1);';
             const res = await conn.query(sql, [id]);
             conn.release();
             return 'deleted';

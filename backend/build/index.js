@@ -10,6 +10,7 @@ var body_parser_1 = __importDefault(require("body-parser"));
 var products_1 = __importDefault(require("./handlars/products"));
 var brand_1 = __importDefault(require("./handlars/brand"));
 var catogery_1 = __importDefault(require("./handlars/catogery"));
+var coupon_1 = __importDefault(require("./handlars/coupon"));
 dotenv_1.default.config();
 //initial port and app
 var port = process.env.port || 5000;
@@ -26,6 +27,7 @@ app.listen(port, function () {
 //orderRoute(app);
 (0, products_1.default)(app);
 (0, brand_1.default)(app);
+(0, coupon_1.default)(app);
 (0, catogery_1.default)(app);
 //export the app to use when importing the file
 exports.default = app;

@@ -53,3 +53,4 @@ Database Schema:
     "vote_total":"", 
     "stock":"", 
     "brand_id":""
+    

@@ -2,10 +2,19 @@
 
 // const product_ = new Product();
 // const p:product={
-//     id:2,
-//     name:'test',
-//     price:6,
-//     category:'5'
+//     id: 1,
+//     code: 'string',
+//     name: 'string',
+//     model: 'string',
+//     image: 'string',
+//     description: 'string',
+//     category_id: 1,
+//     price: 1,
+//     currency: 'string',
+//     vote_count: 20,
+//     vote_total: 20,
+//     stock: 20,
+//     brand_id: 1,
 // };
 // describe('Tests for Product model', ()=>{
 
@@ -34,7 +43,13 @@
 //     it('test show to equal',async()=>{
 //         const res = await product_.show(1);
         
-//         expect(res).toEqual({ id: 1, name: 'marwan', price: 20, category: 'marwan' });
+//         expect(res).toEqual({ id: 1,code: 'string',name: 'string',model: 'string',image: 'string',description: 'string',category_id: 1,
+//             price: 1,
+//             currency: 'string',
+//             vote_count: 20,
+//             vote_total: 20,
+//             stock: 20,
+//             brand_id: 1,})
 //     })
 
 //     //update function
@@ -43,10 +58,19 @@
 //     })
 //     it('test update to equal',async()=>{
 //         const p_:product={
-//             id:2,
-//             name:'100',
-//             price:6,
-//             category:'5'
+//             id: 1,
+//             code: 'string',
+//             name: 'string',
+//             model: 'string',
+//             image: 'string',
+//             description: 'string',
+//             category_id: 1,
+//             price: 1,
+//             currency: 'string',
+//             vote_count: 20,
+//             vote_total: 20,
+//             stock: 20,
+//             brand_id: 1,
 //         };
 //         const res = await product_.update(p_);
 //         expect(res).toEqual('updated');

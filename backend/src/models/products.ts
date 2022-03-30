@@ -20,7 +20,6 @@ export type product = {
     stock: number;
     brand_id: number;
 };
-  
 
 export class Product {
     async index(): Promise<product[]> {
@@ -50,8 +49,9 @@ export class Product {
     async create(p: product): Promise<string> {
         try {
             const conn = await Client.connect();
+
             const sql =
-        'insert into product (code,  name,  model,  image,  description,category_id, price, currency , vote_count, vote_total, stock, brand_id) values($1,$2,$3,$4,$5,$6,$7,$8,$8,$9,$10,$11,$12)RETURNING *;';
+        'insert into product (code,  name,  model,  image,  description,category_id, price, currency , vote_count, vote_total, stock, brand_id) values($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)RETURNING *;';
             const res = await conn.query(sql, [
                 p.code,
                 p.name,

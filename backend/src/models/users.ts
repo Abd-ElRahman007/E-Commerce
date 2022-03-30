@@ -6,7 +6,7 @@
 // /*
 // create table users(id serial primary key, f_name varchar(50), l_name varchar(50), 
 // email varchar(500) unique not null, password varchar(500) not null, birthday date, 
-// phone varchar(11),status varchar(50), created_at timestamp,city varchar(150),address varchar(500));
+// phone varchar(11),status varchar(50), created_at timestamp,city varchar(150),address varchar(500),coupon_id bigint references coupon(id));
 
 // */
 
