@@ -7,6 +7,11 @@ var express_1 = __importDefault(require("express"));
 var dotenv_1 = __importDefault(require("dotenv"));
 var cors_1 = __importDefault(require("cors"));
 var body_parser_1 = __importDefault(require("body-parser"));
+var products_1 = __importDefault(require("./handlars/products"));
+var brand_1 = __importDefault(require("./handlars/brand"));
+var catogery_1 = __importDefault(require("./handlars/catogery"));
+var coupon_1 = __importDefault(require("./handlars/coupon"));
+var feedback_1 = __importDefault(require("./handlars/feedback"));
 dotenv_1.default.config();
 //initial port and app
 var port = process.env.port || 5000;
@@ -18,5 +23,13 @@ app.use((0, cors_1.default)());
 app.listen(port, function () {
     console.log("server running on port ".concat(port));
 });
+//run modules of the project
+//userRoute(app);
+//orderRoute(app);
+(0, products_1.default)(app);
+(0, brand_1.default)(app);
+(0, coupon_1.default)(app);
+(0, feedback_1.default)(app);
+(0, catogery_1.default)(app);
 //export the app to use when importing the file
 exports.default = app;
