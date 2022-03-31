@@ -51,6 +51,16 @@ Database Schema:
         delete     --> /coupons/:id      [delete] header{token}
 
 
+    Comment Table:
+
+        table brand (id serial primary key, subject string, message string, created_at Date, user_id int, product_id int);
+
+        index      --> /coupons          [get]
+        show       --> /coupons/:id      [get]
+        create     --> /coupons          [post] body{subject,message,created_at,user_id,product_id} header{token}
+        update     --> /coupons/:id      [patch] body{subject,message,created_at,user_id,product_id} header{token}
+        delete     --> /coupons/:id      [delete] header{token}
+
 
    "code":"",
     "name":"",  

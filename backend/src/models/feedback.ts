@@ -6,9 +6,9 @@ export type comment = {
     id?: number;
     subject: string;
     message:string;
-    created_at?:AudioTimestamp;
-    user_id?:number;
-    product_id?:number;
+    created_at:Date;
+    user_id:number;
+    product_id:number;
   };
 
 

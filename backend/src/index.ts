@@ -6,6 +6,7 @@ import productRoute from './handlars/products';
 import brandRoute from './handlars/brand';
 import categoriesRoute from './handlars/catogery';
 import couponRoute from './handlars/coupon';
+import feedbackRoute from './handlars/feedback';
 
 dotenv.config();
 
@@ -27,6 +28,7 @@ app.listen(port, (): void => {
 productRoute(app);
 brandRoute(app);
 couponRoute(app);
+feedbackRoute(app);
 categoriesRoute(app);
 
 //export the app to use when importing the file
