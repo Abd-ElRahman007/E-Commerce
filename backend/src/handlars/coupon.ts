@@ -33,7 +33,7 @@ async function update(req: Request, res: Response) {
         try {
             const c: coupon = {
                 id: req.params.id as unknown as number,
-                code: req.body.name,
+                code: req.body.code,
                 value_of_100:req.body.value_of_100
             };
             const resault = await coupon_obj.update(c);
@@ -50,7 +50,7 @@ async function create(req: Request, res: Response) {
     if (permession) {
         try {
             const c: coupon = {
-                code: req.body.name,
+                code: req.body.code,
                 value_of_100:req.body.value_of_100
             };
             const resault = await coupon_obj.create(c);

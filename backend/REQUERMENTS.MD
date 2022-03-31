@@ -40,6 +40,17 @@ Database Schema:
         delete     --> /brands/:id      [delete] header{token}
 
 
+    Coupon Table:
+
+        table brand (id serial primary key, code string, value_of_100 string);
+
+        index      --> /coupons          [get]
+        show       --> /coupons/:id      [get]
+        create     --> /coupons          [post] body{code,value_of_100} header{token}
+        update     --> /coupons/:id      [patch] body{code,value_of_100} header{token}
+        delete     --> /coupons/:id      [delete] header{token}
+
+
 
    "code":"",
     "name":"",  
