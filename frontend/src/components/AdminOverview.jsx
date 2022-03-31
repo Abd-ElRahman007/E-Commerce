@@ -14,9 +14,9 @@ export default function AdminOverview() {
       <SimpleGrid cols={2} breakpoints={[{ maxWidth: 'xs', cols: 1 }]}>
         {importPhoto(BASE_HEIGHT)}
         <Group direction="column">
-          {inputs(getSubHeight(3, theme.spacing.md))}
-          {inputs(getSubHeight(3, theme.spacing.md))}
-          {inputs(getSubHeight(3, theme.spacing.md))}
+          {inputs(getSubHeight(4, theme.spacing.md))}
+          {inputs(getSubHeight(4, theme.spacing.md))}
+          {inputs(getSubHeight(4, theme.spacing.md))}
         </Group>
       </SimpleGrid>
     </Container>
