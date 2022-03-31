@@ -2,7 +2,9 @@ import { Application, Response, Request } from 'express';
 import { Order, order } from '../models/orders';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
+
 dotenv.config();
+
 const secret: string = process.env.token as unknown as string;
 
 const order_obj = new Order();
@@ -53,6 +55,10 @@ async function update(req: Request, res: Response) {
                 id: parseInt(req.params.order_id),
                 status: req.body.status,
                 user_id: parseInt(req.params.user_id),
+                total:Number(req.body.total),
+                time_start:new Date(),
+                time_arrival:new Date(),
+                compelete_at:new Date(),
             };
             const resault = await order_obj.update(o);
             res.json(resault);
@@ -70,6 +76,10 @@ async function create(req: Request, res: Response) {
             const o: order = {
                 status: req.body.status,
                 user_id: parseInt(req.params.user_id),
+                total:Number(req.body.total),
+                time_start:new Date(),
+                time_arrival:new Date(),
+                compelete_at:new Date(),
             };
             const resault = await order_obj.create(o);
             res.json(resault);

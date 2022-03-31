@@ -17,6 +17,38 @@ Database Schema:
 
         delete --> /products/:id [delete]  header{token}
 
+    Users Table:
+
+        (id serial primary key, first_name varchar, last_name varchar, password varchar)
+
+        index   --> /users     [get]    header{token}
+        show    --> /users/:id [get]    header{token}
+        create  --> /users     [post]   body{f_name, l_name, email, password, birthday, phone, status,created_at, city,address}
+        update  --> /users/:id [patch]  body{f_name, l_name, email, birthday, phone,created_at, city,address} header{token}
+        delete  --> /users/:id [delete] header{token}
+        login   --> /login     [post]   body{username, password}
+        get_token-> /users/:id/get_token [get] no body content
+        
+
+    Orders Table:
+        
+        table orders(id serial primary key, status varchar(20), total float,time_start timestamp, time_arrival timestamp, compelete_at timestamp, user_id bigint references users(id)on delete cascade);
+
+        index      --> /users/:user_id/orders           [get] header{token}
+        show       --> /users/:user_id/orders/:order_id [get] header{token}
+        create     --> /users/:user_id/orders           [post] body{status,total,time_start,time_arrival,compelete_at, user_id} header{token}
+        update     --> /users/:user_id/orders/:order_id [patch] body{status,total} header{token}
+        delete     --> /users/:user_id/orders/:order_id [delete] header{token}
+
+
+    order_products Table:
+
+        table order_product (id serial primary key, quantity int ,order_id bigint references orders(id)on delete cascade, product_id bigint references product(id)on delete set null);
+
+        addProduct --> /users/:user_id/orders/:order_id/products [post] body{product_id, quantit} header{token}
+
+
+
     Categoey Table:
 
         table catogery(id serial primary key, name varchar(100) unique not null);
@@ -62,6 +94,15 @@ Database Schema:
         delete     --> /coupons/:id      [delete] header{token}
 
 
+
+
+
+
+
+
+
+
+//product col create req:
    "code":"",
     "name":"",  
     "model":"",  

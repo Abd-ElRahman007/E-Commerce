@@ -5,7 +5,9 @@ import bodyParser from 'body-parser';
 import productRoute from './handlars/products';
 import brandRoute from './handlars/brand';
 import categoriesRoute from './handlars/catogery';
+import usersRoute from './handlars/users';
 import couponRoute from './handlars/coupon';
+import ordersRoute from './handlars/orders';
 import feedbackRoute from './handlars/feedback';
 
 dotenv.config();
@@ -29,7 +31,9 @@ productRoute(app);
 brandRoute(app);
 couponRoute(app);
 feedbackRoute(app);
+usersRoute(app);
 categoriesRoute(app);
+ordersRoute(app);
 
 //export the app to use when importing the file
 export default app;
