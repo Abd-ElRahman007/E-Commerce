@@ -4,7 +4,7 @@ import { Loader, Grid, Skeleton, Container } from '@mantine/core';
 import ProductThumb from "./ProductThumb";
 import TempCart from "./TempCart";
 
-const child = <Skeleton height={222} radius="md" animate={false} />;
+//const child = <Skeleton height={222} radius="md" animate={false} />;
 
 export default function Home() {
     const [products, setProducts] = useState([]);
