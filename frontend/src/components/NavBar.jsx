@@ -1,9 +1,8 @@
-import React from 'react';
 import {Navbar, Nav, NavDropdown, Form, FormControl, Button, Container} from 'react-bootstrap';
 import { User, ShoppingCart  } from 'tabler-icons-react';
 
 
-const NavbarComp = () => {
+const NavBar = () => {
     return (
         <div>
             <Navbar className='nav' bg="light" expand="lg">
@@ -51,4 +50,4 @@ const NavbarComp = () => {
     )
 }
 
-export default NavbarComp;
+export default NavBar;

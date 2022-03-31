@@ -5,7 +5,7 @@ export default function AddremoveButtons(props) {
     return (
         <>
             <Button onClick={props.increaseCount}> + </Button>
-                <span>{props.count}</span>
+                <span>{props.quantity}</span>
             <Button onClick={props.decreaseCount}>-</Button>
         </>
     )
