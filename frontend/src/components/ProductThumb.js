@@ -15,21 +15,19 @@ export default function ProductThumb(props) {
  const  {id , name , main_image ,price} = props.product
     const theme = useMantineTheme();
 
-    const [quantity, setQuantity] = useState(0)
+    const [quantity, setQuantity] = useState(1)
     const [currentQuantity, setCurrentQuantity] = useState(0)
 
     const cartItems = useSelector(cartState)
-  
-      
-    
-    
- const   quantityInCart= cartItems.map((item)=> {
-          if (id===item.id)
-          return item.quantity
+   // console.log("cartItems" , cartItems ) 
+ const quantityInCart= cartItems.filter((item)=> {
+         
+      return   id===item.id
+          
     })
-
+    console.log("quantityInCart" , quantityInCart.quantity , "this id" , id) 
     const thisQ = quantityInCart[0]
-    console.log("thisQ" , thisQ) 
+    console.log("thisQ" , thisQ , "this id" , id) 
     
     const increaseQuantity=()=>{
       // stock logic here 
@@ -57,12 +55,13 @@ export default function ProductThumb(props) {
    
 
    useEffect(() => {
-    setCurrentQuantity(thisQ)
+     if (thisQ)
+    setCurrentQuantity(thisQ.quantity)
 
      return () => {
-      setCurrentQuantity()
+      setCurrentQuantity(0)
      }
-   }, [cartItems])
+   }, [cartItems,thisQ])
 
    
 
@@ -94,7 +93,7 @@ export default function ProductThumb(props) {
                   style={{ marginTop: 14 }}
                   onClick={()=>{
                     dispatch(addToCart( {id , name , main_image , price , quantity} ))
-                    setQuantity(0)
+                    setQuantity(1)
                     }}
            >
             Add to Cart 
