@@ -1,6 +1,6 @@
 
-import { Card, Image, Text, Badge, Button, Group, useMantineTheme } from '@mantine/core';
-import { useState } from 'react';
+import { Card, Image, Text, Badge, Button, Group, useMantineTheme, ColorSchemeProvider } from '@mantine/core';
+import { useState , useEffect} from 'react';
 import AddremoveButtons from './AddremoveButtons';
 import { addToCart } from '../redux/slices/cartSlice';
 import { useDispatch } from 'react-redux';
@@ -14,32 +14,57 @@ import { useSelector } from "react-redux"
 export default function ProductThumb(props) {
  const  {id , name , main_image ,price} = props.product
     const theme = useMantineTheme();
-    const [quantity, setQuantity] = useState(1)
-// console.log("iddddd" , id)
-    const cartItems = useSelector(cartState)
 
-    const increaseCount=()=>{
+    const [quantity, setQuantity] = useState(0)
+    const [currentQuantity, setCurrentQuantity] = useState(0)
+
+    const cartItems = useSelector(cartState)
+  
+      
+    
+    
+ const   quantityInCart= cartItems.map((item)=> {
+          if (id===item.id)
+          return item.quantity
+    })
+
+    const thisQ = quantityInCart[0]
+    console.log("thisQ" , thisQ) 
+    
+    const increaseQuantity=()=>{
+      // stock logic here 
         const number =quantity+1
         setQuantity(number)
 
     }
 
 
-    const decreaseCount=()=>{
-        if (quantity <= 1)  
-         return; 
+    const decreaseQuantity=()=>{
+      if(currentQuantity>0){
+          if (quantity <= -currentQuantity)  
+          return; 
+
+      }
+      else 
+        if (quantity <= 1)   return
+        
          const number =quantity-1
          setQuantity(number)
 
     }
 
     const dispatch = useDispatch()
+   
 
-    const addCart=(id)=>{
-      dispatch(addToCart(id))
-      console.log("ccccc" , id)
+   useEffect(() => {
+    setCurrentQuantity(thisQ)
 
-    }
+     return () => {
+      setCurrentQuantity()
+     }
+   }, [cartItems])
+
+   
 
     return (
         <div style={{ width: 340, margin: 'auto' }}>
@@ -68,16 +93,18 @@ export default function ProductThumb(props) {
                   color="blue" 
                   style={{ marginTop: 14 }}
                   onClick={()=>{
-                    dispatch(addToCart( {id , name , quantity} ))
+                    dispatch(addToCart( {id , name , main_image , price , quantity} ))
+                    setQuantity(0)
                     }}
            >
             Add to Cart 
           </Button>
             <AddremoveButtons
-                increaseCount={increaseCount}
-                decreaseCount={decreaseCount}
+                increaseQuantity={increaseQuantity}
+                decreaseQuantity={decreaseQuantity}
                 quantity={quantity}
                     />
+                   
           </Group>
         </Card>
       </div>

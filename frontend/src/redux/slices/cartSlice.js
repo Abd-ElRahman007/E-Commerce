@@ -3,7 +3,6 @@ import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
     items: []
-
 }
 
 const cartSlice = createSlice({
@@ -19,76 +18,35 @@ const cartSlice = createSlice({
             let updatedItems;
 
             if (existingCartItem) {
-                const updateItem = {
-                    ...existingCartItem,
-                    //extra code - add your logic
-                    quantity: existingCartItem.quantity + action.payload.quantity
+      
+            const updateItem = {
+                ...existingCartItem,
+                quantity: existingCartItem.quantity + action.payload.quantity
+            }
+                if (updateItem.quantity===0) {
+                    state.items= [...state.items.slice(0, existingCartItemIndex), ...state.items.slice(existingCartItemIndex + 1)]
                 }
-    
-                updatedItems = [...state.items]
-                updatedItems[existingCartItemIndex] = updateItem;
-                state.items=[...updatedItems]
-
+                else {
+                    updatedItems = [...state.items]
+                    updatedItems[existingCartItemIndex] = updateItem;
+                    state.items=[...updatedItems]
+                } 
             }
             else {
                 state.items.push({
                     id: action.payload.id,
                     name: action.payload.name,
+                    main_image : action.payload.main_image ,
+                    price : action.payload.price ,
                     quantity: action.payload.quantity,
-
                 })
             }
-
-          /*   const existingCartItemIndex = state.items.findIndex(
-                (item) => item.id === action.payload.id
-            );
-            const existingCartItem = state.items[existingCartItemIndex];
-            let updatedItems;
-            if (existingCartItem) { */
-              //  state.items[existingCartItemIndex].quantity =+ action.payload.quantity
-                //Find the index and update the items
-                /* const updateItem = {
-                    ...existingCartItem,
-                    //extra code - add your logic
-                    quantity: existingCartItem.quantity + action.payload.quantity, */
-                  /*   console.log("existingCartItem" , existingCartItem)
-                }
-                // }
-                else {
-                    state.items.push({
-                        id: action.payload.id,
-                        name: action.payload.name,
-                        quantity: action.payload.quantity,
-
-                    })
-                }
-
- */
-
-           /*  state.items.map((item, index) => {
-                if (action.payload.id === item.id) {
-                   state.items[index].quantity = state.items[index].quantity + action.payload.quantity
-                 console.log("state.items[index].quantity" ,  state.items[index].quantity)
-                     }
-
-                else {
-                    state.items.push({
-                        id: action.payload.id,
-                        name: action.payload.name,
-                        quantity: action.payload.quantity,
-
-                    })
-                }
-
-
-            })
- */
         }
-
     }
 })
 
-export const { addToCart } = cartSlice.actions
+
+export const { addToCart , removeQuantityCart} = cartSlice.actions
 
 export default cartSlice.reducer
 
