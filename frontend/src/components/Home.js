@@ -1,22 +1,15 @@
-import React from "react";
-import { Loader } from "@mantine/core";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { Grid, Skeleton, Container } from '@mantine/core';
+import { Loader, Grid, Skeleton, Container } from '@mantine/core';
 import ProductThumb from "./ProductThumb";
 import TempCart from "./TempCart";
 
-const child = <Skeleton height={222} radius="md" animate={false} />;
-
-
+//const child = <Skeleton height={222} radius="md" animate={false} />;
 
 export default function Home() {
-
     const [products, setProducts] = useState([]);
     const [category, setCategory] = useState([])
-
     const [loading, SetLoading] = useState(false);
-
 
     function update() {
         axios.get("http://localhost:3001/categories")
@@ -24,7 +17,6 @@ export default function Home() {
                 console.log(res.data);
                 setCategory(res.data);
             });
-
         axios.get("http://localhost:3001/products")
             .then((res) => {
                 console.log(res.data);
@@ -33,17 +25,14 @@ export default function Home() {
         SetLoading(true);
     }
 
-
     useEffect(() => {
         update()
 
         return () => {
-        setCategory([]);
-        setProducts([]);
+            setCategory([]);
+            setProducts([]);
         };
     }, [loading]);
-
-
 
     if (loading === false) return <Loader />;
     else
