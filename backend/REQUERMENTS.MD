@@ -148,17 +148,17 @@ Database Schema:
 
         create table comment(id serial primary key, subject varchar(200), message text, created_time timestamp, user_id bigint references users(id)on delete cascade, product_id bigint references product(id)on delete cascade);
 
-        index      --> /coupons          [get]
-                                         [return]{id,subject,message,created_at,user_id,product_id}
+        index      --> product/:product_id/comments         [get]
+                                                            [return]{id,subject,message,created_at,user_id,product_id}
 
-        show       --> /coupons/:id      [get]
-                                         [return]{id,subject,message,created_at,user_id,product_id}
+        show       --> product/:product_id/comments/:id     [get]
+                                                            [return]{id,subject,message,created_at,user_id,product_id}
 
-        create     --> /coupons          [post] body{subject,message,created_at,user_id,product_id} header{token}
-                                         [return]{id,subject,message,created_at,user_id,product_id}
+        create     --> product/:product_id/comments         [post] body{subject,message,created_at,user_id,product_id} header{token}
+                                                            [return]{id,subject,message,created_at,user_id,product_id}
 
-        update     --> /coupons/:id      [patch] body{subject,message,created_at,user_id,product_id} header{token}
-                                         [return]{id,subject,message,created_at,user_id,product_id}
+        update     --> product/:product_id/comments/:id     [patch] body{subject,message,created_at,user_id,product_id} header{token}
+                                                            [return]{id,subject,message,created_at,user_id,product_id}
 
-        delete     --> /coupons/:id      [delete] header{token}
-                                         [return]{'deleted'}
+        delete     --> product/:product_id/comments/:id     [delete] header{token}
+                                                            [return]{'deleted'}
