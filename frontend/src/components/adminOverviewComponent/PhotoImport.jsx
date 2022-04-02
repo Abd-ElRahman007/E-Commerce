@@ -2,6 +2,7 @@ import { useRef, useState } from 'react';
 import { Text, Group, Button, createStyles, useMantineTheme } from '@mantine/core';
 import { Dropzone, IMAGE_MIME_TYPE } from '@mantine/dropzone';
 import { CloudUpload } from 'tabler-icons-react';
+import Image from '../productOverviewComponents/Image';
 
 const useStyles = createStyles((theme) => ({
   wrapper: {
@@ -41,13 +42,13 @@ export default function PhotoImport() {
   const openRef = useRef();
   const [paths, setPath] = useState();
 
-function imgPath(files){
-  const paths = files.map((file) => URL.createObjectURL(file))
-  setPath(paths)
+  function imgPath(files) {
+    const paths = files.map((file) => URL.createObjectURL(file))
+    setPath(paths)
   }
   function img(paths) {
-    if(paths){
-     return paths.map((img)=><img src={img} alt="checking"/>)
+    if (paths) {
+      return paths.map((img) => <Image image={img} title='' authore='' />)
     }
   }
 
@@ -55,7 +56,7 @@ function imgPath(files){
     <div className={classes.wrapper}>
       <Dropzone
         openRef={openRef}
-        onDrop={(files)=>imgPath(files)}
+        onDrop={(files) => imgPath(files)}
         onReject={(files) => console.log('rejected files', files)}
         className={classes.dropzone}
         radius="md"
