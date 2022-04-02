@@ -6,7 +6,7 @@ export type order = {
   id?: number;
   status: string;
   total:number;
-  time_start:Date;
+  time_start?:Date;
   time_arrival:Date;
   compelete_at:Date;
   user_id?: number;
@@ -44,7 +44,7 @@ export class Order {
             const conn = await Client.connect();
             const sql =
         'insert into orders (status,total,time_start,time_arrival,compelete_at, user_id) values($1,$2,$3,$4,$5,$6)RETURNING *;';
-            const res = await conn.query(sql, [o.status,o.total,o.time_start,o.time_arrival,o.compelete_at, o.user_id]);
+            const res = await conn.query(sql, [o.status,o.total,new Date(),o.time_arrival,o.compelete_at, o.user_id]);
             conn.release();
             return res.rows[0];
         } catch (e) {
@@ -55,12 +55,11 @@ export class Order {
     async update(o: order): Promise<string> {
         try {
             const conn = await Client.connect();
-            const q = 'select user_id from orders where id=($1)';
-            const id_of_user = await conn.query(q, [o.id]);
-            const user = id_of_user.rows[0];
-            if (user.user_id == o.user_id) {
-                const sql = 'update orders set status=($1), total=($3) where id=($2) RETURNING *; ';
-                const res = await conn.query(sql, [o.status, o.id,o.total]);
+            const q = 'select user_id from orders where id=($1) and user_id=($2);';
+            const res = await conn.query(q, [o.id,o.user_id]);
+            if (res.rows[0]) {
+                const sql = 'update orders set status=($1), total=($2), compelete_at=($3),time_arrival=($4),time_start=($5) where id=($6) RETURNING *; ';
+                const res = await conn.query(sql, [o.status,o.total,o.compelete_at,o.time_arrival,new Date(),o.id]);
                 conn.release();
                 return res.rows[0];
             }
@@ -74,7 +73,7 @@ export class Order {
         try {
             const conn = await Client.connect();
             const q = 'delete from orders where id=($1) and user_id=($2)';
-            const id_of_user = await conn.query(q, [id, user_id]);
+            await conn.query(q, [id, user_id]);
             conn.release();
             return 'deleted';
         } catch (e) {

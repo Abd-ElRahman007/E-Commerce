@@ -32,19 +32,19 @@ async function update(req: Request, res: Response) {
     if (permession) {
         try {
             const p: product = {
-                id: req.params.id as unknown as number,
+                id: Number(req.params.id),
                 name: req.body.name,
-                price: req.body.price as unknown as number,
+                price: Number(req.params.price),
                 code:req.body.code,
                 model:req.body.model,
                 image:req.body.image,
                 description:req.body.description,
-                category_id:req.body.category_id,
+                category_id:Number(req.params.category_id),
                 currency:req.body.currency,
-                vote_count:req.body.vote_count,
-                vote_total:req.body.vote_total,
-                stock:req.body.stock,
-                brand_id:req.body.brand_id,
+                vote_count:Number(req.params.vote_count),
+                vote_total:Number(req.params.vote_total),
+                stock:Number(req.params.stock),
+                brand_id:Number(req.params.brand_id),
             };
             const resault = await product_obj.update(p);
             res.status(200).json(resault);
@@ -61,7 +61,7 @@ async function create(req: Request, res: Response) {
         try {
             const p: product = {
                 name: req.body.name,
-                price: req.body.price as unknown as number,
+                price: Number(req.params.price),
                 code:req.body.code,
                 model:req.body.model,
                 image:req.body.image,

@@ -64,7 +64,7 @@ export class Product {
                 p.brand_id,
             ]);
             conn.release();
-            return 'created';
+            return res.rows[0];
         } catch (e) {
             throw new Error(`${e}`);
         }
@@ -91,7 +91,7 @@ export class Product {
                 p.id,
             ]);
             conn.release();
-            return 'updated';
+            return res.rows[0];
         } catch (e) {
             throw new Error(`${e}`);
         }
@@ -101,7 +101,7 @@ export class Product {
         try {
             const conn = await Client.connect();
             const sql = 'delete from product where id =($1);';
-            const res = await conn.query(sql, [id]);
+            await conn.query(sql, [id]);
             conn.release();
             return 'deleted';
         } catch (e) {

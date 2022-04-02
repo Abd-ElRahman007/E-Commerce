@@ -1,11 +1,9 @@
 import Client from '../database';
 import bcrypt from 'bcrypt';
 import dotenv from 'dotenv';
-
 dotenv.config();
 
 const { extra } = process.env;
-
 
 export type user = {
   id?: number;
@@ -16,7 +14,7 @@ export type user = {
   birthday:Date;
   phone:string;
   status:string;
-  created_at:Date;
+  created_at?:Date;
   city:string;
   address:string;
   coupon_id?:number;
@@ -52,7 +50,7 @@ export class User {
             const conn = await Client.connect();
             const sql =
         'insert into users (f_name, l_name, email, password, birthday, phone, status,created_at, city,address) values($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)RETURNING*;';
-            const res = await conn.query(sql, [u.f_name, u.l_name, u.email, u.password, u.birthday, u.phone, u.status, u.created_at, u.city,u.address]);
+            const res = await conn.query(sql, [u.f_name, u.l_name, u.email, u.password, u.birthday, u.phone, u.status, new Date(), u.city,u.address]);
             conn.release();
             return res.rows[0];
         } catch (e) {
@@ -77,8 +75,9 @@ export class User {
         try {
             const conn = await Client.connect();
             const sql = 'delete from users where id =($1) ;';
-            const res = await conn.query(sql, [id]);
+            await conn.query(sql, [id]);
             conn.release();
+            
             return 'deleted';
         } catch (e) {
             throw new Error(`${e}`);

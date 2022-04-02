@@ -14,10 +14,10 @@ Database Schema:
                                  [return] {id,code,name,model,,description,currency,vote_count,vote_total,price,stock,image,brand_id,category_id}
 
         create --> /products     [post] body{code,  name,  model,  image,  description,category_id, price, currency, vote_count,    vote_total, stock, brand_id} header{token}
-                                 [return] {'created'}
+                                 [return] {id,code,name,model,,description,currency,vote_count,vote_total,price,stock,image,brand_id,category_id}
 
         update --> /products/:id [patch]  body{code,  name,  model,  image,  description,category_id, price, currency , vote_count, vote_total, stock, brand_id} header{token}
-                                 [return] {'updated'}
+                                 [return] {id,code,name,model,,description,currency,vote_count,vote_total,price,stock,image,brand_id,category_id}
 
         delete --> /products/:id [delete]  header{token}
                                  [return] {'deleted'}
@@ -33,11 +33,11 @@ Database Schema:
         show    --> /users/:id [get]    header{token}
                                 [return] {id,f_name,l_name,email,password,birthday,phone,status,created_at,address,coupon_id}
                                 
-        create  --> /users     [post]   body{f_name, l_name, email, password, birthday, phone, status,created_at, city,address}
-                                [return] {token}
+        create  --> /users     [post]   body{f_name, l_name, email, password, birthday, phone, status, city,address}
+                                [return] {"resault": [id,f_name,l_name,email,password,birthday,phone,status,created_at,address,coupon_id],"token":""}
                                 
-        update  --> /users/:id [patch]  body{f_name, l_name, email, birthday, phone,created_at, city,address} header{token}
-                                [return] {token}
+        update  --> /users/:id [patch]  body{f_name, l_name, email, birthday, phone, city,address} header{token}
+                                [return] {"resault": [id,f_name,l_name,email,password,birthday,phone,status,created_at,address,coupon_id],"token":""}
                                 
         delete  --> /users/:id [delete] header{token}
                                 [return] {'deleted'}
@@ -46,7 +46,7 @@ Database Schema:
                                 [return] {'succeeded'| 'failed'}
                                 
         get_token-> /users/:id/get_token [get] no body content
-                                [return] {token}
+                                [return] {"token":""}
                                 
         
 
@@ -61,10 +61,10 @@ Database Schema:
         show       --> /users/:user_id/orders/:order_id [get] header{token}
                                 [return] {id,status,total,time_start,time_arrival,compelete_at,user_id}
                                 
-        create     --> /users/:user_id/orders           [post] body{status,total,time_start,time_arrival,compelete_at, user_id} header{token}
+        create     --> /users/:user_id/orders           [post] body{status,total,time_arrival,compelete_at} header{token}
                                 [return] {id,status,total,time_start,time_arrival,compelete_at,user_id}
                                 
-        update     --> /users/:user_id/orders/:order_id [patch] body{status,total} header{token}
+        update     --> /users/:user_id/orders/:order_id [patch] body{status,total,time_arrival,compelete_at} header{token}
                                 [return] {id,status,total,time_start,time_arrival,compelete_at,user_id}
                                 
         delete     --> /users/:user_id/orders/:order_id [delete] header{token}
@@ -88,7 +88,7 @@ Database Schema:
                                             [return] {id,name}
 
         show       --> /categories/:id      [get]
-                                            [return] {id,name}
+                                            [return all products in category] {id,name,price,stock,image,brand_id,category_id}
 
         create     --> /categories          [post] body{name} header{token}
                                             [return] {id,name}
@@ -154,10 +154,10 @@ Database Schema:
         show       --> product/:product_id/comments/:id     [get]
                                                             [return]{id,subject,message,created_at,user_id,product_id}
 
-        create     --> product/:product_id/comments         [post] body{subject,message,created_at,user_id,product_id} header{token}
+        create     --> product/:product_id/comments         [post] body{subject,message,user_id,product_id} header{token}
                                                             [return]{id,subject,message,created_at,user_id,product_id}
 
-        update     --> product/:product_id/comments/:id     [patch] body{subject,message,created_at,user_id,product_id} header{token}
+        update     --> product/:product_id/comments/:id     [patch] body{subject,message,user_id,product_id} header{token}
                                                             [return]{id,subject,message,created_at,user_id,product_id}
 
         delete     --> product/:product_id/comments/:id     [delete] header{token}

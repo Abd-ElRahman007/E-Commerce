@@ -64,7 +64,7 @@ export class Brand {
         try {
             const conn = await Client.connect();
             const sql = 'delete from brand where id =($1);';
-            const res = await conn.query(sql, [id]);
+            await conn.query(sql, [id]);
             conn.release();
             return 'deleted';
         } catch (e) {

@@ -35,7 +35,6 @@ async function update(req: Request, res: Response) {
                 id: Number(req.params.id),
                 subject: req.body.subject,
                 message:req.body.message,
-                created_time:req.body.created_time,
                 user_id:Number(req.body.user_id),
                 product_id:Number(req.params.product_id)
             };
@@ -55,7 +54,6 @@ async function create(req: Request, res: Response) {
             const c: comment = {
                 subject: req.body.subject,
                 message:req.body.message,
-                created_time:req.body.created_time,
                 user_id:Number(req.body.user_id),
                 product_id:Number(req.params.product_id)
             };
