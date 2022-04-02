@@ -45,6 +45,7 @@ export default function InputText({data}) {
 
   return (
     <TextInput
+      width="100%"
       label={data.label}
       placeholder={data.placeholder}
       required

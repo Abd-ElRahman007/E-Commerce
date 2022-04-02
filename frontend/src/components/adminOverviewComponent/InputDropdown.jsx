@@ -30,6 +30,7 @@ export default function InputDropdown({data}) {
         placeholder={data.placeholder}
         label={data.label}
         classNames={classes}
+        width="100%"
       />
     </div>
   )

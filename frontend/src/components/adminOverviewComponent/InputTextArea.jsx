@@ -9,6 +9,7 @@ export default function InputTextArea({ data }) {
       autosize
       minRows={3}
       mt="md"
+      style={{ width: '100%' }}
     />
   );
 }

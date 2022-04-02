@@ -92,8 +92,9 @@ export default function PhotoImport() {
       <Button className={classes.control} size="md" radius="xl" onClick={() => openRef.current()}>
         Select files
       </Button>
-      <br />
+      <Group>
       {img(paths)}
+      </Group>
     </div>
   );
 }

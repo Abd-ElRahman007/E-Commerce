@@ -25,6 +25,7 @@ export default function InputCurrency() {
 
   return (
     <TextInput
+      width="100%"
       type="number"
       placeholder="1000"
       label="Product Price"
