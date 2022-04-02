@@ -2,7 +2,7 @@
 import { Card, Image, Text, Badge, Button, Group, useMantineTheme, ColorSchemeProvider } from '@mantine/core';
 import { useState , useEffect} from 'react';
 import AddremoveButtons from './AddremoveButtons';
-import { addToCart } from '../redux/slices/cartSlice';
+import { addToCart , removeFromCart} from '../redux/slices/cartSlice';
 import { useDispatch } from 'react-redux';
 import { cartState } from "../redux/slices/cartSlice"
 import { useSelector } from "react-redux"
@@ -13,6 +13,7 @@ import { useSelector } from "react-redux"
 
 export default function ProductThumb(props) {
  const  {id , name , main_image ,price} = props.product
+ console.log(" , props" , props)
     const theme = useMantineTheme();
 
     const [quantity, setQuantity] = useState(1)
@@ -103,6 +104,15 @@ export default function ProductThumb(props) {
                 decreaseQuantity={decreaseQuantity}
                 quantity={quantity}
                     />
+
+                        {currentQuantity>0 && <button onClick={()=>{
+                                          dispatch(removeFromCart( {id} ))
+                                          setQuantity(1)
+                                          }}>
+                                            remove
+                                            </button>
+
+                    }   
                    
           </Group>
         </Card>
