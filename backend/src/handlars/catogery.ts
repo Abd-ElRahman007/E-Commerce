@@ -1,10 +1,10 @@
 import { Application, Response, Request } from 'express';
 import { Catogery, catogery } from '../models/catogery';
-//import jwt from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 
 dotenv.config();
-//const secret: string = process.env.token as unknown as string;
+const secret: string = process.env.token as unknown as string;
 
 const catogery_obj = new Catogery();
 
@@ -27,8 +27,8 @@ async function show(req: Request, res: Response) {
 }
 
 async function update(req: Request, res: Response) {
-    //const token = req.headers.token as unknown as string;
-    const permession = 1 ;//jwt.verify(token, secret);
+    const token = req.headers.token as unknown as string;
+    const permession = jwt.verify(token, secret);
     if (permession) {
         try {
             const c: catogery = {
@@ -44,8 +44,8 @@ async function update(req: Request, res: Response) {
 }
 
 async function create(req: Request, res: Response) {
-    //const token = req.headers.token as unknown as string;
-    const permession = 1;//jwt.verify(token, secret);
+    const token = req.headers.token as unknown as string;
+    const permession = jwt.verify(token, secret);
     if (permession) {
         try {
             const c: catogery = {
@@ -60,8 +60,8 @@ async function create(req: Request, res: Response) {
 }
 
 async function delete_(req: Request, res: Response) {
-    //const token = req.headers.token as unknown as string;
-    const permession = 1;//jwt.verify(token, secret);
+    const token = req.headers.token as unknown as string;
+    const permession = jwt.verify(token, secret);
     if (permession) {
         try {
             const resault = await catogery_obj.delete(

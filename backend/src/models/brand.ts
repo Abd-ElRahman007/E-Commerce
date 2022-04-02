@@ -41,7 +41,7 @@ export class Brand {
         'insert into brand (name, description) values($1, $2)RETURNING *;';
             const res = await conn.query(sql, [b.name, b.description]);
             conn.release();
-            return 'created';
+            return res.rows[0];
         } catch (e) {
             throw new Error(`${e}`);
         }
@@ -54,7 +54,7 @@ export class Brand {
         'update brand set name=($1), description=($2) where id=($3) RETURNING *; ';
             const res = await conn.query(sql, [b.name, b.description, b.id]);
             conn.release();
-            return 'updated';
+            return res.rows[0];
         } catch (e) {
             throw new Error(`${e}`);
         }

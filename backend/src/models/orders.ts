@@ -1,13 +1,10 @@
 import Client from '../database';
 
-enum STATUS {
-  'open',
-  'closed',
-}
+
 
 export type order = {
   id?: number;
-  status: STATUS;
+  status: string;
   total:number;
   time_start:Date;
   time_arrival:Date;
@@ -49,7 +46,7 @@ export class Order {
         'insert into orders (status,total,time_start,time_arrival,compelete_at, user_id) values($1,$2,$3,$4,$5,$6)RETURNING *;';
             const res = await conn.query(sql, [o.status,o.total,o.time_start,o.time_arrival,o.compelete_at, o.user_id]);
             conn.release();
-            return 'created';
+            return res.rows[0];
         } catch (e) {
             throw new Error(`${e}`);
         }
@@ -65,7 +62,7 @@ export class Order {
                 const sql = 'update orders set status=($1), total=($3) where id=($2) RETURNING *; ';
                 const res = await conn.query(sql, [o.status, o.id,o.total]);
                 conn.release();
-                return 'updated';
+                return res.rows[0];
             }
             return 'not allowed';
         } catch (e) {
@@ -96,7 +93,7 @@ export class Order {
         'insert into order_product (quantity, order_id, product_id) values($1,$2,$3)RETURNING *;';
             const res = await conn.query(sql, [quantity, order_id, product_id]);
             conn.release();
-            return 'added';
+            return res.rows[0];
         } catch (e) {
             throw new Error(`${e}`);
         }

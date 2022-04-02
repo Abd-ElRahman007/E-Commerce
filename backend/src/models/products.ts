@@ -1,9 +1,6 @@
 import Client from '../database';
 
-/*
-create table product (id serial primary key, code varchar(50),name varchar(50),model varchar(150),image bytea, description text,category_id bigint references catogery(id)on delete cascade, price float, currency varchar(20), vote_count int, vote_total int,stock bigint, brand_id bigint references brand(id)on delete cascade);
-create table product_images (id serial primary key, image bytea,product_id bigint references product(id)on delete cascade);
-*/
+
 
 export type product = {
     id?: number;

@@ -4,8 +4,8 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-
 const { extra } = process.env;
+
 
 export type user = {
   id?: number;
@@ -52,7 +52,7 @@ export class User {
             const conn = await Client.connect();
             const sql =
         'insert into users (f_name, l_name, email, password, birthday, phone, status,created_at, city,address) values($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)RETURNING*;';
-            const res = await conn.query(sql, [u.f_name, u.l_name, u.email, u.password, u.birthday, u.phone, u.status,u.created_at, u.city,u.address]);
+            const res = await conn.query(sql, [u.f_name, u.l_name, u.email, u.password, u.birthday, u.phone, u.status, u.created_at, u.city,u.address]);
             conn.release();
             return res.rows[0];
         } catch (e) {
@@ -92,9 +92,9 @@ export class User {
             const res = await conn.query(sql, [email]);
             if (res.rows.length) {
                 const isExist = bcrypt.compareSync(pass + extra, res.rows[0].password);
-                if (isExist) return 'succeed';
+                if (isExist) return 'succeeded';
             }
-            return 'faild';
+            return 'failed';
         } catch (e) {
             throw new Error(`${e}`);
         }

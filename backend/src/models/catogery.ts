@@ -39,7 +39,7 @@ export class Catogery {
             const sql = 'insert into catogery (name) values($1)RETURNING *;';
             const res = await conn.query(sql, [c.name]);
             conn.release();
-            return 'created';
+            return res.rows[0];
         } catch (e) {
             throw new Error(`${e}`);
         }
@@ -51,7 +51,7 @@ export class Catogery {
             const sql = 'update catogery set name=($1) where id=($2) RETURNING *; ';
             const res = await conn.query(sql, [c.name, c.id]);
             conn.release();
-            return 'updated';
+            return res.rows[0];
         } catch (e) {
             throw new Error(`${e}`);
         }

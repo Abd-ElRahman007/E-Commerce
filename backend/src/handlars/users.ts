@@ -56,7 +56,7 @@ async function update(req: Request, res: Response) {
                     password:'', 
                     birthday:req.body.birthday, 
                     phone:req.body.phone, 
-                    status:'',
+                    status:req.body.status,
                     created_at:new Date(), 
                     city:req.body.city,
                     address:req.body.address,
@@ -120,7 +120,7 @@ async function login(req: Request, res: Response) {
 
         const resault = await user_obj.auth(username, password);
         if (resault != null) res.status(200).send('succeed');
-        else res.status(400).send('faild');
+        else res.status(400).send('failed');
     } catch (e) {
         res.status(400).json(`${e}`);
     }
