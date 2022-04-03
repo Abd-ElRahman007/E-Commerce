@@ -41,8 +41,8 @@ export default function InputStoke({ min = 1, max = 10 }) {
   const handlers = useRef();
 
   return (
-    <div style={{ width: '75%' }} className={classes.wrapper}>
-      Add Stoke
+    <div style={{ width: '100%' }} className={classes.wrapper}>
+      Add Stoke 
       <ActionIcon
         size={28}
         variant="transparent"

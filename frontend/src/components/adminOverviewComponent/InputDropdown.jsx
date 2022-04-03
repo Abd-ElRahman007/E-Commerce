@@ -23,14 +23,13 @@ const useStyles = createStyles((theme) => ({
 export default function InputDropdown({data}) {
   const { classes } = useStyles();
   return (
-    <div>
+    <div style={{width:'100%'}}>
       <Select
         style={{ marginTop: 20, zIndex: 2 }}
         data={data.data}
         placeholder={data.placeholder}
         label={data.label}
         classNames={classes}
-        width="100%"
       />
     </div>
   )

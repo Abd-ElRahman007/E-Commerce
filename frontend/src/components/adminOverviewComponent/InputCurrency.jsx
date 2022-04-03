@@ -24,13 +24,14 @@ export default function InputCurrency() {
   );
 
   return (
+  <div style={{width:'100%'}}>
     <TextInput
-      width="100%"
       type="number"
       placeholder="1000"
       label="Product Price"
       rightSection={select}
       rightSectionWidth={92}
     />
+	</div>
   );
 }

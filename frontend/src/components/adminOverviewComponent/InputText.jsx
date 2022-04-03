@@ -4,6 +4,7 @@ import { TextInput, createStyles } from '@mantine/core';
 const useStyles = createStyles((theme, { floating }) => ({
   root: {
     position: 'relative',
+	width:'100%'
   },
 
   label: {
@@ -45,7 +46,6 @@ export default function InputText({data}) {
 
   return (
     <TextInput
-      width="100%"
       label={data.label}
       placeholder={data.placeholder}
       required
