@@ -1,9 +1,7 @@
 import Client from '../database';
+import { catogery } from './catogery';
 
-/*
-create table product (id serial primary key, code varchar(50),name varchar(50),model varchar(150),image bytea, description text,category_id bigint references catogery(id)on delete cascade, price float, currency varchar(20), vote_count int, vote_total int,stock bigint, brand_id bigint references brand(id)on delete cascade);
-create table product_images (id serial primary key, image bytea,product_id bigint references product(id)on delete cascade);
-*/
+
 
 export type product = {
     id?: number;
@@ -25,9 +23,11 @@ export class Product {
     async index(): Promise<product[]> {
         try {
             const conn = await Client.connect();
-            const sql = 'select id,name,price,stock,image,brand_id,category_id from product;';
+            const sql = 'select * from product;';
             const res = await conn.query(sql);
             conn.release();
+            
+            
             return res.rows;
         } catch (e) {
             throw new Error(`${e}`);
@@ -45,6 +45,19 @@ export class Product {
             throw new Error(`${e}`);
         }
     }
+
+    async search_by_category(category_id: number): Promise<product[]> {
+        try {
+            const conn = await Client.connect();
+            const sql = 'select * from product where category_id =($1);';
+            const res = await conn.query(sql, [category_id]);
+            conn.release();
+            return res.rows;
+        } catch (e) {
+            throw new Error(`${e}`);
+        }
+    }
+    
 
     async create(p: product): Promise<string> {
         try {
@@ -67,7 +80,7 @@ export class Product {
                 p.brand_id,
             ]);
             conn.release();
-            return 'created';
+            return res.rows[0];
         } catch (e) {
             throw new Error(`${e}`);
         }
@@ -94,7 +107,7 @@ export class Product {
                 p.id,
             ]);
             conn.release();
-            return 'updated';
+            return res.rows[0];
         } catch (e) {
             throw new Error(`${e}`);
         }
@@ -104,7 +117,7 @@ export class Product {
         try {
             const conn = await Client.connect();
             const sql = 'delete from product where id =($1);';
-            const res = await conn.query(sql, [id]);
+            await conn.query(sql, [id]);
             conn.release();
             return 'deleted';
         } catch (e) {

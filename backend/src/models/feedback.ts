@@ -6,18 +6,18 @@ export type comment = {
     id?: number;
     subject: string;
     message:string;
-    created_time:Date;
+    created_time?:Date;
     user_id:number;
     product_id:number;
   };
 
 
 export class Comment {
-    async index(): Promise<comment[]> {
+    async index(product_id:number): Promise<comment[]> {
         try {
             const conn = await Client.connect();
-            const sql = 'select * from comment;';
-            const res = await conn.query(sql);
+            const sql = 'select * from comment where product_id=($1);';
+            const res = await conn.query(sql,[product_id]);
             conn.release();
             return res.rows;
         } catch (e) {
@@ -25,11 +25,11 @@ export class Comment {
         }
     }
 
-    async show(id: number): Promise<comment> {
+    async show(product_id: number, id:number): Promise<comment> {
         try {
             const conn = await Client.connect();
-            const sql = 'select * from comment where id =($1);';
-            const res = await conn.query(sql, [id]);
+            const sql = 'select * from comment where id =($1) and product_id=($2);';
+            const res = await conn.query(sql, [id,product_id]);
             conn.release();
             return res.rows[0];
         } catch (e) {
@@ -41,9 +41,9 @@ export class Comment {
         try {            
             const conn = await Client.connect();
             const sql = 'insert into comment (subject,message,created_time,user_id,product_id) values($1,$2,$3,$4,$5)RETURNING *;';
-            const res = await conn.query(sql, [c.subject,c.message,c.created_time,c.user_id,c.product_id]);
+            const res = await conn.query(sql, [c.subject,c.message,new Date(),c.user_id,c.product_id]);
             conn.release();
-            return 'created';
+            return res.rows[0];
         } catch (e) {
             throw new Error(`${e}`);
         }
@@ -52,20 +52,20 @@ export class Comment {
     async update(c: comment): Promise<string> {
         try {
             const conn = await Client.connect();
-            const sql = 'update comment set subject=($1),message=($2),created_time=($3),user_id=($4),product_id=($5) where id=($6) RETURNING *; ';
-            const res = await conn.query(sql, [c.subject,c.message,c.created_time,c.user_id,c.product_id, c.id]);
+            const sql = 'update comment set subject=($1),message=($2),user_id=($3),product_id=($4) where id=($5) RETURNING *; ';
+            const res = await conn.query(sql, [c.subject,c.message,c.user_id,c.product_id, c.id]);
             conn.release();
-            return 'updated';
+            return res.rows[0];
         } catch (e) {
             throw new Error(`${e}`);
         }
     }
 
-    async delete(id: number): Promise<string> {
+    async delete(product_id:number,id: number): Promise<string> {
         try {
             const conn = await Client.connect();
-            const sql = 'delete from comment where id =($1);';
-            const res = await conn.query(sql, [id]);
+            const sql = 'delete from comment where id =($1) and product_id=($2);';
+            await conn.query(sql, [id,product_id]);
             conn.release();
             return 'deleted';
         } catch (e) {

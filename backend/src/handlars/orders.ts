@@ -56,9 +56,9 @@ async function update(req: Request, res: Response) {
                 status: req.body.status,
                 user_id: parseInt(req.params.user_id),
                 total:Number(req.body.total),
-                time_start:new Date(),
-                time_arrival:new Date(),
-                compelete_at:new Date(),
+                time_start:req.body.time_start,
+                time_arrival:req.body.time_arrival,
+                compelete_at:req.body.compelete_at,
             };
             const resault = await order_obj.update(o);
             res.json(resault);
@@ -77,9 +77,8 @@ async function create(req: Request, res: Response) {
                 status: req.body.status,
                 user_id: parseInt(req.params.user_id),
                 total:Number(req.body.total),
-                time_start:new Date(),
-                time_arrival:new Date(),
-                compelete_at:new Date(),
+                time_arrival:req.body.time_arrival,
+                compelete_at:req.body.compelete_at,
             };
             const resault = await order_obj.create(o);
             res.json(resault);
