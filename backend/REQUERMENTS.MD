@@ -7,14 +7,14 @@ Database Schema:
         create table product_images (id serial primary key, image text,product_id bigint references product(id)on delete cascade);
 
 
-        index  --> /products     [get] no content in body
-                                 [return] {id,name,price,stock,image,brand_id,category_id}
+        index  --> /products?page=&limit=     [get] no content in body
+                                              [return] {id,name,price,stock,image,brand_id,category_id}
 
         show   --> /products/:id [get] no content in body
                                  [return] {id,code,name,model,,description,currency,vote_count,vote_total,price,stock,image,brand_id,category_id}
 
-        index  --> /products/:category_id [get] no content in body
-                                 [return] {id,code,name,model,,description,currency,vote_count,vote_total,price,stock,image,brand_id,category_id}
+        index  --> /:category_id/products [get] no content in body
+                                          [return] {id,code,name,model,,description,currency,vote_count,vote_total,price,stock,image,brand_id,category_id}
 
         create --> /products     [post] body{code,  name,  model,  image,  description,category_id, price, currency, vote_count,    vote_total, stock, brand_id} header{token}
                                  [return] {id,code,name,model,,description,currency,vote_count,vote_total,price,stock,image,brand_id,category_id}

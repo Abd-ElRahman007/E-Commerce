@@ -43,7 +43,7 @@ async function show(req: Request, res: Response) {
 
 async function search_by_category(req: Request, res: Response) {
     try {
-        const result = await product_obj.search_by_category(req.params.catogery_id as unknown as number);
+        const result = await product_obj.search_by_category(req.params.category_id as unknown as number);
         res.status(200).json(result);
     } catch (e) {
         res.status(400).json(`${e}`);
@@ -123,7 +123,7 @@ async function delete_(req: Request, res: Response) {
 function mainRoutes(app: Application) {
     app.get('/products', index);
     app.get('/products/:id', show);
-    app.get('/products/:category_id', search_by_category);
+    app.get('/:category_id/products', search_by_category);
     app.post('/products', create);
     app.patch('/products/:id', update);
     app.delete('/products/:id', delete_);

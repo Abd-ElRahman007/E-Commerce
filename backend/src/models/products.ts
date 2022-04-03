@@ -1,4 +1,5 @@
 import Client from '../database';
+import { catogery } from './catogery';
 
 
 
@@ -56,6 +57,7 @@ export class Product {
             throw new Error(`${e}`);
         }
     }
+    
 
     async create(p: product): Promise<string> {
         try {
