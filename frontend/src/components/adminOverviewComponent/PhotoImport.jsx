@@ -22,6 +22,7 @@ const useStyles = createStyles((theme) => ({
   control: {
     position: 'relative',
     width: 250,
+	marginBottom:'10px',
     left: 'calc(50% - 125px)',
   },
 }));
@@ -48,7 +49,7 @@ export default function PhotoImport() {
   }
   function img(paths) {
     if (paths) {
-      return paths.map((img) => <Image image={img} title='' authore='' />)
+	return paths.map((img) => <Image cols='col-6' dim={{height:'100px',margin:'2px',width:'160px'}} image={img} title='' author='' key={img}/>)
     }
   }
 
@@ -78,7 +79,7 @@ export default function PhotoImport() {
               {status.accepted
                 ? 'Drop files here'
                 : status.rejected
-                  ? 'JPG file less than 10mb'
+                  ? 'JPG file less than 2mb'
                   : 'Upload Photo'}
             </Text>
             <Text align="center" size="sm" mt="xs" color="dimmed">
@@ -92,7 +93,9 @@ export default function PhotoImport() {
       <Button className={classes.control} size="md" radius="xl" onClick={() => openRef.current()}>
         Select files
       </Button>
-      {img(paths)}
+	  <div className='row justify-content-evenly overflow-auto h-25'>
+	  {img(paths)}	  
+	  </div>
     </div>
   );
 }
