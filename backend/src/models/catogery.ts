@@ -24,7 +24,7 @@ export class Catogery {
     async show(id: number): Promise<catogery> {
         try {
             const conn = await Client.connect();
-            const sql = 'select id,name,price,stock,image,brand_id,category_id from product where category_id =($1);';
+            const sql = 'select * from catogery where id =($1);';
             const res = await conn.query(sql, [id]);
             conn.release();
             return res.rows[0];

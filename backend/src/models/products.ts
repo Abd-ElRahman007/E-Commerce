@@ -22,9 +22,11 @@ export class Product {
     async index(): Promise<product[]> {
         try {
             const conn = await Client.connect();
-            const sql = 'select id,name,price,stock,image,brand_id,category_id from product;';
+            const sql = 'select * from product;';
             const res = await conn.query(sql);
             conn.release();
+            
+            
             return res.rows;
         } catch (e) {
             throw new Error(`${e}`);
@@ -38,6 +40,18 @@ export class Product {
             const res = await conn.query(sql, [id]);
             conn.release();
             return res.rows[0];
+        } catch (e) {
+            throw new Error(`${e}`);
+        }
+    }
+
+    async search_by_category(category_id: number): Promise<product[]> {
+        try {
+            const conn = await Client.connect();
+            const sql = 'select * from product where category_id =($1);';
+            const res = await conn.query(sql, [category_id]);
+            conn.release();
+            return res.rows;
         } catch (e) {
             throw new Error(`${e}`);
         }

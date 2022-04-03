@@ -26,6 +26,7 @@ async function show(req: Request, res: Response) {
     }
 }
 
+
 async function update(req: Request, res: Response) {
     const token = req.headers.token as unknown as string;
     const permession = jwt.verify(token, secret);
