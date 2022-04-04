@@ -28,10 +28,10 @@ app.listen(port, function () {
 //run modules of the project
 //userRoute(app);
 //orderRoute(app);
+(0, feedback_1.default)(app);
 (0, products_1.default)(app);
 (0, brand_1.default)(app);
 (0, coupon_1.default)(app);
-(0, feedback_1.default)(app);
 (0, users_1.default)(app);
 (0, catogery_1.default)(app);
 (0, orders_1.default)(app);

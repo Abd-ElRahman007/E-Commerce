@@ -27,10 +27,10 @@ app.listen(port, (): void => {
 //run modules of the project
 //userRoute(app);
 //orderRoute(app);
+feedbackRoute(app);
 productRoute(app);
 brandRoute(app);
 couponRoute(app);
-feedbackRoute(app);
 usersRoute(app);
 categoriesRoute(app);
 ordersRoute(app);
