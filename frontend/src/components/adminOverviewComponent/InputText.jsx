@@ -3,6 +3,7 @@ import { TextInput, createStyles } from '@mantine/core';
 
 const useStyles = createStyles((theme, { floating }) => ({
   root: {
+	  marginBottom:'23px',
     position: 'relative',
 	width:'100%',
 	},
