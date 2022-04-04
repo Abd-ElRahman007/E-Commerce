@@ -1,4 +1,5 @@
 import { createStyles, Select } from '@mantine/core';
+import {useState} from 'react'
 
 const useStyles = createStyles((theme) => ({
   root: {
@@ -20,11 +21,13 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-export default function InputDropdown({data}) {
+export default function InputDropdown({data,toParent}) {
   const { classes } = useStyles();
   return (
     <div style={{width:'100%'}}>
       <Select
+	  value={data.value}
+	    onChange={toParent}
         style={{ marginTop: 20, zIndex: 2 }}
         data={data.data}
         placeholder={data.placeholder}

@@ -36,9 +36,8 @@ const useStyles = createStyles((theme) => ({
 
 }));
 
-export default function InputStoke({ min = 1 }) {
+export default function InputStoke({ min = 1 ,toParent,value}) {
   const { classes } = useStyles();
-  const [value, setValue] = useState(1);
   const handlers = useRef();
 
   return (
@@ -60,7 +59,7 @@ export default function InputStoke({ min = 1 }) {
         min={min}
         handlersRef={handlers}
         value={value}
-        onChange={setValue}
+        onChange={toParent}
         classNames={{ input: classes.input }}
       />
       <ActionIcon
