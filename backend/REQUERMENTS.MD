@@ -151,17 +151,17 @@ Database Schema:
 
         create table comment(id serial primary key, subject varchar(200), message text, created_time timestamp, user_id bigint references users(id)on delete cascade, product_id bigint references product(id)on delete cascade);
 
-        index      --> product/:product_id/comments         [get]
+        index      --> products/:product_id/comments         [get]
                                                             [return]{id,subject,message,created_at,user_id,product_id}
 
-        show       --> product/:product_id/comments/:id     [get]
+        show       --> products/:product_id/comments/:id     [get]
                                                             [return]{id,subject,message,created_at,user_id,product_id}
 
-        create     --> product/:product_id/comments         [post] body{subject,message,user_id,product_id} header{token}
+        create     --> products/:product_id/comments         [post] body{subject,message,user_id,product_id} header{token}
                                                             [return]{id,subject,message,created_at,user_id,product_id}
 
-        update     --> product/:product_id/comments/:id     [patch] body{subject,message,user_id,product_id} header{token}
+        update     --> products/:product_id/comments/:id     [patch] body{subject,message,user_id,product_id} header{token}
                                                             [return]{id,subject,message,created_at,user_id,product_id}
 
-        delete     --> product/:product_id/comments/:id     [delete] header{token}
+        delete     --> products/:product_id/comments/:id     [delete] header{token}
                                                             [return]{'deleted'}
