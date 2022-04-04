@@ -4,6 +4,7 @@ import { Plus, Minus } from 'tabler-icons-react';
 
 const useStyles = createStyles((theme) => ({
   wrapper: {
+	marginTop:'18px',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -35,14 +36,13 @@ const useStyles = createStyles((theme) => ({
 
 }));
 
-export default function InputStoke({ min = 1, max = 10 }) {
+export default function InputStoke({ min = 1 ,toParent,value}) {
   const { classes } = useStyles();
-  const [value, setValue] = useState(1);
   const handlers = useRef();
 
   return (
-    <label className={classes.wrapper}>
-    Add Stoke
+    <div style={{ width: '100%' }} className={classes.wrapper}>
+      Add Stoke 
       <ActionIcon
         size={28}
         variant="transparent"
@@ -57,22 +57,20 @@ export default function InputStoke({ min = 1, max = 10 }) {
       <NumberInput
         variant='unstyled'
         min={min}
-        max={max}
         handlersRef={handlers}
         value={value}
-        onChange={setValue}
+        onChange={toParent}
         classNames={{ input: classes.input }}
       />
       <ActionIcon
         size={28}
         variant="transparent"
         onClick={() => handlers.current.increment()}
-        disabled={value === max}
         className={classes.control}
         onMouseDown={(e) => e.preventDefault()}
       >
         <Plus size={16} />
       </ActionIcon>
-    </label>
+    </div>
   )
 }

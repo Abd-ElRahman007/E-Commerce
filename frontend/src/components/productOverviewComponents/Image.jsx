@@ -6,7 +6,8 @@ const useStyles = createStyles((theme, _params, getRef) => {
   return {
     card: {
       position: 'relative',
-      height: 280,
+      height: 250,
+	  width:250,
       backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.colors.gray[0],
 
       [`&:hover .${image}`]: {
@@ -31,7 +32,7 @@ const useStyles = createStyles((theme, _params, getRef) => {
       left: 0,
       right: 0,
       bottom: 0,
-      backgroundImage: 'linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, .85) 90%)',
+      backgroundImage: 'linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, .65) 90%)',
     },
 
     content: {
@@ -60,14 +61,15 @@ const useStyles = createStyles((theme, _params, getRef) => {
 });
 
 
-export default function Image({ image, title, author }) {
+export default function Image({ image, title, author,dim,cols }) {
   const { classes } = useStyles();
 
   return (
     <Card
+	  style={dim}
       p="lg"
       shadow="lg"
-      className={classes.card}
+      className={classes.card,cols}
       radius="md"
       component="a"
       href={image}
