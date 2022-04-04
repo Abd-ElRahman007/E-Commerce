@@ -15,18 +15,23 @@ async function index(req: Request, res: Response) {
         const page = Number(req.query.page);
         const limit = Number(req.query.limit);
         //pagination
-        const start_index = (page-1)*limit;
-        const end_index = (page)*limit;
-        const result={next:{},data:{},previous:{}};
-        if(model_result.length > end_index){
-            result.next={page:page+1,limit:limit};
-        }        
+        if(page && limit)
+        {
+            const start_index = (page-1)*limit;
+            const end_index = (page)*limit;
+            const result={next:{},data:{},previous:{}};
+            if(model_result.length > end_index){
+                result.next={page:page+1,limit:limit};
+            }        
 
-        if(start_index>0){
-            result.previous={page:page-1,limit:limit};
-        }
-        result.data=model_result.slice(start_index,end_index);
-        res.status(200).json(result);
+            if(start_index>0){
+                result.previous={page:page-1,limit:limit};
+            }
+            result.data=model_result.slice(start_index,end_index);
+            res.status(200).json(result);
+        }else
+            res.status(200).json(model_result);
+        
     } catch (e) {
         res.status(400).json(`${e}`);
     }
