@@ -79,11 +79,11 @@ async function delete_(req: Request, res: Response) {
 }
 
 function mainRoutes(app: Application) {
-    app.get('product/:product_id/comments', index);
-    app.get('product/:product_id/comments/:id', show);
-    app.post('product/:product_id/comments', create);
-    app.patch('product/:product_id/comments/:id', update);
-    app.delete('product/:product_id/comments/:id', delete_);
+    app.get('products/:product_id/comments', index);
+    app.get('products/:product_id/comments/:id', show);
+    app.post('products/:product_id/comments', create);
+    app.patch('products/:product_id/comments/:id', update);
+    app.delete('products/:product_id/comments/:id', delete_);
 }
 
 export default mainRoutes;

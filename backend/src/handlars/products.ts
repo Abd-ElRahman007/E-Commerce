@@ -58,17 +58,17 @@ async function update(req: Request, res: Response) {
             const p: product = {
                 id: Number(req.params.id),
                 name: req.body.name,
-                price: Number(req.params.price),
+                price: Number(req.body.price),
                 code:req.body.code,
                 model:req.body.model,
                 image:req.body.image,
                 description:req.body.description,
-                category_id:Number(req.params.category_id),
+                category_id:Number(req.body.category_id),
                 currency:req.body.currency,
-                vote_count:Number(req.params.vote_count),
-                vote_total:Number(req.params.vote_total),
-                stock:Number(req.params.stock),
-                brand_id:Number(req.params.brand_id),
+                vote_count:Number(req.body.vote_count),
+                vote_total:Number(req.body.vote_total),
+                stock:Number(req.body.stock),
+                brand_id:Number(req.body.brand_id),
             };
             const result = await product_obj.update(p);
             res.status(200).json(result);
