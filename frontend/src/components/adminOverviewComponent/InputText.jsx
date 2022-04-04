@@ -3,8 +3,10 @@ import { TextInput, createStyles } from '@mantine/core';
 
 const useStyles = createStyles((theme, { floating }) => ({
   root: {
+	  marginBottom:'23px',
     position: 'relative',
-  },
+	width:'100%',
+	},
 
   label: {
     position: 'absolute',
@@ -38,10 +40,9 @@ const useStyles = createStyles((theme, { floating }) => ({
   },
 }));
 
-export default function InputText({data}) {
+export default function InputText({data,toParent}) {
   const [focused, setFocused] = useState(false);
-  const [value, setValue] = useState('');
-  const { classes } = useStyles({ floating: value.trim().length !== 0 || focused });
+  const { classes } = useStyles({ floating: data.value.trim().length !== 0 || focused });
 
   return (
     <TextInput
@@ -49,8 +50,8 @@ export default function InputText({data}) {
       placeholder={data.placeholder}
       required
       classNames={classes}
-      value={value}
-      onChange={(event) => setValue(event.currentTarget.value)}
+      value={data.value}
+	  onChange={(event)=>toParent(event.currentTarget.value)}
       onFocus={() => setFocused(true)}
       onBlur={() => setFocused(false)}
       mt="md"
