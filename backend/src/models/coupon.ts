@@ -41,7 +41,7 @@ export class Coupon {
             const sql = 'insert into coupon (code,value_of_100) values($1,$2)RETURNING *;';
             const res = await conn.query(sql, [c.code,c.value_of_100]);
             conn.release();
-            return 'created';
+            return res.rows[0];
         } catch (e) {
             throw new Error(`${e}`);
         }
@@ -53,7 +53,7 @@ export class Coupon {
             const sql = 'update coupon set code=($1), value_of_100=($2) where id=($3) RETURNING *; ';
             const res = await conn.query(sql, [c.code, c.value_of_100, c.id]);
             conn.release();
-            return 'updated';
+            return res.rows[0];
         } catch (e) {
             throw new Error(`${e}`);
         }
@@ -63,7 +63,7 @@ export class Coupon {
         try {
             const conn = await Client.connect();
             const sql = 'delete from coupon where id =($1);';
-            const res = await conn.query(sql, [id]);
+            await conn.query(sql, [id]);
             conn.release();
             return 'deleted';
         } catch (e) {
