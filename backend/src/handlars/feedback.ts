@@ -9,6 +9,8 @@ const secret: string = process.env.token as unknown as string;
 const comment_obj = new Comment();
 
 async function index(req: Request, res: Response) {
+    console.log('...................................');
+    
     try {
         const resault = await comment_obj.index(Number(req.params.product_id));
         res.status(200).json(resault);
@@ -47,6 +49,8 @@ async function update(req: Request, res: Response) {
 }
 
 async function create(req: Request, res: Response) {
+    console.log('arr..............');
+    
     const token = req.headers.token as unknown as string;
     const permession = jwt.verify(token, secret);
     if (permession) {
@@ -79,6 +83,8 @@ async function delete_(req: Request, res: Response) {
 }
 
 function mainRoutes(app: Application) {
+    console.log('main..........');
+    
     app.get('products/:product_id/comments', index);
     app.get('products/:product_id/comments/:id', show);
     app.post('products/:product_id/comments', create);

@@ -14,10 +14,14 @@ export type comment = {
 
 export class Comment {
     async index(product_id:number): Promise<comment[]> {
+        console.log('...........................');
+        
         try {
             const conn = await Client.connect();
             const sql = 'select * from comment where product_id=($1);';
             const res = await conn.query(sql,[product_id]);
+            console.log(res.rows);
+            
             conn.release();
             return res.rows;
         } catch (e) {

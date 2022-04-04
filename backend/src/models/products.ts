@@ -19,6 +19,8 @@ export type product = {
     brand_id: number;
 };
 
+
+
 export class Product {
     async index(): Promise<product[]> {
         try {
@@ -34,13 +36,18 @@ export class Product {
         }
     }
 
-    async show(id: number): Promise<product> {
+    async show(id: number): Promise<object> {
         try {
             const conn = await Client.connect();
             const sql = 'select * from product where id =($1);';
             const res = await conn.query(sql, [id]);
+            
+            const sql1 = 'select * from product_images where product_id =($1);';
+            const res1 = await conn.query(sql1, [id]);
+
+            const main_res={product:res.rows[0], images:res1.rows};
             conn.release();
-            return res.rows[0];
+            return main_res;
         } catch (e) {
             throw new Error(`${e}`);
         }

@@ -85,7 +85,7 @@ async function create(req: Request, res: Response) {
         try {
             const p: product = {
                 name: req.body.name,
-                price: Number(req.params.price),
+                price: Number(req.body.price),
                 code:req.body.code,
                 model:req.body.model,
                 image:req.body.image,
