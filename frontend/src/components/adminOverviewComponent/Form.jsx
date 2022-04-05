@@ -5,7 +5,7 @@ import InputStoke from './InputStoke';
 import InputText from './InputText';
 import InputTextArea from './InputTextArea';
 import { Group, Button } from '@mantine/core';
-import { useState } from 'react';
+import { useState ,useEffect} from 'react';
 import axios from 'axios';
 
 export default function Form() {
@@ -18,6 +18,10 @@ export default function Form() {
 	const [dataPrice, setPrice] = useState('');
 	const [dataStoke, setStoke] = useState(1);
 	const [dataDescription, setDescrition] = useState('');
+	const [imageData, setImageData] = useState('')
+
+	const [exisitingCategories, setExisitingCategories] = useState([])
+	const [existingBrands, setExistingBrands] = useState([])
 
 	const form = useForm({
 		initialValues: {
@@ -68,20 +72,84 @@ export default function Form() {
 		setDescrition(childData);
 		form.setFieldValue('description', childData)
 	}
+	function image(childData) {
+		setImageData(childData);
+		form.setFieldValue('image', childData)
+	}
+
+	const getCategories =()=> {
+	
+		axios.get('http://localhost:5000/categories',)
+		 .then((response) => {
+			 console.log("backend response categoies" , response)
+		 	setExisitingCategories(response.data) 
+			 })
+		 .catch(error =>console.log("backend error categoies" , error))
+	}
+
+	const getBrands =()=> {
+	
+		axios.get('http://localhost:5000/brands',)
+		 .then((response) => {
+			 console.log("backend response brands" , response)
+		 	 setExistingBrands(response.data) 
+			 })
+		 .catch(error =>console.log("backend error brands" , error))
+	}
+
+
+	const backendCategories =()=> {
+	 let current =[]
+		exisitingCategories.map((c)=>{			
+		  return current.push(c)
+		})
+		return current
+	}
+
+	const backendBrands =()=> {
+		let current =[]
+		   existingBrands.map((b)=>{			
+			 return current.push(b)
+		   })
+		   return current
+	   }
+
+
+	   const handelSubmit = (e,values)=> {
+		e.preventDefault(e)
+		axios.post('http://localhost:5000/products', {data:values})
+		.then((response) => {
+			console.log("backend response brands" , response)
+			 setExistingBrands(response.data) 
+			}).
+		catch(function(error){console.log(error)})
+	}
+
+	useEffect(() => {
+		getCategories()
+		console.log("categoies in backend " , exisitingCategories)
+
+		getBrands()
+		console.log("brands in backend " , existingBrands)
+	}, [])
 
 	return (
-		<form onSubmit={form.onSubmit((values) => axios({method:'post',url:'http://localhost:5000/products',data:values}).then(function(response){console.log(response)}).catch(function(error){console.log(error)}))}>
+		<form onSubmit={form.onSubmit(handelSubmit)}>
 			<InputText toParent={name} data={{ label: 'Product Name', placeholder: 'Product Name', value: dataName }} radius='md' />
 			<InputText toParent={code} data={{ label: 'Product Code', placeholder: 'Product Code', value: dataCode }} radius='md' />
 			<InputText toParent={model} data={{ label: 'Product Model', placeholder: 'Product Model', value: dataModel }} radius='md' />
-			<InputDropdown toParent={category} data={{ label: 'Category', placeholder: 'category', data: ['category1', 'category2', 'category3', 'category4', 'category5'], value: dataCategory }} />
-			<InputDropdown toParent={brand} data={{ label: 'Brand', placeholder: 'Brand', data: ['brand1', 'brand2', 'brand3', 'brand4', 'brand5'], value: dataBrand }} />
+			<InputDropdown toParent={category} data={{ label: 'Category', placeholder: 'category', data: backendCategories(), value: dataCategory }} />
+			<InputDropdown toParent={brand} data={{ label: 'Brand', placeholder: 'Brand', data:backendBrands(), value: dataBrand }} />
 			<InputCurrency toParent={price} toParentTwo={currency} dataInput={{ value: dataPrice }} currency={dataCurrency} />
 			<InputStoke toParent={stoke} value={dataStoke} max='' />
 			<InputTextArea toParent={description} data={{ label: 'Description', placeholder: 'description', value: dataDescription }} />
+			<InputText toParent={image} data={{ label: 'image', placeholder: 'image path', value: imageData }} radius='md' />
 			<Group position="right" mt="md">
 				<Button type="submit">Submit</Button>
 			</Group>
 		</form>
 	)
 }
+
+
+
