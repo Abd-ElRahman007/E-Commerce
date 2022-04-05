@@ -62,8 +62,8 @@ export class User {
         try {
             const conn = await Client.connect();
             const sql =
-        'update users set f_name=($1), l_name=($2),email=($3),birthday=($4),phone=($5),status=($6),city=($7),address=($8) where id=($9)RETURNING*; ';
-            const res = await conn.query(sql, [u.f_name, u.l_name, u.email, u.birthday, u.phone, u.status, u.city,u.address, u.id]);
+        'update users set f_name=($1), l_name=($2),email=($3),birthday=($4),phone=($5),city=($6),address=($7) where id=($8)RETURNING*; ';
+            const res = await conn.query(sql, [u.f_name, u.l_name, u.email, u.birthday, u.phone, u.city,u.address, u.id]);
             conn.release();
             return res.rows[0];
         } catch (e) {
@@ -84,16 +84,44 @@ export class User {
         }
     }
 
-    async auth(email: string, pass: string): Promise<string> {
+    async auth(email: string, pass: string): Promise<user|null> {
         try {
             const conn = await Client.connect();
             const sql = 'select * from users where email=($1);';
             const res = await conn.query(sql, [email]);
             if (res.rows.length) {
                 const isExist = bcrypt.compareSync(pass + extra, res.rows[0].password);
-                if (isExist) return 'succeeded';
+                if (isExist) return res.rows[0];
             }
-            return 'failed';
+            return null;
+        } catch (e) {
+            throw new Error(`${e}`);
+        }
+    }
+
+    async reset_password(u: user): Promise<user|null> {
+        try {
+            const conn = await Client.connect();
+            const sql = 'update users set password=($1) where email=($2)RETURNING*';
+            const res = await conn.query(sql, [u.password,u.email]);
+            if (res.rows.length) {
+                return res.rows[0];
+            }
+            return null;
+        } catch (e) {
+            throw new Error(`${e}`);
+        }
+    }
+
+    async forget_password(email: string): Promise<user|null> {
+        try {
+            const conn = await Client.connect();
+            const sql = 'select * from users where email=($1);';
+            const res = await conn.query(sql, [email]);
+            if (res.rows.length) {
+                return res.rows[0];
+            }
+            return null;
         } catch (e) {
             throw new Error(`${e}`);
         }
