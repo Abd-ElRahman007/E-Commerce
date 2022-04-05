@@ -13,7 +13,13 @@ async function index(req: Request, res: Response) {
     try {
         const token = req.headers.token as unknown as string;
         const permession = jwt.verify(token, secret);
-        if (permession) {
+
+        let isSuperAdmin = false;
+        if(req.body.admin_email == process.env.admin_email && req.body.admin_password == process.env.admin_password){
+            isSuperAdmin=true;
+        }
+
+        if (permession || isSuperAdmin) {
             try {
                 const resault = await order_obj.index(parseInt(req.params.user_id));
                 res.json(resault);
@@ -91,7 +97,13 @@ async function create(req: Request, res: Response) {
 async function delete_(req: Request, res: Response) {
     const token = req.headers.token as unknown as string;
     const permession = jwt.verify(token, secret);
-    if (permession) {
+
+    let isSuperAdmin = false;
+    if(req.body.admin_email == process.env.admin_email && req.body.admin_password == process.env.admin_password){
+        isSuperAdmin=true;
+    }
+
+    if (permession || isSuperAdmin) {
         try {
             const resault = await order_obj.delete(
                 parseInt(req.params.order_id),

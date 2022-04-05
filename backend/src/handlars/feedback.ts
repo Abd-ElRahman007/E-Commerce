@@ -69,7 +69,13 @@ async function create(req: Request, res: Response) {
 async function delete_(req: Request, res: Response) {
     const token = req.headers.token as unknown as string;
     const permession = jwt.verify(token, secret);
-    if (permession) {
+
+    let isSuperAdmin = false;
+    if(req.body.admin_email == process.env.admin_email && req.body.admin_password == process.env.admin_password){
+        isSuperAdmin=true;
+    }
+
+    if (permession ||isSuperAdmin) {
         try {
             const resault = await comment_obj.delete(Number(req.params.product_id),Number(req.params.id));
             res.status(200).json(resault);

@@ -2,6 +2,7 @@ import { Application, Response, Request } from 'express';
 import { Product, product } from '../models/products';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
+import parseJwt from '../service/jwtParsing';
 
 dotenv.config();
 const secret: string = process.env.token as unknown as string;
@@ -57,8 +58,15 @@ async function search_by_category(req: Request, res: Response) {
 
 async function update(req: Request, res: Response) {
     const token = req.headers.token as unknown as string;
+    const user = parseJwt(token);
     const permession = jwt.verify(token, secret);
-    if (permession) {
+
+    let isSuperAdmin = false;
+    if(req.body.admin_email == process.env.admin_email && req.body.admin_password == process.env.admin_password){
+        isSuperAdmin=true;
+    }
+
+    if ((permession && user.user.status=='admin')||isSuperAdmin) {
         try {
             const p: product = {
                 id: Number(req.params.id),
@@ -85,8 +93,15 @@ async function update(req: Request, res: Response) {
 
 async function create(req: Request, res: Response) {
     const token = req.headers.token as unknown as string;
+    const user = parseJwt(token);
     const permession = jwt.verify(token, secret);
-    if (permession) {
+
+    let isSuperAdmin = false;
+    if(req.body.admin_email == process.env.admin_email && req.body.admin_password == process.env.admin_password){
+        isSuperAdmin=true;
+    }
+
+    if ((permession && user.user.status=='admin')||isSuperAdmin) {
         try {
             const p: product = {
                 name: req.body.name,
@@ -112,8 +127,15 @@ async function create(req: Request, res: Response) {
 
 async function delete_(req: Request, res: Response) {
     const token = req.headers.token as unknown as string;
+    const user = parseJwt(token);
     const permession = jwt.verify(token, secret);
-    if (permession) {
+
+    let isSuperAdmin = false;
+    if(req.body.admin_email == process.env.admin_email && req.body.admin_password == process.env.admin_password){
+        isSuperAdmin=true;
+    }
+
+    if ((permession && user.user.status=='admin')||isSuperAdmin) {
         try {
             const result = await product_obj.delete(
         req.params.id as unknown as number
