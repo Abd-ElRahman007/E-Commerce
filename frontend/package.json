@@ -2,12 +2,11 @@
   "name": "frontend",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://localhost:5002",
   "dependencies": {
-<<<<<<< HEAD
     "@mantine/core": "^4.1.2",
     "@mantine/dropzone": "^4.1.2",
     "@mantine/hooks": "^4.1.1",
+	"@mantine/form": "^4.1.2",
     "@mantine/notifications": "^4.1.2",
     "@reduxjs/toolkit": "^1.8.0",
     "@testing-library/jest-dom": "^5.16.2",
@@ -21,7 +20,7 @@
     "react-redux": "^7.2.6",
     "react-router-dom": "^6.2.2",
     "react-scripts": "5.0.0",
-	"styled-components":"5.3.5",
+    "styled-components": "^5.3.5",
     "tabler-icons-react": "^1.42.0",
     "web-vitals": "^2.1.4"
   },
@@ -30,8 +29,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "server": "json-server -p3001 --watch db.json",
-    "serve": "npx serve -s build"
+    "server": "json-server -p3001 --watch db.json"
   },
   "eslintConfig": {
     "extends": [
