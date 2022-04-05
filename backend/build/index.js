@@ -26,8 +26,6 @@ app.listen(port, function () {
     console.log("server running on port ".concat(port));
 });
 //run modules of the project
-//userRoute(app);
-//orderRoute(app);
 (0, feedback_1.default)(app);
 (0, products_1.default)(app);
 (0, brand_1.default)(app);

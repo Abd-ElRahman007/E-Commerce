@@ -14,7 +14,6 @@ export type comment = {
 
 export class Comment {
     async index(product_id:number): Promise<comment[]> {
-        console.log('...........................');
         
         try {
             const conn = await Client.connect();
