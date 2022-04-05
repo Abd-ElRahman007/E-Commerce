@@ -20,10 +20,10 @@ export default function Form() {
 
 	const form = useForm({
 		initialValues: {
-			productName: '',
-			productModel: '',
-			productCode: '',
-			stoke: '',
+			name: '',
+			model: '',
+			code: '',
+			stock: '',
 			category: '',
 			brand: '',
 			price: '',
@@ -33,15 +33,15 @@ export default function Form() {
 	})
 	function name(childData) {
 		setProductName(childData);
-		form.setFieldValue('productName', childData)
+		form.setFieldValue('name', childData)
 	}
 	function code(childData) {
 		setProductCode(childData);
-		form.setFieldValue('productCode', childData)
+		form.setFieldValue('code', childData)
 	}
 	function model(childData) {
 		setProductModel(childData);
-		form.setFieldValue('productModel', childData)
+		form.setFieldValue('model', childData)
 	}
 	function category(childData) {
 		setCategory(childData);
@@ -61,7 +61,7 @@ export default function Form() {
 	}
 	function stoke(childData) {
 		setStoke(childData);
-		form.setFieldValue('stoke', childData)
+		form.setFieldValue('stock', childData)
 	}
 	function description(childData) {
 		setDescrition(childData);
@@ -69,7 +69,7 @@ export default function Form() {
 	}
 
 	return (
-		<form onSubmit={form.onSubmit((values) => console.log(values))}>
+		<form onSubmit={form.onSubmit((values) => axion({method:'post',url:'http://localhost:5000/products',data:values}).then(function(response){console.log(response)}).catch(function(error){console.log(error)}))}>
 			<InputText toParent={name} data={{ label: 'Product Name', placeholder: 'Product Name', value: dataName }} radius='md' />
 			<InputText toParent={code} data={{ label: 'Product Code', placeholder: 'Product Code', value: dataCode }} radius='md' />
 			<InputText toParent={model} data={{ label: 'Product Model', placeholder: 'Product Model', value: dataModel }} radius='md' />
