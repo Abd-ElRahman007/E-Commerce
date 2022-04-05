@@ -1,6 +1,7 @@
 import { Application, Response, Request } from 'express';
 import nodemailer from 'nodemailer';
 import { User, user } from '../models/users';
+import parseJwt from '../service/jwtParsing';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
@@ -16,15 +17,7 @@ const transporter = nodemailer.createTransport({
         pass: process.env.email_password
     }
 });
-function parseJwt (token:string) {
-    const base64Url = token.split('.')[1];
-    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-    const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
-        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-    }).join(''));
 
-    return JSON.parse(jsonPayload);
-}
 
 async function index(req: Request, res: Response) {
     try {
