@@ -6,6 +6,7 @@ import InputText from './InputText';
 import InputTextArea from './InputTextArea';
 import { Group, Button } from '@mantine/core';
 import { useState } from 'react';
+import axios from 'axios';
 
 export default function Form() {
 	const [dataName, setProductName] = useState('');
@@ -69,7 +70,7 @@ export default function Form() {
 	}
 
 	return (
-		<form onSubmit={form.onSubmit((values) => axion({method:'post',url:'http://localhost:5000/products',data:values}).then(function(response){console.log(response)}).catch(function(error){console.log(error)}))}>
+		<form onSubmit={form.onSubmit((values) => axios({method:'post',url:'http://localhost:5000/products',data:values}).then(function(response){console.log(response)}).catch(function(error){console.log(error)}))}>
 			<InputText toParent={name} data={{ label: 'Product Name', placeholder: 'Product Name', value: dataName }} radius='md' />
 			<InputText toParent={code} data={{ label: 'Product Code', placeholder: 'Product Code', value: dataCode }} radius='md' />
 			<InputText toParent={model} data={{ label: 'Product Model', placeholder: 'Product Model', value: dataModel }} radius='md' />
