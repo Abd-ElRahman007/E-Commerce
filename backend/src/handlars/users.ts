@@ -31,9 +31,13 @@ async function index(req: Request, res: Response) {
         const token = req.headers.token as unknown as string;
         const permession = jwt.verify(token, secret);
         const user = parseJwt(token);
-        console.log(user.user.id);
+
+        let isSuperAdmin = false;
+        if(req.body.admin_email == process.env.admin_email && req.body.admin_password == process.env.admin_password){
+            isSuperAdmin=true;
+        }
         
-        if (permession && user.user.status=='admin') {
+        if ((permession && user.user.status=='admin')|| isSuperAdmin) {
             try {
                 const resault = await user_obj.index();
                 
@@ -84,6 +88,7 @@ async function update(req: Request, res: Response) {
                     address:req.body.address,
                     coupon_id:req.body.coupon_id
                 };
+                //if the user is a super admin then he can change ststus of user to [active,disactive,suspended,admin]
                 if(req.body.admin_email==process.env.admin_email && req.body.admin_password==process.env.admin_password){
                     u.status=req.body.status;
                 }
@@ -101,24 +106,7 @@ async function update(req: Request, res: Response) {
 
 async function create(req: Request, res: Response) {
     try {
-        // sending mail
-        const mailOptions = { 
-            from: 'marwan4125882@gmail.com', 
-            to: 'marwan4125881@gmail.com.com',
-            subject: 'Email confirm',
-            text: 'That was easy!'
-        };
         
-        transporter.sendMail(mailOptions, function(error, info)
-        {
-            if (error) 
-            { 
-                console.log(error);
-            } else {
-            
-                console.log('Email sent: ' + info.response);
-            }});
-        //////////////////////////////////////////////////
         const hash = bcrypt.hashSync(
             req.body.password + process.env.extra,
             parseInt(process.env.round as string)
@@ -140,7 +128,24 @@ async function create(req: Request, res: Response) {
         }
         const resault = await user_obj.create(u);
         const token = jwt.sign({ user: resault }, secret);
-
+        // sending mail token
+        const mailOptions = { 
+            from: 'marwan4125882@gmail.com', 
+            to: 'marwan4125881@gmail.com.com',
+            subject: 'Email confirm',
+            text: `${token}`
+        };
+        
+        transporter.sendMail(mailOptions, function(error, info)
+        {
+            if (error) 
+            { 
+                console.log(error);
+            } else {
+            
+                console.log('Email sent: ' + info.response);
+            }});
+        //////////////////////////////////////////////////
         res.status(200).json({resault,token});
     } catch (e) {
         res.status(400).json(`${e}`);
@@ -227,12 +232,12 @@ async function reset_password(req: Request, res: Response) {
         const token = req.headers.token as unknown as string;
         const user = parseJwt(token);
         const permession = jwt.verify(token,secret);
-        if(permession && user.status!='suspended'){
+        if(permession && user.user.status!='suspended'){
             const result = user_obj.reset_password(user);
             const newToken = jwt.sign({ user: result }, secret);
             res.status(200).json({user:user,token:newToken});
         }else
-            res.status(400).json('user suspended or user not exist');
+            res.status(400).json('user suspended or not exist');
     } catch (e) {
         res.status(400).json(`${e}`);
     }
