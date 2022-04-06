@@ -165,3 +165,42 @@ Database Schema:
 
         delete     --> products/:product_id/comments/:id     [delete] header{token}
                                                             [return]{'deleted'}
+
+
+
+
+
+
+
+{
+    "code": "11fdkbmkkkgf57",
+    "name": "jksn455",
+    "model": "2022",
+    "images": ["none","jkjkj","klmjkj","fdjkgdf"],
+    "description": "misr",
+    "category_id": 1,
+    "price": 2500,
+    "currency": "eg",
+    "vote_count": 5,
+    "vote_total": 20,
+    "stock": 1000,
+    "brand_id": 1,
+    "f_name":"marwan",
+    "l_name":"ahmed",
+    "admin_email":"marwan@gmail.com",
+    "admin_password":"marwan",
+    "birthday":"2022-04-03T17:38:06.684Z",
+    "phone":"01282783116",
+    "status":"open",
+    "city":"menofia",
+    "address":"none",
+    "total":200,
+    "time_arrival":"2022-04-03T17:38:06.684Z",
+    "time_compelete":"2022-04-03T17:38:06.684Z",
+    "product_id":1,
+    "quantity":20,
+    "value_of_100":51,
+    "subject":"no2mne",
+    "message":"helmlo",
+    "user_id":1
+}
