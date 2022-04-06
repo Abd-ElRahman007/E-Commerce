@@ -2,6 +2,7 @@ import { Application, Response, Request } from 'express';
 import { Catogery, catogery } from '../models/catogery';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
+import parseJwt from '../service/jwtParsing';
 
 dotenv.config();
 const secret: string = process.env.token as unknown as string;
@@ -29,8 +30,15 @@ async function show(req: Request, res: Response) {
 
 async function update(req: Request, res: Response) {
     const token = req.headers.token as unknown as string;
+    const user = parseJwt(token);
     const permession = jwt.verify(token, secret);
-    if (permession) {
+
+    let isSuperAdmin = false;
+    if(req.body.admin_email == process.env.admin_email && req.body.admin_password == process.env.admin_password){
+        isSuperAdmin=true;
+    }
+
+    if ((permession && user.user.status=='admin')||isSuperAdmin) {
         try {
             const c: catogery = {
                 id: req.params.id as unknown as number,
@@ -46,8 +54,17 @@ async function update(req: Request, res: Response) {
 
 async function create(req: Request, res: Response) {
     const token = req.headers.token as unknown as string;
-    const permession = 1; //jwt.verify(token, secret);
-    if (permession) {
+
+    const user = parseJwt(token);
+    const permession = jwt.verify(token, secret);
+
+    let isSuperAdmin = false;
+    if(req.body.admin_email == process.env.admin_email && req.body.admin_password == process.env.admin_password){
+        isSuperAdmin=true;
+    }
+
+    if ((permession && user.user.status=='admin')||isSuperAdmin) {
+
         try {
             const c: catogery = {
                 name: req.body.name,
@@ -62,8 +79,15 @@ async function create(req: Request, res: Response) {
 
 async function delete_(req: Request, res: Response) {
     const token = req.headers.token as unknown as string;
+    const user = parseJwt(token);
     const permession = jwt.verify(token, secret);
-    if (permession) {
+
+    let isSuperAdmin = false;
+    if(req.body.admin_email == process.env.admin_email && req.body.admin_password == process.env.admin_password){
+        isSuperAdmin=true;
+    }
+
+    if ((permession && user.user.status=='admin')||isSuperAdmin) {
         try {
             const resault = await catogery_obj.delete(
         req.params.id as unknown as number

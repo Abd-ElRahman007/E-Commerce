@@ -1,5 +1,4 @@
 import Client from '../database';
-import { catogery } from './catogery';
 
 
 
@@ -8,7 +7,8 @@ export type product = {
     code: string;
     name: string;
     model: string;
-    image: string;
+    images?: Array<string>;
+    image:string;
     description: string;
     category_id: number;
     price: number;
@@ -42,12 +42,8 @@ export class Product {
             const sql = 'select * from product where id =($1);';
             const res = await conn.query(sql, [id]);
             
-            const sql1 = 'select * from product_images where product_id =($1);';
-            const res1 = await conn.query(sql1, [id]);
-
-            const main_res={product:res.rows[0], images:res1.rows};
             conn.release();
-            return main_res;
+            return res.rows[0];
         } catch (e) {
             throw new Error(`${e}`);
         }
@@ -71,12 +67,12 @@ export class Product {
             const conn = await Client.connect();
 
             const sql =
-        'insert into product (code,  name,  model,  image,  description,category_id, price, currency , vote_count, vote_total, stock, brand_id) values($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)RETURNING *;';
+        'insert into product (code,  name,  model,  images,  description,category_id, price, currency , vote_count, vote_total, stock, brand_id,image) values($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13)RETURNING *;';
             const res = await conn.query(sql, [
                 p.code,
                 p.name,
                 p.model,
-                p.image,
+                p.images,
                 p.description,
                 p.category_id,
                 p.price,
@@ -85,6 +81,7 @@ export class Product {
                 p.vote_total,
                 p.stock,
                 p.brand_id,
+                p.image,
             ]);
             conn.release();
             return res.rows[0];
@@ -97,12 +94,12 @@ export class Product {
         try {
             const conn = await Client.connect();
             const sql =
-        'update product set code=($1),  name=($2),  model=($3),  image=($4),  description=($5),category_id=($6), price=($7), currency=($8) , vote_count=($9), vote_total=($10), stock=($11), brand_id=($12) where id=($13) RETURNING *; ';
+        'update product set code=($1),  name=($2),  model=($3),  images=($4),  description=($5),category_id=($6), price=($7), currency=($8) , vote_count=($9), vote_total=($10), stock=($11), brand_id=($12),image=($14) where id=($13) RETURNING *; ';
             const res = await conn.query(sql, [
                 p.code,
                 p.name,
                 p.model,
-                p.image,
+                p.images,
                 p.description,
                 p.category_id,
                 p.price,
@@ -112,6 +109,7 @@ export class Product {
                 p.stock,
                 p.brand_id,
                 p.id,
+                p.image,
             ]);
             conn.release();
             return res.rows[0];
