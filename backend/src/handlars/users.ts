@@ -74,36 +74,49 @@ async function update(req: Request, res: Response) {
     try {
         const token = req.headers.token as unknown as string;
         const permession = jwt.verify(token, secret);
-        const user = parseJwt(token);
+        const user = parseJwt(token).user;
+        const id = Number(req.params.id);
+        if(permession && id==user.id){
+            if(req.body.f_name)
+                user.f_name=req.body.f_name;
+            if(req.body.l_name)
+                user.f_name=req.body.l_name;
+            if(req.body.email)
+                user.email=req.body.email;
+            if(req.body.password)
+                user.password=req.body.password;
+            if(req.body.birthday)
+                user.birthday=req.body.birthday;
+            if(req.body.phone)
+                user.phone=req.body.phone;
+            if(req.body.city)
+                user.city=req.body.city;
+            if(req.body.address)
+                user.address=req.body.address;
 
-        if (permession) {
-            try {
-                const u: user = {
-                    id: req.params.id as unknown as number,
-                    f_name:req.body.f_name, 
-                    l_name:req.body.l_name, 
-                    email:req.body.email, 
-                    password:'', 
-                    birthday:req.body.birthday, 
-                    phone:req.body.phone, 
-                    status:'', 
-                    city:req.body.city,
-                    address:req.body.address,
-                    coupon_id:req.body.coupon_id
-                };
-                //if the user is a super admin then he can change ststus of user to [active,disactive,suspended,admin]
-                if(req.body.admin_email==process.env.admin_email && req.body.admin_password==process.env.admin_password){
-                    u.status=req.body.status;
-                }else if(user.user.status=='admin' && req.body.status!='admin'){
-                    u.status=req.body.status;
-                }
-                const resault = await user_obj.update(u);
-                const newToken = jwt.sign({ user: resault }, secret);
-                res.status(200).json({resault,newToken});
-            } catch (e) {
-                res.status(400).json(`${e}`);
-            }
-        } else res.send('Not allowed login first!!');
+            const resualt = await user_obj.update(user);
+            const new_token = jwt.sign({user:resualt},secret);
+            res.status(200).json(new_token);
+        }else if(permession && id!=user.id && user.status=='admin' && req.body.status!='admin'){
+            const u:user={
+                id:id,
+                coupon_id:Number(req.body.coupon_id),
+                status:req.body.status,
+            };
+            const resault = await user_obj.update(u);
+            const new_token = jwt.sign({user:resault},secret);
+            res.status(200).json(new_token);
+        }else if(req.body.admin_email==process.env.admin_email && req.body.admin_password==process.env.admin_password){
+            const u:user={
+                id:id,
+                coupon_id:Number(req.body.coupon_id),
+                status:req.body.status,
+            };
+            const resault = await user_obj.update(u);
+            const new_token = jwt.sign({user:resault},secret);
+            res.status(200).json(new_token);
+        }else
+            res.status(400).json('failed');
     } catch (e) {
         res.status(400).send(`${e}`);
     }
@@ -125,29 +138,9 @@ async function create(req: Request, res: Response) {
             address:req.body.address,
             coupon_id:req.body.coupon_id
         };
-        if(req.body.admin_email==process.env.admin_email && req.body.admin_password==process.env.admin_password){
-            u.status=req.body.status;
-        }
+        
         const resault = await user_obj.create(u);
         const token = jwt.sign({ user: resault }, secret);
-        // sending mail token
-        // const mailOptions = { 
-        //     from: 'marwan4125882@gmail.com', 
-        //     to: 'marwan4125881@gmail.com.com',
-        //     subject: 'Email confirm',
-        //     text: `${token}`
-        // };
-        
-        // transporter.sendMail(mailOptions, function(error, info)
-        // {
-        //     if (error) 
-        //     { 
-        //         console.log(error);
-        //     } else {
-            
-        //         console.log('Email sent: ' + info.response);
-        //     }});
-        //////////////////////////////////////////////////
         res.status(200).json(token);
     } catch (e) {
         res.status(400).json(`${e}`);
@@ -157,9 +150,9 @@ async function create(req: Request, res: Response) {
 async function delete_(req: Request, res: Response) {
     const token = req.headers.token as unknown as string;
     const user = parseJwt(token);
-
+    const id = Number(req.params.id);
     const permession = jwt.verify(token, secret);
-    if (permession) {
+    if (permession && user.user.id==id) {
         try {
             const resault = await user_obj.delete(parseInt(user.user.id));
             res.status(200).json(resault);
