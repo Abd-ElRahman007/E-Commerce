@@ -2,7 +2,7 @@ import { Application, Response, Request } from 'express';
 import nodemailer from 'nodemailer';
 import { User, user } from '../models/users';
 import parseJwt from '../service/jwtParsing';
-import jwt from 'jsonwebtoken';
+import jwt, { JwtPayload } from 'jsonwebtoken';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -165,15 +165,10 @@ async function delete_(req: Request, res: Response) {
 async function login(req: Request, res: Response) {
     try {
         const { email, password } = req.body;
-        const token = req.headers.token as unknown as string;
-        const permession = jwt.verify(token,secret);
-        const user = parseJwt(token);
-        const resault = await user_obj.auth(email, password);
-        console.log(user.user);
         
-        if(permession && user.user.status!='suspended'){
-            res.status(200).json({token:token});
-        }else if(resault){
+        const resault = await user_obj.auth(email, password);
+    
+        if(resault){
             if (resault.status!='suspended') {
                 const user_token = jwt.sign({user:resault},secret);
                 res.status(200).json(user_token);
