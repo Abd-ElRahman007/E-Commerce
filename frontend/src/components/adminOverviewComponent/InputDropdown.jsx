@@ -21,17 +21,18 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-export default function InputDropdown({data,toParent}) {
+export default function InputDropdown({info,toParent}) {
+  console.log("info" , info)
   const { classes } = useStyles();
   return (
     <div style={{width:'100%'}}>
       <Select
-	  value={data.value}
-	    onChange={toParent}
+    	  value={info.value}
+	      onChange={toParent}
         style={{ marginTop: 20, zIndex: 2 }}
-        data={data.data}
-        placeholder={data.placeholder}
-        label={data.label}
+        data={info.data}
+        placeholder={info.placeholder}
+        label={info.label}
         classNames={classes}
       />
     </div>
