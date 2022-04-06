@@ -2,7 +2,6 @@ import { Application, Response, Request } from 'express';
 import nodemailer from 'nodemailer';
 import { User, user } from '../models/users';
 import parseJwt from '../service/jwtParsing';
-import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 
@@ -49,9 +48,18 @@ async function show(req: Request, res: Response) {
         const token = req.headers.token as unknown as string;
         const permession = jwt.verify(token, secret);
         const user = parseJwt(token);
-        if (permession) {
+
+        let isSuperAdmin = false;
+        if(req.body.admin_email == process.env.admin_email && req.body.admin_password == process.env.admin_password){
+            isSuperAdmin=true;
+        }
+        let search_id:number = parseInt(user.user.id);
+        if (permession || isSuperAdmin) {
+            if(user.user.status=='admin'){
+                search_id=Number(req.params.id);
+            }
             try {
-                const resault = await user_obj.show(parseInt(user.user.id));
+                const resault = await user_obj.show(search_id);
                 res.status(200).json(resault);
             } catch (e) {
                 res.status(400).json(`${e}`);
@@ -71,7 +79,7 @@ async function update(req: Request, res: Response) {
         if (permession) {
             try {
                 const u: user = {
-                    id: user.user.id as number,
+                    id: req.params.id as unknown as number,
                     f_name:req.body.f_name, 
                     l_name:req.body.l_name, 
                     email:req.body.email, 
@@ -85,6 +93,8 @@ async function update(req: Request, res: Response) {
                 };
                 //if the user is a super admin then he can change ststus of user to [active,disactive,suspended,admin]
                 if(req.body.admin_email==process.env.admin_email && req.body.admin_password==process.env.admin_password){
+                    u.status=req.body.status;
+                }else if(user.user.status=='admin' && req.body.status!='admin'){
                     u.status=req.body.status;
                 }
                 const resault = await user_obj.update(u);
@@ -102,15 +112,12 @@ async function update(req: Request, res: Response) {
 async function create(req: Request, res: Response) {
     try {
         
-        const hash = bcrypt.hashSync(
-            req.body.password + process.env.extra,
-            parseInt(process.env.round as string)
-        );
+        
         const u: user = {
             f_name:req.body.f_name, 
             l_name:req.body.l_name, 
             email:req.body.email, 
-            password:hash, 
+            password:req.body.password, 
             birthday:req.body.birthday, 
             phone:req.body.phone, 
             status:'active',
@@ -169,7 +176,8 @@ async function login(req: Request, res: Response) {
         const permession = jwt.verify(token,secret);
         const user = parseJwt(token);
         const resault = await user_obj.auth(email, password);
-
+        console.log(user.user);
+        
         if(permession && user.user.status!='suspended'){
             res.status(200).json({token:token});
         }else if(resault){

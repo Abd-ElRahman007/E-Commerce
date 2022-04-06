@@ -8,6 +8,7 @@ export type product = {
     name: string;
     model: string;
     images?: Array<string>;
+    image:string;
     description: string;
     category_id: number;
     price: number;
@@ -66,7 +67,7 @@ export class Product {
             const conn = await Client.connect();
 
             const sql =
-        'insert into product (code,  name,  model,  images,  description,category_id, price, currency , vote_count, vote_total, stock, brand_id) values($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)RETURNING *;';
+        'insert into product (code,  name,  model,  images,  description,category_id, price, currency , vote_count, vote_total, stock, brand_id,image) values($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13)RETURNING *;';
             const res = await conn.query(sql, [
                 p.code,
                 p.name,
@@ -80,6 +81,7 @@ export class Product {
                 p.vote_total,
                 p.stock,
                 p.brand_id,
+                p.image,
             ]);
             conn.release();
             return res.rows[0];
@@ -92,7 +94,7 @@ export class Product {
         try {
             const conn = await Client.connect();
             const sql =
-        'update product set code=($1),  name=($2),  model=($3),  images=($4),  description=($5),category_id=($6), price=($7), currency=($8) , vote_count=($9), vote_total=($10), stock=($11), brand_id=($12) where id=($13) RETURNING *; ';
+        'update product set code=($1),  name=($2),  model=($3),  images=($4),  description=($5),category_id=($6), price=($7), currency=($8) , vote_count=($9), vote_total=($10), stock=($11), brand_id=($12),image=($14) where id=($13) RETURNING *; ';
             const res = await conn.query(sql, [
                 p.code,
                 p.name,
@@ -107,6 +109,7 @@ export class Product {
                 p.stock,
                 p.brand_id,
                 p.id,
+                p.image,
             ]);
             conn.release();
             return res.rows[0];
