@@ -110,17 +110,20 @@ async function create(req: Request, res: Response) {
 async function delete_(req: Request, res: Response) {
     const token = req.headers.token as unknown as string;
     const permession = jwt.verify(token, secret);
+    const user = parseJwt(token);
 
+    let search_id = user.user.id;
     let isSuperAdmin = false;
     if(req.body.admin_email == process.env.admin_email && req.body.admin_password == process.env.admin_password){
         isSuperAdmin=true;
+        search_id = req.params.user_id;
     }
 
     if (permession || isSuperAdmin) {
         try {
             const resault = await order_obj.delete(
                 parseInt(req.params.order_id),
-                parseInt(req.params.user_id)
+                parseInt(search_id)
             );
             res.json(resault);
         } catch (e) {
