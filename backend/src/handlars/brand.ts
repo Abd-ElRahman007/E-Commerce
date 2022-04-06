@@ -57,6 +57,7 @@ async function update(req: Request, res: Response) {
 
 async function create(req: Request, res: Response) {
     const token = req.headers.token as unknown as string;
+
     const user = parseJwt(token);
     const permession = jwt.verify(token, secret);
     
@@ -66,6 +67,7 @@ async function create(req: Request, res: Response) {
     }
 
     if ((permession && user.user.status=='admin')||isSuperAdmin) {
+
         try {
             const b: brand = {
                 name: req.body.name,
