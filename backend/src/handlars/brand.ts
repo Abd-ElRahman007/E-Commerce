@@ -32,6 +32,7 @@ async function show(req: Request, res: Response) {
 async function update(req: Request, res: Response) {
     const token = req.headers.token as unknown as string;
     const user = parseJwt(token);
+
     const permession = jwt.verify(token, secret);
 
     let isSuperAdmin = false;
@@ -58,7 +59,7 @@ async function create(req: Request, res: Response) {
     const token = req.headers.token as unknown as string;
     const user = parseJwt(token);
     const permession = jwt.verify(token, secret);
-
+    
     let isSuperAdmin = false;
     if(req.body.admin_email == process.env.admin_email && req.body.admin_password == process.env.admin_password){
         isSuperAdmin=true;

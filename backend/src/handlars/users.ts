@@ -48,10 +48,10 @@ async function show(req: Request, res: Response) {
     try {
         const token = req.headers.token as unknown as string;
         const permession = jwt.verify(token, secret);
-        
+        const user = parseJwt(token);
         if (permession) {
             try {
-                const resault = await user_obj.show(parseInt(req.params.id));
+                const resault = await user_obj.show(parseInt(user.user.id));
                 res.status(200).json(resault);
             } catch (e) {
                 res.status(400).json(`${e}`);
@@ -66,10 +66,12 @@ async function update(req: Request, res: Response) {
     try {
         const token = req.headers.token as unknown as string;
         const permession = jwt.verify(token, secret);
+        const user = parseJwt(token);
+
         if (permession) {
             try {
                 const u: user = {
-                    id: req.params.id as unknown as number,
+                    id: user.user.id as number,
                     f_name:req.body.f_name, 
                     l_name:req.body.l_name, 
                     email:req.body.email, 
@@ -122,24 +124,24 @@ async function create(req: Request, res: Response) {
         const resault = await user_obj.create(u);
         const token = jwt.sign({ user: resault }, secret);
         // sending mail token
-        const mailOptions = { 
-            from: 'marwan4125882@gmail.com', 
-            to: 'marwan4125881@gmail.com.com',
-            subject: 'Email confirm',
-            text: `${token}`
-        };
+        // const mailOptions = { 
+        //     from: 'marwan4125882@gmail.com', 
+        //     to: 'marwan4125881@gmail.com.com',
+        //     subject: 'Email confirm',
+        //     text: `${token}`
+        // };
         
-        transporter.sendMail(mailOptions, function(error, info)
-        {
-            if (error) 
-            { 
-                console.log(error);
-            } else {
+        // transporter.sendMail(mailOptions, function(error, info)
+        // {
+        //     if (error) 
+        //     { 
+        //         console.log(error);
+        //     } else {
             
-                console.log('Email sent: ' + info.response);
-            }});
+        //         console.log('Email sent: ' + info.response);
+        //     }});
         //////////////////////////////////////////////////
-        res.status(200).json({resault,token});
+        res.status(200).json(token);
     } catch (e) {
         res.status(400).json(`${e}`);
     }
@@ -147,10 +149,12 @@ async function create(req: Request, res: Response) {
 
 async function delete_(req: Request, res: Response) {
     const token = req.headers.token as unknown as string;
+    const user = parseJwt(token);
+
     const permession = jwt.verify(token, secret);
     if (permession) {
         try {
-            const resault = await user_obj.delete(parseInt(req.params.id));
+            const resault = await user_obj.delete(parseInt(user.user.id));
             res.status(200).json(resault);
         } catch (e) {
             res.status(400).json(`${e}`);
@@ -163,11 +167,11 @@ async function login(req: Request, res: Response) {
         const { email, password } = req.body;
         const token = req.headers.token as unknown as string;
         const permession = jwt.verify(token,secret);
-
+        const user = parseJwt(token);
         const resault = await user_obj.auth(email, password);
 
-        if(permession){
-            res.status(200).json(token);
+        if(permession && user.user.status!='suspended'){
+            res.status(200).json({token:token});
         }else if(resault){
             if (resault.status!='suspended') {
                 const user_token = jwt.sign({user:resault},secret);
@@ -225,12 +229,12 @@ async function reset_password(req: Request, res: Response) {
         const token = req.headers.token as unknown as string;
         const user = parseJwt(token);
         const permession = jwt.verify(token,secret);
-        if(permession && user.user.status!='suspended'){
-            const result = user_obj.reset_password(user);
+        if(permession){
+            const result = user_obj.reset_password(user.user);
             const newToken = jwt.sign({ user: result }, secret);
             res.status(200).json({user:user,token:newToken});
         }else
-            res.status(400).json('user suspended or not exist');
+            res.status(400).json('user not exist');
     } catch (e) {
         res.status(400).json(`${e}`);
     }

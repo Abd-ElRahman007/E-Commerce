@@ -2,6 +2,7 @@ import { Application, Response, Request } from 'express';
 import { Order, order } from '../models/orders';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
+import parseJwt from '../service/jwtParsing';
 
 dotenv.config();
 
@@ -13,20 +14,22 @@ async function index(req: Request, res: Response) {
     try {
         const token = req.headers.token as unknown as string;
         const permession = jwt.verify(token, secret);
-
+        const user = parseJwt(token);
+        let search_id = user.user.id;
         let isSuperAdmin = false;
         if(req.body.admin_email == process.env.admin_email && req.body.admin_password == process.env.admin_password){
             isSuperAdmin=true;
+            search_id = req.params.user_id;
         }
 
         if (permession || isSuperAdmin) {
             try {
-                const resault = await order_obj.index(parseInt(req.params.user_id));
+                const resault = await order_obj.index(parseInt(search_id));
                 res.json(resault);
             } catch (e) {
                 res.status(400).json(`${e}`);
             }
-        } else res.send('Not allowed login first!!');
+        } else res.send('Not allowed!!');
     } catch (e) {
         res.status(400).send(`${e}`);
     }
@@ -36,11 +39,20 @@ async function show(req: Request, res: Response) {
     try {
         const token = req.headers.token as unknown as string;
         const permession = jwt.verify(token, secret);
-        if (permession) {
+        const user = parseJwt(token);
+
+        let search_id = user.user.id;
+        let isSuperAdmin = false;
+        if(req.body.admin_email == process.env.admin_email && req.body.admin_password == process.env.admin_password){
+            isSuperAdmin=true;
+            search_id = req.params.user_id;
+        }
+
+        if (permession || isSuperAdmin) {
             try {
                 const resault = await order_obj.show(
                     parseInt(req.params.order_id),
-                    parseInt(req.params.user_id)
+                    parseInt(search_id)
                 );
                 res.json(resault);
             } catch (e) {
@@ -55,12 +67,13 @@ async function show(req: Request, res: Response) {
 async function update(req: Request, res: Response) {
     const token = req.headers.token as unknown as string;
     const permession = jwt.verify(token, secret);
+    const user = parseJwt(token);
     if (permession) {
         try {
             const o: order = {
                 id: parseInt(req.params.order_id),
                 status: req.body.status,
-                user_id: parseInt(req.params.user_id),
+                user_id: parseInt(user.user.id),
                 total:Number(req.body.total),
                 time_start:req.body.time_start,
                 time_arrival:req.body.time_arrival,
@@ -80,7 +93,7 @@ async function create(req: Request, res: Response) {
     if (permession) {
         try {
             const o: order = {
-                status: req.body.status,
+                status: 'open',
                 user_id: parseInt(req.params.user_id),
                 total:Number(req.body.total),
                 time_arrival:req.body.time_arrival,
