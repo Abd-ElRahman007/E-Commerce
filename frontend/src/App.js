@@ -5,17 +5,57 @@ import 'bootstrap/dist/js/bootstrap.bundle.min';
 import ProductOverview from './components/productOverview';
 import Home from './components/Home';
 import AdminOverview from './components/AdminOverview';
-import NavBar from './components/NavBar'
+import { HeaderMenu } from './components/NavBar'
 import NewCategory from './components/admin/NewCategory';
 import NewBrand from './components/admin/NewBrand';
 /* import HomeAdmin from './components/admin/HomeAdmin';
 import NewBrand from './components/admin/NewBrand ';
 import NewCategory from './components/admin/NewCategory'; */
 
+//Navbar object
+const navLinks = {
+  "links": [
+    {
+      "link": "/about",
+      "label": "Features"
+    },
+    {
+      "link": "#1",
+      "label": "Learn",
+      "links": [
+        {
+          "link": "/docs",
+          "label": "Documentation"
+        },
+        {
+          "link": "/resources",
+          "label": "Resources"
+        },
+        {
+          "link": "/community",
+          "label": "Community"
+        },
+        {
+          "link": "/blog",
+          "label": "Blog"
+        }
+      ]
+    },
+    {
+      "link": "/about",
+      "label": "About"
+    },
+    {
+      "link": "/pricing",
+      "label": "Pricing"
+    },
+  ]
+}
+
 function App() {
   return (
     <Container className="app" style={{ padding: " 10px 10px" }}>
-      <NavBar/>
+      <HeaderMenu links = {navLinks.links}/>
       <Routes>
         <Route exact path='/' element={<Home />} />
         <Route exact path='/overView' element={<ProductOverview />} />
