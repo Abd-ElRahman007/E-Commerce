@@ -9,6 +9,7 @@ import NavBar from './components/NavBar'
 import NewCategory from './components/admin/NewCategory';
 import NewBrand from './components/admin/NewBrand';
 import  {Login}  from './components/Login';
+import {Car} from "./components/Car"
 /* import HomeAdmin from './components/admin/HomeAdmin';
 import NewBrand from './components/admin/NewBrand ';
 import NewCategory from './components/admin/NewCategory'; */
@@ -25,6 +26,7 @@ function App() {
         <Route exact path='/NewCategory' element={<NewCategory />} />
         <Route exact path='/NewBrand' element={<NewBrand />} />
         <Route exact path='/Login' element={<Login />} />
+        <Route exact path='/car' element={<Car />} />
        {/*  <Route exact path='/homeAdmin' element={<HomeAdmin />} />
         <Route exact path='/newCategory' element={<NewCategory />} />
         <Route exact path='/newBrand' element={<NewBrand />} /> */}

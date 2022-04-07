@@ -43,6 +43,16 @@ export const login = createAsyncThunk(
   }
 )
 
+export const logout = createAsyncThunk(
+  "auth/logout",
+  async () => {
+    
+       await localStorage.removeItem('userToken')
+    
+    }
+  
+)
+
 
 export const register = createAsyncThunk(
   "auth/register",
@@ -120,6 +130,15 @@ const authSlice = createSlice({
       state.isLoading = false
       state.isError = true
       state.message = action.payload
+      /* state.id = null
+      state.first_name = ""
+      state.last_name =  ""
+      state.status = "" */
+     })
+     .addCase(logout.fulfilled , (state,action)=>{
+      state.isLoading = false
+      state.isError = false
+      state.message = ""
       state.id = null
       state.first_name = ""
       state.last_name =  ""
