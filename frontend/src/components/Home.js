@@ -3,6 +3,7 @@ import axios from "axios";
 import { Loader, Grid, Skeleton, Container } from '@mantine/core';
 import ProductThumb from "./ProductThumb";
 import TempCart from "./TempCart";
+import TempUser from "./TempUser";
 
 //const child = <Skeleton height={222} radius="md" animate={false} />;
 
@@ -38,7 +39,8 @@ export default function Home() {
     else
         return (
             <Container my="md">
-                <TempCart/>
+                <TempUser/>
+             {/*  <TempCart/>  */}
                 {category.map((x) => (
                     <div key={x.id}>
                         <p>{x.name}</p>
