@@ -4,10 +4,12 @@ import InputDropdown from './InputDropdown';
 import InputStoke from './InputStoke';
 import InputText from './InputText';
 import InputTextArea from './InputTextArea';
-import { Group, Button , Autocomplete, Text } from '@mantine/core';
+import { Group, Button , Autocomplete, Text,SimpleGrid } from '@mantine/core';
 import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import React, { forwardRef } from 'react'
+import PhotoImport from './PhotoImport';
+
 
 
 
@@ -22,9 +24,10 @@ export default function Form() {
 	const [dataStoke, setStoke] = useState(1);
 	const [dataDescription, setDescrition] = useState('');
 	const [imageData, setImageData] = useState('')
-
 	const [exisitingCategories, setExisitingCategories] = useState([])
 	const [existingBrands, setExistingBrands] = useState([])
+	
+	
 
 	const form = useForm({
 		initialValues: {
@@ -39,11 +42,12 @@ export default function Form() {
 			description: '',
 			vote_count: 0,
 			vote_total: 0,
+			image:'',
 		}
 	})
 
 
-	console.log("form", form.values)
+//	console.log("form", form.values)
 
 //	console.log("dataCategory", dataCategory)
 
@@ -86,15 +90,13 @@ export default function Form() {
 		form.setFieldValue('description', childData)
 	}
 	function image(childData) {
-		setImageData(childData);
-		form.setFieldValue('image', childData)
+		const imagePath=URL.createObjectURL(childData[0]);
 	}
 
 	const getCategories = () => {
 
 		axios.get('http://localhost:5000/categories',)
 			.then((response) => {
-				console.log("backend response categoies", response)
 				setExisitingCategories(response.data)
 			})
 			.catch(error => console.log("backend error categoies", error))
@@ -104,7 +106,6 @@ export default function Form() {
 
 		axios.get('http://localhost:5000/brands',)
 			.then((response) => {
-				console.log("backend response brands", response)
 				setExistingBrands(response.data)
 			})
 			.catch(error => console.log("backend error brands", error))
@@ -143,26 +144,22 @@ const clearInput = () => {
 	 setPrice(0);
 	 setStoke(1);
 	 setDescrition('');
-	 setImageData('')
+	 setImageData('');
     }
 
 	const handelSubmit = (values) => {
 		//e.preventDefault(e)
-		console.log("values to send", values)
 		axios.post('http://localhost:5000/products', values)
 			.then((response) => {
-				console.log("backend response brands", response)
 				clearInput()
-			}).
-			catch(function (error) { console.log(error) })
+			})
+			.catch(function (error) { console.log(error) })
 	}
 
 	useEffect(() => {
 		getCategories()
-		console.log("categoies in backend ", exisitingCategories)
 
 		getBrands()
-		console.log("brands in backend ", existingBrands)
 
 
 		/* return () => {
@@ -176,7 +173,10 @@ const clearInput = () => {
 	
 
 	return (
-		<form onSubmit={form.onSubmit(handelSubmit)}>
+		<form onSubmit={form.onSubmit((values)=>console.log(values))}>
+		 <SimpleGrid cols={2} breakpoints={[{ maxWidth: 'xs', cols: 1 }]}>
+<PhotoImport toParent={image} height='360px' radius='md' data={imageData}/>
+        <Group direction="column" className="overflow-auto d-inline-block">
 			<InputText toParent={name} data={{ label: 'Product Name', placeholder: 'Product Name', value: dataName }} radius='md' />
 			<InputText toParent={code} data={{ label: 'Product Code', placeholder: 'Product Code', value: dataCode }} radius='md' />
 			<InputText toParent={model} data={{ label: 'Product Model', placeholder: 'Product Model', value: dataModel }} radius='md' />
@@ -241,10 +241,11 @@ const clearInput = () => {
 			<InputCurrency toParent={price} toParentTwo={currency} dataInput={{ value: dataPrice }} currency={dataCurrency} />
 			<InputStoke toParent={stoke} value={dataStoke} max='' />
 			<InputTextArea toParent={description} data={{ label: 'Description', placeholder: 'description', value: dataDescription }} />
-			<InputText toParent={image} data={{ label: 'image', placeholder: 'image path', value: imageData }} radius='md' />
 			<Group position="right" mt="md">
 				<Button type="submit">Submit</Button>
 			</Group>
+		</Group>
+		</SimpleGrid>
 		</form>
 	)
 }

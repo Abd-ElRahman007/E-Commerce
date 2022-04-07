@@ -4,6 +4,7 @@ import { Dropzone, IMAGE_MIME_TYPE } from '@mantine/dropzone';
 import { CloudUpload } from 'tabler-icons-react';
 import Image from '../productOverviewComponents/Image';
 
+
 const useStyles = createStyles((theme) => ({
   wrapper: {
     position: 'relative',
@@ -37,28 +38,18 @@ function getActiveColor(status, theme) {
         : theme.black;
 }
 
-export default function PhotoImport() {
+export default function PhotoImport({toParent,data}) {
   const theme = useMantineTheme();
   const { classes } = useStyles();
   const openRef = useRef();
-  const [paths, setPath] = useState();
 
-  function imgPath(files) {
-    const paths = files.map((file) => URL.createObjectURL(file))
-    setPath(paths)
-  }
-  function img(paths) {
-    if (paths) {
-	return paths.map((img) => <Image cols='col-6' dim={{height:'100px',margin:'2px',width:'160px'}} image={img} title='' author='' key={img}/>)
-    }
-  }
 
   return (
     <div className={classes.wrapper}>
       <Dropzone
+multiple= {false}
         openRef={openRef}
-        onDrop={(files) => imgPath(files)}
-        onReject={(files) => console.log('rejected files', files)}
+        onDrop={(file) => toParent(file)}
         className={classes.dropzone}
         radius="md"
         accept={IMAGE_MIME_TYPE}
@@ -77,10 +68,10 @@ export default function PhotoImport() {
               sx={{ color: getActiveColor(status, theme) }}
             >
               {status.accepted
-                ? 'Drop files here'
+                ? 'Drop Main Photo here'
                 : status.rejected
                   ? 'JPG file less than 2mb'
-                  : 'Upload Photo'}
+                  : 'Upload Main Photo'}
             </Text>
             <Text align="center" size="sm" mt="xs" color="dimmed">
               Drag&apos;n&apos;drop files here to upload. We can accept only <i>.jpg</i> files that
@@ -94,7 +85,7 @@ export default function PhotoImport() {
         Select files
       </Button>
 	  <div className='row justify-content-evenly overflow-auto h-25'>
-	  {img(paths)}	  
+	<Image image={data} dim={{height:'150px',width:'90%'}} col='col-12'/>
 	  </div>
     </div>
   );
