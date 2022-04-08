@@ -7,16 +7,16 @@ const { extra } = process.env;
 
 export type user = {
   id?: number;
-  f_name: string;
-  l_name: string;
-  email:string;
-  password: string;
-  birthday:Date;
-  phone:string;
-  status:string;
+  f_name?: string;
+  l_name?: string;
+  email?:string;
+  password?: string;
+  birthday?:Date;
+  phone?:string;
+  status?:string;
   created_at?:Date;
-  city:string;
-  address:string;
+  city?:string;
+  address?:string;
   coupon_id?:number;
 };
 
@@ -89,9 +89,10 @@ export class User {
             const conn = await Client.connect();
             const sql = 'select * from users where email=($1);';
             const res = await conn.query(sql, [email]);
+            console.log(res.rows);
+            
             if (res.rows.length) {
-                const isExist = bcrypt.compareSync(pass + extra, res.rows[0].password);
-                if (isExist) return res.rows[0];
+                if (pass == res.rows[0].password) return res.rows[0];
             }
             return null;
         } catch (e) {
