@@ -4,6 +4,7 @@ import { useBooleanToggle } from '@mantine/hooks';
 import { ChevronDown } from 'tabler-icons-react';
 import { Search } from 'tabler-icons-react';
 import { User, ShoppingCart  } from 'tabler-icons-react';
+import { Link, useNavigate } from 'react-router-dom';
 
 
 const useStyles = createStyles((theme) => ({
@@ -51,16 +52,58 @@ const useStyles = createStyles((theme) => ({
 
 
 
-export function HeaderMenu({ links }) {
+export function HeaderMenu() {
+  const navLinks = {
+    "links": [
+      {
+        "link": "/about",
+        "label": "Features"
+      },
+
+      {
+        "link": "#1",
+        "label": "Categories",
+        "links": [
+          {
+            "link": "/docs",
+            "label": "Documentation"
+          },
+          {
+            "link": "/resources",
+            "label": "Resources"
+          },
+          {
+            "link": "/community",
+            "label": "Community"
+          },
+          {
+            "link": "/blog",
+            "label": "Blog"
+          }
+        ]
+      },
+      {
+        "link": "/about",
+        "label": "About"
+      },
+      {
+        "link": "/pricing",
+        "label": "Pricing"
+      },
+    ]
+  }
   const [opened, toggleOpened] = useBooleanToggle(false);
   const { classes } = useStyles();
+  const navigate = useNavigate()
 
-  const items = links.map((link) => {
+
+  
+  const items = navLinks.links.map((link) => {
     const menuItems = link.links?.map((item) => (
-      <Menu.Item key={item.link}>{item.label}</Menu.Item>
+      <Menu.Item key={item.link}  component={Link}  to='/car'>{item.label}</Menu.Item>
     ));
 
-    if (menuItems) {
+    if (menuItems) {  // drop down menu 
       return (
         <Menu
           key={link.label}
@@ -92,30 +135,41 @@ export function HeaderMenu({ links }) {
         key={link.label}
         href={link.link}
         className={classes.link}
-        onClick={(event) => event.preventDefault()}
+        onClick={(event) => {event.preventDefault()
+                                   navigate("./login")  }   }
       >
         {link.label}
+        
       </a>
     );
   });
 
+
+
+
+
+
+
   return (
-    <Header height={56} mb={120}>
+    <Header height={56} mb={12}>
       <Container>
         <div className={classes.inner}>
           <h1>NavBar</h1>
-          <Group ml={120} mr={120}>
-          <Autocomplete
+          <Group ml={120} mr={120} >
+          <Autocomplete  /* styles={{
+                                    root: { width: '200px' } }} */
+                radius="lg"
                 className={classes.search}
                 placeholder="Search"
                 icon={<Search size={16} />}
                 data={['React', 'Angular', 'Vue', 'Next.js', 'Riot.js', 'Svelte', 'Blitz.js']}
             />
+          
           </Group>
           <Group spacing={5} className={classes.links} >
             {items}
           </Group>
-          <ShoppingCart/ >
+          <ShoppingCart />
           <Burger
             opened={opened}
             onClick={() => toggleOpened()}
