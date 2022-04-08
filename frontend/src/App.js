@@ -10,54 +10,17 @@ import NewCategory from './components/admin/NewCategory';
 import NewBrand from './components/admin/NewBrand';
 import  {Login}  from './components/Login';
 import {Car} from "./components/Car"
+import {NewNav} from "./components/NewNav"
+import Headerx from './components/Headerx';
 /* import HomeAdmin from './components/admin/HomeAdmin';
 import NewBrand from './components/admin/NewBrand ';
 import NewCategory from './components/admin/NewCategory'; */
 
-//Navbar object
-const navLinks = {
-  "links": [
-    {
-      "link": "/about",
-      "label": "Features"
-    },
-    {
-      "link": "#1",
-      "label": "Learn",
-      "links": [
-        {
-          "link": "/docs",
-          "label": "Documentation"
-        },
-        {
-          "link": "/resources",
-          "label": "Resources"
-        },
-        {
-          "link": "/community",
-          "label": "Community"
-        },
-        {
-          "link": "/blog",
-          "label": "Blog"
-        }
-      ]
-    },
-    {
-      "link": "/about",
-      "label": "About"
-    },
-    {
-      "link": "/pricing",
-      "label": "Pricing"
-    },
-  ]
-}
 
 function App() {
   return (
     <Container className="app" style={{ padding: " 10px 10px" }}>
-      <HeaderMenu links = {navLinks.links}/>
+      <Headerx />
       <Routes>
         <Route exact path='/' element={<Home />} />
         <Route exact path='/overView' element={<ProductOverview />} />
@@ -67,6 +30,9 @@ function App() {
         <Route exact path='/NewBrand' element={<NewBrand />} />
         <Route exact path='/Login' element={<Login />} />
         <Route exact path='/car' element={<Car />} />
+        <Route exact path='/NewNav' element={<NewNav />} />
+        <Route exact path='/Headerx' element={<Headerx />} />
+        <Route exact path='/navbar' element={<HeaderMenu />} />
        {/*  <Route exact path='/homeAdmin' element={<HomeAdmin />} />
         <Route exact path='/newCategory' element={<NewCategory />} />
         <Route exact path='/newBrand' element={<NewBrand />} /> */}
