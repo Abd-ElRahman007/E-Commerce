@@ -84,8 +84,8 @@ multiple= {false}
       <Button className={classes.control} size="md" radius="xl" onClick={() => openRef.current()}>
         Select files
       </Button>
-	  <div className='row justify-content-evenly overflow-auto h-25'>
-	<Image image={data} dim={{height:'150px',width:'90%'}} col='col-12'/>
+	  <div className='row justify-content-evenly overflow-auto'>
+	  <Image image={data} dim={{height:'200px',width:'90%'}} col='col-12'/>
 	  </div>
     </div>
   );

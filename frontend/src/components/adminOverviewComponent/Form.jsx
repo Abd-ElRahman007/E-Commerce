@@ -91,6 +91,8 @@ export default function Form() {
 	}
 	function image(childData) {
 		const imagePath=URL.createObjectURL(childData[0]);
+		setImageData(imagePath)
+		form.setFieldValue('image',imagePath)
 	}
 
 	const getCategories = () => {
@@ -160,13 +162,6 @@ const clearInput = () => {
 		getCategories()
 
 		getBrands()
-
-
-		/* return () => {
-
-			cleanup     
-		}
- */
 	}, [])
 
 
@@ -180,16 +175,6 @@ const clearInput = () => {
 			<InputText toParent={name} data={{ label: 'Product Name', placeholder: 'Product Name', value: dataName }} radius='md' />
 			<InputText toParent={code} data={{ label: 'Product Code', placeholder: 'Product Code', value: dataCode }} radius='md' />
 			<InputText toParent={model} data={{ label: 'Product Model', placeholder: 'Product Model', value: dataModel }} radius='md' />
-
-
-			{/* <InputDropdown toParent={category} info={{ 
-												label: 'Category',
-												placeholder: 'category',
-												data: backendCategoriesnames(),
-												value: dataCategory }} 
-							  />
- */}
-
 
 			<Autocomplete transition="pop-top-left"
 				transitionDuration={80}
@@ -212,10 +197,6 @@ const clearInput = () => {
 
 
 			/>
-
-			{/* 			<InputDropdown toParent={brand} info={{ label: 'Brand', placeholder: 'Brand', data:backendBrands(), value: dataBrand }} />
- */}
-
 
 			<Autocomplete transition="pop-top-left"
 				transitionDuration={80}
