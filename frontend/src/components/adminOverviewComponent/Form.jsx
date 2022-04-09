@@ -4,10 +4,11 @@ import InputDropdown from './InputDropdown';
 import InputStoke from './InputStoke';
 import InputText from './InputText';
 import InputTextArea from './InputTextArea';
-import { Group, Button , Autocomplete, Text } from '@mantine/core';
+import { Group, Button, Autocomplete, Text } from '@mantine/core';
 import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import React, { forwardRef } from 'react'
+import * as api from "../../helpers/api"
 
 
 
@@ -45,7 +46,7 @@ export default function Form() {
 
 	console.log("form", form.values)
 
-//	console.log("dataCategory", dataCategory)
+	//	console.log("dataCategory", dataCategory)
 
 
 	function name(childData) {
@@ -90,7 +91,7 @@ export default function Form() {
 		form.setFieldValue('image', childData)
 	}
 
-	const getCategories = () => {
+	/* const getCategories = () => {
 
 		axios.get('http://localhost:5000/categories',)
 			.then((response) => {
@@ -108,6 +109,19 @@ export default function Form() {
 				setExistingBrands(response.data)
 			})
 			.catch(error => console.log("backend error brands", error))
+	} */
+
+	const getCategories = async () => {
+
+		const data = await api.getCategories()
+		console.log("dataccc" , data)
+		setExisitingCategories(await api.getCategories())
+	}
+
+	const getBrands = async () => {
+
+		const data = await api.getBrands()
+		setExistingBrands(data)
 	}
 
 
@@ -126,25 +140,25 @@ export default function Form() {
 	const brandData = () => {
 		let results = []
 
-		existingBrands.map((c) => {
+		existingBrands?.map((c) => {
 			return results.push({ value: c.name, id: c.id })
 		})
 		return results
 
 	}
-	
-const clearInput = () => {
-	 setProductName('')
-	 setProductCode('')
-	 setProductModel('');
-	 setCategory('');
-	 setBrand('');
-	 setCurrency('');
-	 setPrice(0);
-	 setStoke(1);
-	 setDescrition('');
-	 setImageData('')
-    }
+
+	const clearInput = () => {
+		setProductName('')
+		setProductCode('')
+		setProductModel('');
+		setCategory('');
+		setBrand('');
+		setCurrency('');
+		setPrice(0);
+		setStoke(1);
+		setDescrition('');
+		setImageData('')
+	}
 
 	const handelSubmit = (values) => {
 		//e.preventDefault(e)
@@ -173,7 +187,7 @@ const clearInput = () => {
 	}, [])
 
 
-	
+
 
 	return (
 		<form onSubmit={form.onSubmit(handelSubmit)}>

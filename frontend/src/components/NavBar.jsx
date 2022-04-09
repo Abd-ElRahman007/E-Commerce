@@ -5,6 +5,7 @@ import { ChevronDown } from 'tabler-icons-react';
 import { Search } from 'tabler-icons-react';
 import { User, ShoppingCart  } from 'tabler-icons-react';
 import { Link, useNavigate } from 'react-router-dom';
+import Usernav from './User';
 
 
 const useStyles = createStyles((theme) => ({
@@ -62,15 +63,15 @@ export function HeaderMenu() {
 
       {
         "link": "#1",
-        "label": "Categories",
+        "label": "Browse Products",
         "links": [
           {
             "link": "/docs",
-            "label": "Documentation"
+            "label": "by category"
           },
           {
             "link": "/resources",
-            "label": "Resources"
+            "label": "by brand"   ,   
           },
           {
             "link": "/community",
@@ -125,7 +126,7 @@ export function HeaderMenu() {
             </a>
           }
         >
-          {menuItems}
+          {menuItems}jjjj
         </Menu>
       );
     }
@@ -155,20 +156,27 @@ export function HeaderMenu() {
       <Container>
         <div className={classes.inner}>
           <h1>NavBar</h1>
-          <Group ml={120} mr={120} >
+          <Group  className={"w-25"} >
           <Autocomplete  /* styles={{
                                     root: { width: '200px' } }} */
                 radius="lg"
-                className={classes.search}
+                className={classes.search , "w-100"}
                 placeholder="Search"
                 icon={<Search size={16} />}
                 data={['React', 'Angular', 'Vue', 'Next.js', 'Riot.js', 'Svelte', 'Blitz.js']}
             />
           
           </Group>
+
           <Group spacing={5} className={classes.links} >
-            {items}
+           {/*  <MenuCom/> */}
+
+           {items}
+
           </Group>
+
+
+          <Usernav/>
           <ShoppingCart />
           <Burger
             opened={opened}
