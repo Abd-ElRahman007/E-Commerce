@@ -12,6 +12,11 @@ export const getBrands =async () => {
          return data.data
 }
 
+
+export const getProductsLimited =async (limit) => {
+    const data = await axios.get(`http://localhost:5000/products?page=1&limit=${limit}`,)
+         return data.data.data
+}
 /* 
 export const getBrands =async () => {
 

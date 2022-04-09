@@ -66,7 +66,7 @@ token:  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxNSwiZl9uYW1lIj
 
 ###
 
-PATCH  http://localhost:5000/products?id=9 HTTP/1.1
+PATCH  http://localhost:5000/products/9 HTTP/1.1
 content-type: application/json
 
 
@@ -77,10 +77,16 @@ content-type: application/json
 ###
 
 
-GET   http://localhost:5000/products/?id=9  HTTP/1.1
+GET   http://localhost:5000/products/1  HTTP/1.1
 content-type: application/json
 
 
 ###
 
-GET https://jsonplaceholder.typicode.com/posts?userId=1&id=2
+PATCH    http://localhost:5000/products/11  HTTP/1.1
+content-type: application/json
+
+{
+    "image": "https://cdn.pixabay.com/photo/2015/02/07/20/58/tv-627876_960_720.jpg"    
+}
+###

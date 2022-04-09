@@ -156,8 +156,8 @@ export function HeaderMenu() {
       <Container>
         <div className={classes.inner}>
           <h1>NavBar</h1>
-          <Group  className={"w-25"} >
-          <Autocomplete  /* styles={{
+          <Group  className={"w-25"} >  
+          <Autocomplete  /* styles={{   50 ,50 (other group)
                                     root: { width: '200px' } }} */
                 radius="lg"
                 className={classes.search , "w-100"}

@@ -32,7 +32,7 @@ export function NewNav() {
 
 
     header={
-        <Header height={56} mb={12} p="md">
+        <Header height={56} mb={12}  p="md">
           <div style={{ display: 'flex', alignItems: 'center', height: '100%' }}>
             <MediaQuery largerThan="sm" styles={{ display: 'none' }}>
               <Burger

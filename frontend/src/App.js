@@ -23,6 +23,7 @@ function App() {
   return (
     <Container className="app" style={{ padding: " 10px 10px" }}>
      {/*  <Headerx /> */}
+     <NavNew />
       <Routes>
         <Route exact path='/' element={<Home />} />
         <Route exact path='/overView' element={<ProductOverview />} />

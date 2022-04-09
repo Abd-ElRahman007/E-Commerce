@@ -112,17 +112,16 @@ export default function Form() {
 	} */
 
 	const getCategories = async () => {
-
-		const data = await api.getCategories()
-		console.log("dataccc" , data)
-		setExisitingCategories(await api.getCategories())
+	 	const data = await api.getCategories()
+		setExisitingCategories(data)
 	}
 
 	const getBrands = async () => {
-
 		const data = await api.getBrands()
 		setExistingBrands(data)
 	}
+
+	
 
 
 	const query = useRef(null);

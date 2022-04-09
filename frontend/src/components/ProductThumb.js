@@ -1,5 +1,6 @@
 
-import { Card, Image, Text, Badge, Button, Group, useMantineTheme, ColorSchemeProvider } from '@mantine/core';
+import { Card, Image, Text, Badge, Button, Group, useMantineTheme,
+        ActionIcon ,  ColorSchemeProvider } from '@mantine/core';
 import { useState, useEffect } from 'react';
 import AddremoveButtons from './AddremoveButtons';
 import { addToCart, removeFromCart } from '../redux/slices/cartSlice';
@@ -7,10 +8,11 @@ import { useDispatch } from 'react-redux';
 import { cartState } from "../redux/slices/cartSlice"
 import { useSelector } from "react-redux"
 import { showNotification } from '@mantine/notifications';
-import { ShoppingCartPlus , ShoppingCartX } from 'tabler-icons-react';
+import { ShoppingCartPlus , ShoppingCartX, ShoppingCartOff , Tournament, ShoppingCart } from 'tabler-icons-react';
+import Rating from '@mui/material/Rating';
 
 export default function ProductThumb(props) {
-  const { id, name, main_image, price } = props.product
+  const { id, name, image, price ,currency } = props.product
   console.log(" , props", props)
   const theme = useMantineTheme();
 
@@ -58,12 +60,12 @@ export default function ProductThumb(props) {
   }
 
 
-  const cartAddFunction = (id, name, main_image, price, quantity) => {
+  const cartAddFunction = (id, name, image, price, quantity) => {
     if (quantity === 0) {
       showNotification(message())
       return
     }
-    dispatch(addToCart({ id, name, main_image, price, quantity }))
+    dispatch(addToCart({ id, name, image, price, quantity }))
     setQuantity(1)
     showNotification(message())
   }
@@ -104,7 +106,7 @@ export default function ProductThumb(props) {
 
 
   }
-
+ 
 
   useEffect(() => {
     if (thisQ)
@@ -118,20 +120,26 @@ export default function ProductThumb(props) {
 
 
   return (
+    <>
     <div style={{ width: 340, margin: 'auto' }}>
       <Card shadow="sm" p="lg">
         <Card.Section>
-          <Image src={main_image}
+          <Image src={image}
             alt="Product"
             radius={10}
+            height={180} 
+            fit="contain"
 
           />
         </Card.Section>
 
-        <Group position="apart" style={{ marginBottom: 5, marginTop: theme.spacing.sm }}>
+        <Group position="center" style={{ marginBottom: 5, marginTop: theme.spacing.sm }}>
           <Text weight={500}>{name}</Text>
+
+          <Rating name="read-only" size="small" value={2} readOnly />
+
           <Badge color="pink" variant="light" size="xl" >
-            {price}
+            {price}{currency} 
           </Badge>
         </Group>
 
@@ -139,12 +147,15 @@ export default function ProductThumb(props) {
             With Fjord Tours you can explore more of the magical fjord landscapes with tours and
             activities on and around the fjords of Norway
           </Text> */}
-        <Group position="apart" style={{ marginBottom: 5, marginTop: theme.spacing.sm }}>
-          <Button variant="light"
-            color="blue"
-            style={{ marginTop: 14 }}
+        <Group  grow position="center" style={{ marginBottom: 5, marginTop: theme.spacing.sm }}>
+          <ActionIcon 
+           
+           
+            disabled={quantity===0
+                      ? true 
+                      :false}
             onClick={() => {
-              cartAddFunction(id, name, main_image, price, quantity)
+              cartAddFunction(id, name, image, price, quantity)
 
               /*  dispatch(addToCart( {id , name , main_image , price , quantity} ))
                setQuantity(1)
@@ -155,8 +166,14 @@ export default function ProductThumb(props) {
                }) */
             }}
           >
-            Add to Cart
-          </Button>
+
+              {  quantity > 0
+                 ?<ShoppingCartPlus  size={30}color={'#40bf59'}/>
+                : <ShoppingCartX   size={30} color={'#d279c6'}/>
+
+              }
+           
+          </ActionIcon>
           <AddremoveButtons
             increaseQuantity={increaseQuantity}
             decreaseQuantity={decreaseQuantity}
@@ -164,13 +181,36 @@ export default function ProductThumb(props) {
           />
 
           {currentQuantity > 0 && 
-              <button onClick={() => {cartRemoveFunction()}}>
-                remove
-              </button>
+            <ActionIcon  onClick={() => {cartRemoveFunction()}}>
+
+              <ShoppingCartOff size={30} color={'red'}/>
+            </ActionIcon>
+            
+             
           }
 
         </Group>
       </Card>
     </div>
+    </>
   )
 }
+
+
+ {/* <button onClick={() => {cartRemoveFunction()}}>
+                remove
+              </button> */}
+
+
+            /*   <Button variant="light"
+            color="blue"
+            style={{ marginTop: 14 }}
+            disabled={quantity===0
+                      ? true 
+                      :false}
+            onClick={() => {
+              cartAddFunction(id, name, image, price, quantity)   
+            }}
+          >
+             Add to Cart
+          </Button> */
