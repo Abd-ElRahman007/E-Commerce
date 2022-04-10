@@ -9,7 +9,7 @@ import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import React, { forwardRef } from 'react'
 import PhotoImport from './PhotoImport';
-
+import * as api from "../../helpers/api"
 
 
 
@@ -50,7 +50,7 @@ export default function Form() {
 
 //	console.log("form", form.values)
 
-//	console.log("dataCategory", dataCategory)
+	//	console.log("dataCategory", dataCategory)
 
 
 	function name(childData) {
@@ -96,25 +96,17 @@ export default function Form() {
 		setImagePath(childData)
 	}
 
-	const getCategories = () => {
-
-		axios.get('http://localhost:5000/categories',)
-			.then((response) => {
-				setExisitingCategories(response.data)
-			})
-			.catch(error => console.log("backend error categoies", error))
+	const getCategories = async () => {
+	 	const data = await api.getCategories()
+		setExisitingCategories(data)
 	}
 
-	const getBrands = () => {
-
-		axios.get('http://localhost:5000/brands',)
-			.then((response) => {
-				setExistingBrands(response.data)
-			})
-			.catch(error => console.log("backend error brands", error))
+	const getBrands = async () => {
+		const data = await api.getBrands()
+		setExistingBrands(data)
 	}
 
-
+	
 	const query = useRef(null);
 
 	const categoryData = () => {
@@ -130,25 +122,25 @@ export default function Form() {
 	const brandData = () => {
 		let results = []
 
-		existingBrands.map((c) => {
+		existingBrands?.map((c) => {
 			return results.push({ value: c.name, id: c.id })
 		})
 		return results
 
 	}
 	
-const clearInput = () => {
-	 setProductName('')
-	 setProductCode('')
-	 setProductModel('');
-	 setCategory('');
-	 setBrand('');
-	 setCurrency('');
-	 setPrice(0);
-	 setStoke(1);
-	 setDescrition('');
-	 setImageData('');
-    }
+	const clearInput = () => {
+		setProductName('')
+		setProductCode('')
+		setProductModel('');
+		setCategory('');
+		setBrand('');
+		setCurrency('');
+		setPrice(0);
+		setStoke(1);
+		setDescrition('');
+		setImageData('')
+	}
 
 async function getSignature(){
 	const response =await fetch('http://localhost:5000/imageSignature');
@@ -188,7 +180,7 @@ async function wait(call){
 	}, [])
 
 
-	
+
 
 	return (
 		<form onSubmit={form.onSubmit(()=>wait(handelSubmit))}>
@@ -253,6 +245,3 @@ async function wait(call){
 		</form>
 	)
 }
-
-
-
