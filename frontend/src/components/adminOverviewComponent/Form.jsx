@@ -156,10 +156,7 @@ async function getSignature(){
 	const {signature,timestamp}=data;
 	return {signature,timestamp};
 }
-function makePath(i){
-	form.setFieldValue('image',i)
-	console.log(form.values)
-}
+
 async function wait(call){
 	const url=`https://api.cloudinary.com/v1_1/storephotos/upload`;
 		const {signature,timestamp}=await getSignature();
@@ -170,8 +167,7 @@ async function wait(call){
 		formData.append('api_key',437159287973424);
 		const response=await axios.post(url,formData);
 		const secured_url=response.data.secure_url;
-		form.values.image=secured_url;
-		
+		form.values.image=secured_url;		
 		call()
 		}
 
