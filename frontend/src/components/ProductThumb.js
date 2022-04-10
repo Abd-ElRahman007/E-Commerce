@@ -1,6 +1,8 @@
 
-import { Card, Image, Text, Badge, Button, Group, useMantineTheme,
-        ActionIcon ,  ColorSchemeProvider } from '@mantine/core';
+import {
+  Card, Image, Text, Badge, Button, Group, useMantineTheme,
+  ActionIcon, ColorSchemeProvider
+} from '@mantine/core';
 import { useState, useEffect } from 'react';
 import AddremoveButtons from './AddremoveButtons';
 import { addToCart, removeFromCart } from '../redux/slices/cartSlice';
@@ -8,16 +10,17 @@ import { useDispatch } from 'react-redux';
 import { cartState } from "../redux/slices/cartSlice"
 import { useSelector } from "react-redux"
 import { showNotification } from '@mantine/notifications';
-import { ShoppingCartPlus , ShoppingCartX, ShoppingCartOff , Tournament, ShoppingCart } from 'tabler-icons-react';
+import { ShoppingCartPlus, ShoppingCartX, ShoppingCartOff, LetterX, Tournament, ShoppingCart } from 'tabler-icons-react';
 import Rating from '@mui/material/Rating';
 
 export default function ProductThumb(props) {
-  const { id, name, image, price ,currency } = props.product
+  const { id, name, image, price, currency, stock } = props.product
   console.log(" , props", props)
   const theme = useMantineTheme();
 
   const [quantity, setQuantity] = useState(1)
   const [currentQuantity, setCurrentQuantity] = useState(0)
+  const [full, setFull] = useState(false)
 
   const cartItems = useSelector(cartState)
   // console.log("cartItems" , cartItems ) 
@@ -32,6 +35,15 @@ export default function ProductThumb(props) {
 
   const increaseQuantity = () => {
     // stock logic here 
+    if (currentQuantity > 0) {
+      if (quantity == stock - currentQuantity)
+        return
+      else if (currentQuantity == stock)
+        return setFull(true)
+
+    }
+    if (quantity == stock)
+      return;
     const number = quantity + 1
     setQuantity(number)
 
@@ -39,6 +51,7 @@ export default function ProductThumb(props) {
 
 
   const decreaseQuantity = () => {
+    setFull(false)
     if (currentQuantity > 0) {
       if (quantity <= -currentQuantity)
         return;
@@ -61,6 +74,19 @@ export default function ProductThumb(props) {
 
 
   const cartAddFunction = (id, name, image, price, quantity) => {
+    if (currentQuantity == stock && quantity > 0) {
+      showNotification({
+        title: "invalid ",
+        message: `${id} cant be added any more`,
+        color: 'yellow',
+        icon: <LetterX />
+        // radius and other props can be added 
+        // inner stylings to title/message/etc  can be done 
+      })
+      setFull(true)
+      return
+    }
+    else setFull(false)
     if (quantity === 0) {
       showNotification(message())
       return
@@ -68,6 +94,7 @@ export default function ProductThumb(props) {
     dispatch(addToCart({ id, name, image, price, quantity }))
     setQuantity(1)
     showNotification(message())
+
   }
 
 
@@ -76,13 +103,14 @@ export default function ProductThumb(props) {
     dispatch(removeFromCart({ id }))
     setQuantity(1)
     showNotification({
-       title: "Cart changed",
-        message: `${id} has been removed from the cart` ,
-        color: 'red',
-        icon: <ShoppingCartX />
-        // radius and other props can be added 
-        // inner stylings to title/message/etc  can be done 
-       })
+      title: "Cart changed",
+      message: `${id} has been removed from the cart`,
+      color: 'red',
+      icon: <ShoppingCartX />
+      // radius and other props can be added 
+      // inner stylings to title/message/etc  can be done 
+    })
+    setFull(false)
 
   }
 
@@ -91,26 +119,27 @@ export default function ProductThumb(props) {
     if (quantity === 0)
       return { title: "invalid amount", message: "0 is not a valid quantity" }
     if (currentQuantity === 0)
-      return { title: "Cart changed", message: `${id} has been added to the cart`,icon: <ShoppingCartPlus /> }
+      return { title: "Cart changed", message: `${id} has been added to the cart`, icon: <ShoppingCartPlus />, color: "green" }
 
     else if (currentQuantity > 0 && quantity < 0 && currentQuantity === -quantity)
-      return { title: "Cart changed", message: `${id} has been removed from the cart`,icon: <ShoppingCartX /> ,color:"red" }
+      return { title: "Cart changed", message: `${id} has been removed from the cart`, icon: <ShoppingCartX />, color: "red" }
 
     else if (currentQuantity > 0 && quantity < 0)
-      return { title: "Cart changed", message: `${id} has been decreased by ${-quantity}` ,icon: <ShoppingCartX /> }
+      return { title: "Cart changed", message: `${id} has been decreased by ${-quantity}`, icon: <ShoppingCartX />, color: 'pink' }
 
     else if (currentQuantity > 0 && quantity > 0)
-      return { title: "Cart changed", message: `${id} has been increased by ${quantity}` ,icon: <ShoppingCartPlus /> }
+      return { title: "Cart changed", message: `${id} has been increased by ${quantity}`, icon: <ShoppingCartPlus />, color: "green" }
 
-      
+
 
 
   }
- 
+
 
   useEffect(() => {
     if (thisQ)
       setCurrentQuantity(thisQ.quantity)
+
 
     return () => {
       setCurrentQuantity(0)
@@ -121,96 +150,91 @@ export default function ProductThumb(props) {
 
   return (
     <>
-    <div style={{ width: 340, margin: 'auto' }}>
-      <Card shadow="sm" p="lg">
-        <Card.Section>
-          <Image src={image}
-            alt="Product"
-            radius={10}
-            height={180} 
-            fit="contain"
+      <div style={{ width: 340, margin: 'auto' }}>
+        <Card shadow="sm" p="lg">
+          <Card.Section>
+            <Image src={image}
+              alt="Product"
+              radius={10}
+              height={180}
+              fit="contain"
 
-          />
-        </Card.Section>
+            />
+          </Card.Section>
 
-        <Group position="center" style={{ marginBottom: 5, marginTop: theme.spacing.sm }}>
-          <Text weight={500}>{name}</Text>
+          <Group position="center" style={{ marginBottom: 5, marginTop: theme.spacing.sm }}>
+            <Text weight={500}>{name}</Text>
 
-          <Rating name="read-only" size="small" value={2} readOnly />
+            <Rating name="read-only" size="small" value={2} readOnly />
 
-          <Badge color="pink" variant="light" size="xl" >
-            {price}{currency} 
-          </Badge>
-        </Group>
+            <Badge color="pink" variant="light" size="xl" >
+              {price}{currency}
+            </Badge>
+          </Group>
 
-        {/* <Text size="sm" style={{ color: secondaryColor, lineHeight: 1.5 }}>
+          {/* <Text size="sm" style={{ color: secondaryColor, lineHeight: 1.5 }}>
             With Fjord Tours you can explore more of the magical fjord landscapes with tours and
             activities on and around the fjords of Norway
           </Text> */}
-        <Group  grow position="center" style={{ marginBottom: 5, marginTop: theme.spacing.sm }}>
-          <ActionIcon 
-           
-           
-            disabled={quantity===0
-                      ? true 
-                      :false}
-            onClick={() => {
-              cartAddFunction(id, name, image, price, quantity)
+          <Group grow position="center" style={{ marginBottom: 5, marginTop: theme.spacing.sm }}>
+            <ActionIcon
+              disabled={quantity === 0 || full === true
+                ? true
+                : false}
+              onClick={() => {
+                cartAddFunction(id, name, image, price, quantity)
 
-              /*  dispatch(addToCart( {id , name , main_image , price , quantity} ))
-               setQuantity(1)
+                /*  dispatch(addToCart( {id , name , main_image , price , quantity} ))
+                 setQuantity(1)
+  
+                 showNotification({
+                   title: 'Default notification',
+                   message: message()  ,
+                 }) */
+              }}
+            >
 
-               showNotification({
-                 title: 'Default notification',
-                 message: message()  ,
-               }) */
-            }}
-          >
-
-              {  quantity > 0
-                 ?<ShoppingCartPlus  size={30}color={'#40bf59'}/>
-                : <ShoppingCartX   size={30} color={'#d279c6'}/>
+              {quantity > 0
+                ? <ShoppingCartPlus size={30} color={'#40bf59'} />
+                : <ShoppingCartX size={30} color={'#d279c6'} />
 
               }
-           
-          </ActionIcon>
-          <AddremoveButtons
-            increaseQuantity={increaseQuantity}
-            decreaseQuantity={decreaseQuantity}
-            quantity={quantity}
-          />
 
-          {currentQuantity > 0 && 
-            <ActionIcon  onClick={() => {cartRemoveFunction()}}>
-
-              <ShoppingCartOff size={30} color={'red'}/>
             </ActionIcon>
-            
-             
-          }
+            <AddremoveButtons
+              increaseQuantity={increaseQuantity}
+              decreaseQuantity={decreaseQuantity}
+              quantity={quantity}
+            />
 
-        </Group>
-      </Card>
-    </div>
+            {currentQuantity > 0 &&
+              <ActionIcon onClick={() => { cartRemoveFunction() }}>
+                <ShoppingCartOff size={30} color={'red'} />
+              </ActionIcon>
+            }
+
+          </Group>
+        </Card>
+      </div>
     </>
   )
 }
 
 
- {/* <button onClick={() => {cartRemoveFunction()}}>
+{/* <button onClick={() => {cartRemoveFunction()}}>
                 remove
               </button> */}
 
 
-            /*   <Button variant="light"
-            color="blue"
-            style={{ marginTop: 14 }}
-            disabled={quantity===0
-                      ? true 
-                      :false}
-            onClick={() => {
-              cartAddFunction(id, name, image, price, quantity)   
-            }}
-          >
-             Add to Cart
-          </Button> */
+/*   <Button variant="light"
+color="blue"
+style={{ marginTop: 14 }}
+disabled={quantity===0
+          ? true
+          :false}
+onClick={() => {
+  cartAddFunction(id, name, image, price, quantity)
+}}
+>
+ Add to Cart
+</Button> */
