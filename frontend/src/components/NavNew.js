@@ -160,7 +160,9 @@ export function NavNew() {
         <Header height={56} mb={12}>
             <Container>
                 <div className={classes.inner}>
+                    <Link to="./">
                     <h1>NavBar</h1>
+                    </Link>
                     <Group className={"w-50"} >
                         <Autocomplete  /* styles={{   50 ,50 (other group)
                                     root: { width: '200px' } }} */

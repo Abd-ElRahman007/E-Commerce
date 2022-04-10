@@ -69,7 +69,7 @@ export default function Cart() {
 
     return (
         <Container>
-
+                <span>total : {totalCost()}  </span>
 
             <SimpleGrid cols={3} spacing="lg"
                 breakpoints={[
@@ -77,7 +77,7 @@ export default function Cart() {
                     { maxWidth: 755, cols: 2, spacing: 'sm' },
                     { maxWidth: 600, cols: 1, spacing: 'sm' },
                 ]} >
-                    <span>total : {totalCost()}  </span>
+                    
                 {cartItems.map((item) => (
 
                     <ProductThumb product={item} key={item.id} />

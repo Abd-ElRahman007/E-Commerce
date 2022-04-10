@@ -10,8 +10,13 @@ import {
   Button,
   Divider,
   Checkbox,
-  Anchor,
+  Anchor, Modal, useMantineTheme
 } from '@mantine/core';
+import { useState, useEffect } from "react";
+
+
+import { Alert } from '@mantine/core';
+import { AlertCircle } from 'tabler-icons-react';
 //import { GoogleButton, TwitterButton } from '../SocialButtons/SocialButtons';
 
 import { useDispatch, useSelector } from 'react-redux';
@@ -19,9 +24,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from "react-router-dom";
 
 
-import  {authState, login, register } from '../redux/slices/authSlice';
-
+import { authState, login, register, reset } from '../redux/slices/authSlice';
+import { showNotification } from '@mantine/notifications';
 export function Login(props) {
+  const theme = useMantineTheme();
+
   const [type, toggle] = useToggle('login', ['login', 'register']);
   const form = useForm({
     initialValues: {
@@ -33,7 +40,7 @@ export function Login(props) {
     },
 
     validationRules: {
-      email: (val) => /^\S+@\S+$/.test(val),
+      /*  email: (val) => /^\S+@\S+$/.test(val), */
       password: (val) => val.length >= 1,
     },
   });
@@ -41,21 +48,32 @@ export function Login(props) {
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
-  const clearInput=()=>{
+  const clearInput = () => {
     form.setFieldValue('email', "")
-    form.setFieldValue('first_name',"" )
+    form.setFieldValue('first_name', "")
     form.setFieldValue('last_name', "")
     form.setFieldValue('password', "")
 
   }
 
+  const handleError = () => {
+    showNotification({
+      title: "Error ",
+      message: "Wrong email or password ",
+      color: 'red',
+      icon: <AlertCircle /> ,
+    
+
+    })
+  }
 
   const userState = useSelector(authState)
 
-  const {message , isError , isLoading , isSuccess} = userState
+  const { message, isError, isLoading, isSuccess } = userState
 
 
   const handelSubmit = () => {
+
     console.log("form", form.values)
     if (type === "login") {
       const { email, password } = form.values
@@ -65,21 +83,14 @@ export function Login(props) {
       }
 
       dispatch(login(userInfo))
-      clearInput()
-      console.log("userInfo", userInfo)
-      console.log(email, password)
 
-      if (isError===true)
-        alert(message)
-        else  navigate("./")
-     
     }
     else if (type === "register") {
 
-      const { email, password,first_name,last_name } = form.values
+      const { email, password, first_name, last_name } = form.values
       const userInfo = {
-        f_name:first_name,
-        l_name:last_name ,
+        f_name: first_name,
+        l_name: last_name,
         email: email,
         password: password
       }
@@ -87,11 +98,28 @@ export function Login(props) {
       dispatch(register(userInfo))
       clearInput()
       console.log("userInfo", userInfo)
-      navigate("./")
+
     }
 
 
   }
+
+  useEffect(() => {
+    if (isError) 
+    { 
+      handleError()
+         }
+    if (isSuccess)
+     { 
+      navigate("/") 
+          }
+
+    dispatch(reset())
+
+    /* return () => {
+      cleanup
+    } */
+  }, [isError, isSuccess])
 
 
   return (
@@ -111,18 +139,18 @@ export function Login(props) {
         <Group direction="column" grow>
           {type === 'register' && (
             <>
-            <TextInput
-              label="First Name"
-              placeholder="Your first name"
-              value={form.values.first_name}
-              onChange={(event) => form.setFieldValue('first_name', event.currentTarget.value)}
-            />
-            <TextInput
-            label="Last Name"
-            placeholder="Your last name"
-            value={form.values.last_name}
-            onChange={(event) => form.setFieldValue('last_name', event.currentTarget.value)}
-          />
+              <TextInput
+                label="First Name"
+                placeholder="Your first name"
+                value={form.values.first_name}
+                onChange={(event) => form.setFieldValue('first_name', event.currentTarget.value)}
+              />
+              <TextInput
+                label="Last Name"
+                placeholder="Your last name"
+                value={form.values.last_name}
+                onChange={(event) => form.setFieldValue('last_name', event.currentTarget.value)}
+              />
             </>
           )}
 
@@ -165,3 +193,19 @@ export function Login(props) {
     </Paper>
   );
 }
+
+
+
+
+
+{/* <Alert  icon={<AlertCircle size={30} />} 
+                       title="Error!" 
+                       color="red"
+                       radius="lg"
+                       withCloseButton
+                       
+                       onClose={()=>  dispatch(reset())}
+                
+                >
+      Something terrible happened! You made a mistake and there is no going back, your data was lost forever!
+      </Alert> */}

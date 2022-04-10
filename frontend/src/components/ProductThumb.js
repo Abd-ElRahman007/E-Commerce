@@ -15,7 +15,7 @@ import Rating from '@mui/material/Rating';
 
 export default function ProductThumb(props) {
   const { id, name, image, price, currency, stock , vote_count , vote_total } = props.product
-  // console.log(" , props", props)
+  //  console.log(" , props", props)
   const theme = useMantineTheme();
 
   const [quantity, setQuantity] = useState(1)

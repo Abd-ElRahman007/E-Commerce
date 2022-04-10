@@ -42,7 +42,7 @@ export default function Home() {
     else
         return (
             <Container my="md">
-                <TempUser />
+                
                       
                 {category?.map((x) => (
                     <div key={x.id}>
