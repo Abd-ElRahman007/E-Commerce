@@ -38,8 +38,8 @@ export default function ProductThumb(props) {
     if (currentQuantity > 0) {
       if (quantity == stock - currentQuantity)
         return
-      else if (currentQuantity == stock)
-        return setFull(true)
+     /*  else if (currentQuantity == stock)
+        return setFull(true) */
 
     }
     if (quantity == stock)
@@ -61,9 +61,10 @@ export default function ProductThumb(props) {
       if (quantity <= 1) return
 
       if(currentQuantity==stock)
-       setFull(false)
+       setFull(true)
     const number = quantity - 1
     setQuantity(number)
+    setFull=(false)
 
   }
 
@@ -180,7 +181,7 @@ export default function ProductThumb(props) {
           </Text> */}
           <Group grow position="center" style={{ marginBottom: 5, marginTop: theme.spacing.sm }}>
             <ActionIcon
-              disabled={quantity === 0 || full === true
+              disabled={quantity === 0 /* && full === true    <---------- */  
                 ? true
                 : false}
               onClick={() => {
