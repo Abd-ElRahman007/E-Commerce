@@ -1,5 +1,5 @@
 import React from 'react';
-import { createStyles, Header, Menu, Group, Center, Burger, Container, Autocomplete } from '@mantine/core';
+import { createStyles, Header,ActionIcon, Menu, Group, Center, Burger, Container, Autocomplete } from '@mantine/core';
 import { useBooleanToggle } from '@mantine/hooks';
 import { ChevronDown } from 'tabler-icons-react';
 import { Search } from 'tabler-icons-react';
@@ -190,7 +190,10 @@ export function NavNew() {
 
 
                     {/*  <Usernav/> */}
-                    <ShoppingCart />
+                    <ActionIcon component={Link} to="/cart" >
+                      <ShoppingCart/>
+                    </ActionIcon>
+                    
                     <User/>
                     <Burger
                         opened={opened}

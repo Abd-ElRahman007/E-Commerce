@@ -65,8 +65,8 @@ export default function Home() {
                                         { maxWidth: 600, cols: 1, spacing: 'sm' },
                                       ]} >
                             {products?.filter((item) => item.category_id === x.id.toString())
-                                .slice(0, 6).map((p) => {
-                                    return    <ProductThumb product={p} />                                          
+                                .slice(0, 6).map((p,index) => {
+                                    return    <ProductThumb product={p} key={p.id} />                                          
                                    
 
                                 })}
@@ -76,13 +76,13 @@ export default function Home() {
                     </div>
                 ))}
 
-                <Grid columns={3} gutter="lg" >
+                {/* <Grid columns={3} gutter="lg" >
                     {products?.map((x) => {
                         console.log(x)
                         return <p>{x.name}</p>
 
                     })}
-                </Grid>
+                </Grid> */}
             </Container>
         );
 }

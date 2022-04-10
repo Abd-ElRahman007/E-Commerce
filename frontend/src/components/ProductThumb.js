@@ -51,7 +51,7 @@ export default function ProductThumb(props) {
 
 
   const decreaseQuantity = () => {
-    setFull(false)
+    
     if (currentQuantity > 0) {
       if (quantity <= -currentQuantity)
         return;
@@ -60,6 +60,8 @@ export default function ProductThumb(props) {
     else
       if (quantity <= 1) return
 
+      if(currentQuantity==stock)
+       setFull(false)
     const number = quantity - 1
     setQuantity(number)
 
