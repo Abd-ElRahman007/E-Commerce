@@ -80,7 +80,7 @@ export default function ProductThumb(props) {
     if (currentQuantity == stock && quantity > 0) {
       showNotification({
         title: "invalid ",
-        message: `${id} cant be added any more`,
+        message: `${name} cant be added ,no more in stock`,
         color: 'yellow',
         icon: <LetterX />
         // radius and other props can be added 
@@ -107,7 +107,7 @@ export default function ProductThumb(props) {
     setQuantity(1)
     showNotification({
       title: "Cart changed",
-      message: `${id} has been removed from the cart`,
+      message: `${name} has been removed from the cart`,
       color: 'red',
       icon: <ShoppingCartX />
       // radius and other props can be added 
@@ -122,16 +122,16 @@ export default function ProductThumb(props) {
     if (quantity === 0)
       return { title: "invalid amount", message: "0 is not a valid quantity" }
     if (currentQuantity === 0)
-      return { title: "Cart changed", message: `${id} has been added to the cart`, icon: <ShoppingCartPlus />, color: "green" }
+      return { title: "Cart changed", message: `${name} has been added to the cart`, icon: <ShoppingCartPlus />, color: "green" }
 
     else if (currentQuantity > 0 && quantity < 0 && currentQuantity === -quantity)
-      return { title: "Cart changed", message: `${id} has been removed from the cart`, icon: <ShoppingCartX />, color: "red" }
+      return { title: "Cart changed", message: `${name} has been removed from the cart`, icon: <ShoppingCartX />, color: "red" }
 
     else if (currentQuantity > 0 && quantity < 0)
-      return { title: "Cart changed", message: `${id} has been decreased by ${-quantity}`, icon: <ShoppingCartX />, color: 'pink' }
+      return { title: "Cart changed", message: `${name} has been decreased by ${-quantity}`, icon: <ShoppingCartX />, color: 'pink' }
 
     else if (currentQuantity > 0 && quantity > 0)
-      return { title: "Cart changed", message: `${id} has been increased by ${quantity}`, icon: <ShoppingCartPlus />, color: "green" }
+      return { title: "Cart changed", message: `${name} has been increased by ${quantity}`, icon: <ShoppingCartPlus />, color: "green" }
 
 
 
