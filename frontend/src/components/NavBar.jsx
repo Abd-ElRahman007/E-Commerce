@@ -160,19 +160,15 @@ export function HeaderMenu() {
           <Autocomplete  /* styles={{   50 ,50 (other group)
                                     root: { width: '200px' } }} */
                 radius="lg"
-                className={classes.search , "w-100"}
+                className={classes.search,'w-100'}
                 placeholder="Search"
                 icon={<Search size={16} />}
                 data={['React', 'Angular', 'Vue', 'Next.js', 'Riot.js', 'Svelte', 'Blitz.js']}
             />
           
           </Group>
-
-          <Group spacing={5} className={classes.links} >
-           {/*  <MenuCom/> */}
-
-           {items}
-
+          <Group spacing={5} className={classes.links,'w-50'} >
+            {items}
           </Group>
 
 

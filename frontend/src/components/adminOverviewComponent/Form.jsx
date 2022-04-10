@@ -4,10 +4,11 @@ import InputDropdown from './InputDropdown';
 import InputStoke from './InputStoke';
 import InputText from './InputText';
 import InputTextArea from './InputTextArea';
-import { Group, Button, Autocomplete, Text } from '@mantine/core';
+import { Group, Button , Autocomplete, Text,SimpleGrid } from '@mantine/core';
 import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import React, { forwardRef } from 'react'
+import PhotoImport from './PhotoImport';
 import * as api from "../../helpers/api"
 
 
@@ -23,9 +24,11 @@ export default function Form() {
 	const [dataStoke, setStoke] = useState(1);
 	const [dataDescription, setDescrition] = useState('');
 	const [imageData, setImageData] = useState('')
-
+	const [imagePath, setImagePath] = useState('')
 	const [exisitingCategories, setExisitingCategories] = useState([])
 	const [existingBrands, setExistingBrands] = useState([])
+	
+	
 
 	const form = useForm({
 		initialValues: {
@@ -40,11 +43,12 @@ export default function Form() {
 			description: '',
 			vote_count: 0,
 			vote_total: 0,
+			image:'',
 		}
 	})
 
 
-	console.log("form", form.values)
+//	console.log("form", form.values)
 
 	//	console.log("dataCategory", dataCategory)
 
@@ -87,29 +91,10 @@ export default function Form() {
 		form.setFieldValue('description', childData)
 	}
 	function image(childData) {
-		setImageData(childData);
-		form.setFieldValue('image', childData)
+		const imagePath=URL.createObjectURL(childData[0]);
+		setImageData(imagePath)
+		setImagePath(childData)
 	}
-
-	/* const getCategories = () => {
-
-		axios.get('http://localhost:5000/categories',)
-			.then((response) => {
-				console.log("backend response categoies", response)
-				setExisitingCategories(response.data)
-			})
-			.catch(error => console.log("backend error categoies", error))
-	}
-
-	const getBrands = () => {
-
-		axios.get('http://localhost:5000/brands',)
-			.then((response) => {
-				console.log("backend response brands", response)
-				setExistingBrands(response.data)
-			})
-			.catch(error => console.log("backend error brands", error))
-	} */
 
 	const getCategories = async () => {
 	 	const data = await api.getCategories()
@@ -122,8 +107,6 @@ export default function Form() {
 	}
 
 	
-
-
 	const query = useRef(null);
 
 	const categoryData = () => {
@@ -145,7 +128,7 @@ export default function Form() {
 		return results
 
 	}
-
+	
 	const clearInput = () => {
 		setProductName('')
 		setProductCode('')
@@ -159,50 +142,54 @@ export default function Form() {
 		setImageData('')
 	}
 
-	const handelSubmit = (values) => {
-		//e.preventDefault(e)
-		console.log("values to send", values)
-		axios.post('http://localhost:5000/products', values)
+async function getSignature(){
+	const response =await fetch('http://localhost:5000/imageSignature');
+	const data=await response.json();
+	const {signature,timestamp}=data;
+	return {signature,timestamp};
+}
+
+async function wait(call){
+	const url=`https://api.cloudinary.com/v1_1/storephotos/upload`;
+		const {signature,timestamp}=await getSignature();
+		const formData=new FormData();
+		formData.append('file',imagePath[0]);
+		formData.append('signature',signature);
+		formData.append('timestamp',timestamp);
+		formData.append('api_key',437159287973424);
+		const response=await axios.post(url,formData);
+		const secured_url=response.data.secure_url;
+		form.values.image=secured_url;		
+		call()
+		}
+
+	const handelSubmit = () => {
+		
+		const values=form.values;
+	axios.post('http://localhost:5000/products', values)
 			.then((response) => {
-				console.log("backend response brands", response)
 				clearInput()
-			}).
-			catch(function (error) { console.log(error) })
+			})
+			.catch(function (error) { console.log(error) }) 	
 	}
 
 	useEffect(() => {
 		getCategories()
-		console.log("categoies in backend ", exisitingCategories)
 
 		getBrands()
-		console.log("brands in backend ", existingBrands)
-
-
-		/* return () => {
-
-			cleanup     
-		}
- */
 	}, [])
 
 
 
 
 	return (
-		<form onSubmit={form.onSubmit(handelSubmit)}>
+		<form onSubmit={form.onSubmit(()=>wait(handelSubmit))}>
+		 <SimpleGrid cols={2} breakpoints={[{ maxWidth: 'xs', cols: 1 }]}>
+<PhotoImport toParent={image} height='360px' radius='md' data={imageData}/>
+        <Group direction="column" className="overflow-auto d-inline-block">
 			<InputText toParent={name} data={{ label: 'Product Name', placeholder: 'Product Name', value: dataName }} radius='md' />
 			<InputText toParent={code} data={{ label: 'Product Code', placeholder: 'Product Code', value: dataCode }} radius='md' />
 			<InputText toParent={model} data={{ label: 'Product Model', placeholder: 'Product Model', value: dataModel }} radius='md' />
-
-
-			{/* <InputDropdown toParent={category} info={{ 
-												label: 'Category',
-												placeholder: 'category',
-												data: backendCategoriesnames(),
-												value: dataCategory }} 
-							  />
- */}
-
 
 			<Autocomplete transition="pop-top-left"
 				transitionDuration={80}
@@ -225,10 +212,6 @@ export default function Form() {
 
 
 			/>
-
-			{/* 			<InputDropdown toParent={brand} info={{ label: 'Brand', placeholder: 'Brand', data:backendBrands(), value: dataBrand }} />
- */}
-
 
 			<Autocomplete transition="pop-top-left"
 				transitionDuration={80}
@@ -254,13 +237,11 @@ export default function Form() {
 			<InputCurrency toParent={price} toParentTwo={currency} dataInput={{ value: dataPrice }} currency={dataCurrency} />
 			<InputStoke toParent={stoke} value={dataStoke} max='' />
 			<InputTextArea toParent={description} data={{ label: 'Description', placeholder: 'description', value: dataDescription }} />
-			<InputText toParent={image} data={{ label: 'image', placeholder: 'image path', value: imageData }} radius='md' />
 			<Group position="right" mt="md">
 				<Button type="submit">Submit</Button>
 			</Group>
+		</Group>
+		</SimpleGrid>
 		</form>
 	)
 }
-
-
-
