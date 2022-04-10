@@ -1,27 +1,30 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { Loader, Grid, Skeleton, Container } from '@mantine/core';
+import { Loader, Grid, Skeleton, Container , SimpleGrid,Text} from '@mantine/core';
 import ProductThumb from "./ProductThumb";
 import TempCart from "./TempCart";
 import TempUser from "./TempUser";
+import * as api from "../helpers/api"
+
 
 //const child = <Skeleton height={222} radius="md" animate={false} />;
 
 export default function Home() {
-    const [products, setProducts] = useState([]);
-    const [category, setCategory] = useState([])
+    const [products, setProducts] = useState();
+    const [category, setCategory] = useState()
     const [loading, SetLoading] = useState(false);
 
-    function update() {
-        axios.get("http://localhost:3001/categories")
+    const update = async () => {
+        await api.getCategories()
             .then((res) => {
-                console.log(res.data);
-                setCategory(res.data);
+                console.log("ccccccccccc ", res);
+                setCategory(res);
             });
-        axios.get("http://localhost:3001/products")
+        // const limit= category?.length *6
+        await api.getProductsLimited(22)
             .then((res) => {
-                console.log(res.data);
-                setProducts(res.data);
+                console.log("pppppppppp ", res);
+                setProducts(res);
             });
         SetLoading(true);
     }
@@ -30,30 +33,72 @@ export default function Home() {
         update()
 
         return () => {
-            setCategory([]);
-            setProducts([]);
+            setCategory();
+            setProducts();
         };
     }, [loading]);
 
-    if (loading === false) return <Loader />;
+    if (category === undefined || products === undefined) return <Loader />;
     else
         return (
             <Container my="md">
-                <TempUser/>
-             {/*  <TempCart/>  */}
-                {category.map((x) => (
+                <TempUser />
+                      <TempCart/>  
+                {category?.map((x) => (
                     <div key={x.id}>
-                        <p>{x.name}</p>
-                        <Grid columns={3} gutter="lg" >
-                            {products.filter((item) => item.category === x.name)
-                                .slice(0, 6).map((p) => {
-                                    return <Grid.Col xs={1} key={p.id}>
-                                                <ProductThumb  product={p}/>
-                                           </Grid.Col>
+                          <Text
+                                component="span"
+                                align="center"
+                                variant="gradient"
+                                gradient={{ from: 'indigo', to: 'cyan', deg: 45 }}
+                                size="xl"
+                                weight={700}
+                                style={{ fontFamily: 'Greycliff CF, sans-serif' }}
+                                >
+                                {x.name}
+                                </Text>
+
+                        <SimpleGrid cols={3} spacing="lg" 
+                                    breakpoints={[
+                                        { maxWidth: 980, cols: 3, spacing: 'md' },
+                                        { maxWidth: 755, cols: 2, spacing: 'sm' },
+                                        { maxWidth: 600, cols: 1, spacing: 'sm' },
+                                      ]} >
+                            {products?.filter((item) => item.category_id === x.id.toString())
+                                .slice(0, 6).map((p,index) => {
+                                    return    <ProductThumb product={p} key={p.id} />                                          
+                                   
+
                                 })}
-                        </Grid>
+                        </SimpleGrid>
+
+
                     </div>
                 ))}
+
+                {/* <Grid columns={3} gutter="lg" >
+                    {products?.map((x) => {
+                        console.log(x)
+                        return <p>{x.name}</p>
+
+                    })}
+                </Grid> */}
             </Container>
         );
 }
+
+                        {/*     <Grid.Col xs={1} key={p.id}>
+                                        <ProductThumb  product={p}/>
+                                </Grid.Col> */}
+
+
+
+                                    {/*     <Grid.Col xs={1} key={p.id}>
+                                                <span>p.name</span>
+                                                {console.log(p.category_id)}
+                                                <ProductThumb  product={p}/>
+                                        </Grid.Col> */}
+
+
+
+/*                                         <Grid.Col xs={1} key={p.id}>  <ProductThumb  product={p}/> </Grid.Col> */

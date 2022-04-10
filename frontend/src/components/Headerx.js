@@ -10,7 +10,7 @@ import {
     useMantineTheme, Center,
     AspectRatio, Grid, Autocomplete, Menu, createStyles
 } from '@mantine/core';
-import { ChevronDown } from 'tabler-icons-react';
+import { ChevronDown , ChevronLeft} from 'tabler-icons-react';
 import { User, ShoppingCart  } from 'tabler-icons-react';
 import { Search } from 'tabler-icons-react';
 import { Link, useNavigate } from 'react-router-dom';
@@ -114,6 +114,55 @@ export default function Headerx() {
                     </Menu>
                 </Grid.Col>
 
+                <Grid.Col span={25}>
+
+                    <Menu
+                        trigger="hover"
+                        delay={0}
+                        transitionDuration={0}
+                        placement="end"
+                        gutter={1}
+                        control={
+                            <a className={classes.link}>
+
+                                <Center>
+                                    <span className={classes.linkLabel}>nested head</span>
+                                    <ChevronDown size={12} />
+                                </Center>
+                            </a>
+                        }
+                    >
+                        <Menu.Item component={Menu}
+                                        
+                                        trigger="hover"
+                                        delay={0}
+                                        transitionDuration={0}
+                                        placement="end"
+                                        gutter={1}
+                                        control={
+                                            <>
+                                            <a className={classes.link}>
+                
+                                                <Center>
+                                                    <span className={classes.linkLabel}>inner menu</span>
+                                                    <ChevronLeft size={12} />
+                                                </Center>
+                                            </a>
+                                            <Menu.Item component={Link} to="/newcategory"> list</Menu.Item>
+                                            </>
+                                        }                > 
+                        
+                          <Menu.Item component={Link} to="/newcategory"> By category</Menu.Item>
+                         </Menu.Item>
+
+
+
+
+
+                        <Menu.Item component={Link} to="/newcategory"> By category</Menu.Item>
+                    </Menu>
+                </Grid.Col>
+
                 <Grid.Col span={25}  >
 
                     <a
@@ -135,6 +184,45 @@ export default function Headerx() {
                      <ShoppingCart />
                         
                 </Grid.Col>
+
+                <Menu
+                        trigger="hover"
+                        delay={0}
+                        transitionDuration={0}
+                        placement="end"
+                        gutter={1}
+                        control={
+                            <a className={classes.link}>
+
+                                <Center>
+                                    <span className={classes.linkLabel}>Browse Products</span>
+                                    <ChevronDown size={12} />
+                                </Center>
+                            </a>
+                        }
+                    >
+                         <Menu
+                        trigger="hover"
+                        delay={0}
+                        transitionDuration={0}
+                        placement="start"
+                        gutter={1}
+                        position="left"
+                        control={
+                            <a className={classes.link}>
+
+                                <Center>
+                                    <span className={classes.linkLabel}>Browse Products</span>
+                                    <ChevronDown size={12} />
+                                </Center>
+                            </a>
+                        }
+                    >
+                        <Menu.Item component={Link} to="/newbrand"> By brand</Menu.Item>
+                        <Menu.Item component={Link} to="/newcategory"> By category</Menu.Item>
+                    </Menu>
+                        <Menu.Item component={Link} to="/newcategory"> By category</Menu.Item>
+                    </Menu>
               
 
             </Grid>

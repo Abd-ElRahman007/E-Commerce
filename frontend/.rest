@@ -54,10 +54,39 @@ content-type: application/json
 
 ###
 
-POST http://localhost:5000/auth/login HTTP/1.1
+GET  http://localhost:5000/user HTTP/1.1
 content-type: application/json
+token:  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxNSwiZl9uYW1lIjoibW1tbSIsImxfbmFtZSI6ImFhYWFhIiwiZW1haWwiOiJhc2RAZ21haWwuY29tIiwicGFzc3dvcmQiOiJhc2Rhc2QiLCJiaXJ0aGRheSI6IjIwMjItMDQtMDFUMjI6MDA6MDAuMDAwWiIsInBob25lIjoiNTU1NSIsInN0YXR1cyI6ImFjdGl2ZSIsImNyZWF0ZWRfYXQiOiIyMDIyLTA0LTA2VDA1OjAyOjMwLjI2OVoiLCJjaXR5IjoiYWxleCIsImFkZHJlc3MiOiJkZGRkZCIsImNvdXBvbl9pZCI6bnVsbH0sImlhdCI6MTY0OTM2ODU0MX0.RGgnjskqL15np3QDCQgvNFZk0Z8fEadT4Qn4KsC-YE0"
 
 {
     "email": "asd@gmail.com",
     "password": "asdasd"
 }
+
+
+###
+
+PATCH  http://localhost:5000/products/9 HTTP/1.1
+content-type: application/json
+
+
+{
+    "image":"https://cdn.pixabay.com/photo/2019/06/30/18/19/tv-4308538_960_720.jpg"
+}
+
+###
+
+
+GET   http://localhost:5000/products/1  HTTP/1.1
+content-type: application/json
+
+
+###
+
+PATCH    http://localhost:5000/products/11  HTTP/1.1
+content-type: application/json
+
+{
+    "image": "https://cdn.pixabay.com/photo/2015/02/07/20/58/tv-627876_960_720.jpg"    
+}
+###
