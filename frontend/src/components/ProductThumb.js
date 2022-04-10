@@ -14,8 +14,8 @@ import { ShoppingCartPlus, ShoppingCartX, ShoppingCartOff, LetterX, Tournament, 
 import Rating from '@mui/material/Rating';
 
 export default function ProductThumb(props) {
-  const { id, name, image, price, currency, stock } = props.product
-  console.log(" , props", props)
+  const { id, name, image, price, currency, stock , vote_count , vote_total } = props.product
+  // console.log(" , props", props)
   const theme = useMantineTheme();
 
   const [quantity, setQuantity] = useState(1)
@@ -23,15 +23,15 @@ export default function ProductThumb(props) {
   const [full, setFull] = useState(false)
 
   const cartItems = useSelector(cartState)
-  // console.log("cartItems" , cartItems ) 
+   console.log("cartItems" , cartItems ) 
   const quantityInCart = cartItems.filter((item) => {
 
     return id === item.id
 
   })
-  console.log("quantityInCart", quantityInCart.quantity, "this id", id)
+  //console.log("quantityInCart", quantityInCart.quantity, "this id", id)
   const thisQ = quantityInCart[0]
-  console.log("thisQ", thisQ, "this id", id)
+ // console.log("thisQ", thisQ, "this id", id)
 
   const increaseQuantity = () => {
     // stock logic here 
@@ -64,7 +64,7 @@ export default function ProductThumb(props) {
        setFull(true)
     const number = quantity - 1
     setQuantity(number)
-    setFull=(false)
+    setFull(false)
 
   }
 
@@ -76,7 +76,7 @@ export default function ProductThumb(props) {
   }
 
 
-  const cartAddFunction = (id, name, image, price, quantity) => {
+  const cartAddFunction = (id, name, image, price, quantity , stock , vote_count , vote_total) => {
     if (currentQuantity == stock && quantity > 0) {
       showNotification({
         title: "invalid ",
@@ -94,7 +94,7 @@ export default function ProductThumb(props) {
       showNotification(message())
       return
     }
-    dispatch(addToCart({ id, name, image, price, quantity }))
+    dispatch(addToCart({ id, name, image, price, quantity , stock ,vote_count , vote_total }))
     setQuantity(1)
     showNotification(message())
 
@@ -181,11 +181,11 @@ export default function ProductThumb(props) {
           </Text> */}
           <Group grow position="center" style={{ marginBottom: 5, marginTop: theme.spacing.sm }}>
             <ActionIcon
-              disabled={quantity === 0 /* && full === true    <---------- */  
+              disabled={quantity === 0 || full === true      // <----------
                 ? true
                 : false}
               onClick={() => {
-                cartAddFunction(id, name, image, price, quantity)
+                cartAddFunction(id, name, image, price, quantity , stock,vote_count , vote_total)
 
                 /*  dispatch(addToCart( {id , name , main_image , price , quantity} ))
                  setQuantity(1)

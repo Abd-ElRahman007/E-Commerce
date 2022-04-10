@@ -19,7 +19,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from "react-router-dom";
 
 
-import { login, register } from '../redux/slices/authSlice';
+import  {authState, login, register } from '../redux/slices/authSlice';
 
 export function Login(props) {
   const [type, toggle] = useToggle('login', ['login', 'register']);
@@ -49,6 +49,12 @@ export function Login(props) {
 
   }
 
+
+  const userState = useSelector(authState)
+
+  const {message , isError , isLoading , isSuccess} = userState
+
+
   const handelSubmit = () => {
     console.log("form", form.values)
     if (type === "login") {
@@ -62,6 +68,11 @@ export function Login(props) {
       clearInput()
       console.log("userInfo", userInfo)
       console.log(email, password)
+
+      if (isError===true)
+        alert(message)
+        else  navigate("./")
+     
     }
     else if (type === "register") {
 
@@ -76,6 +87,7 @@ export function Login(props) {
       dispatch(register(userInfo))
       clearInput()
       console.log("userInfo", userInfo)
+      navigate("./")
     }
 
 

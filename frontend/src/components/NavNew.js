@@ -7,6 +7,8 @@ import { User, ShoppingCart } from 'tabler-icons-react';
 import { Link, useNavigate } from 'react-router-dom';
 import Usernav from './User';
 import MenuInNav from './MenuInNav';
+import UserDisplay from './user/UserDisplay';
+
 
 
 const useStyles = createStyles((theme) => ({
@@ -100,7 +102,7 @@ export function NavNew() {
 
 
 
-    const items = navLinks.links.map((link) => {
+   /*  const items = navLinks.links.map((link) => {
         const menuItems = link.links?.map((item) => (
             <Menu.Item key={item.link} component={Link} to='/car'>{item.label}</Menu.Item>
         ));
@@ -147,7 +149,7 @@ export function NavNew() {
             </a>
         );
     });
-
+ */
 
 
 
@@ -194,7 +196,7 @@ export function NavNew() {
                       <ShoppingCart/>
                     </ActionIcon>
                     
-                    <User/>
+                    <UserDisplay/>
                     <Burger
                         opened={opened}
                         onClick={() => toggleOpened()}
