@@ -43,7 +43,11 @@ export default function PhotoImport({toParent,data}) {
   const { classes } = useStyles();
   const openRef = useRef();
 
-
+function imgRender(img){
+	if(img){
+		return <Image image={img} dim={{height:'200px',width:'90%'}} col='col-12'/>
+	}
+}
   return (
     <div className={classes.wrapper}>
       <Dropzone
@@ -85,7 +89,7 @@ multiple= {false}
         Select files
       </Button>
 	  <div className='row justify-content-evenly overflow-auto'>
-	  <Image image={data} dim={{height:'200px',width:'90%'}} col='col-12'/>
+	  {imgRender(data)}
 	  </div>
     </div>
   );

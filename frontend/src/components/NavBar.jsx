@@ -155,18 +155,17 @@ export function HeaderMenu() {
       <Container>
         <div className={classes.inner}>
           <h1>NavBar</h1>
-          <Group ml={120} mr={120} >
-          <Autocomplete  /* styles={{
-                                    root: { width: '200px' } }} */
+          <Group className={'w-50'}>
+          <Autocomplete
                 radius="lg"
-                className={classes.search}
+                className={classes.search,'w-100'}
                 placeholder="Search"
                 icon={<Search size={16} />}
                 data={['React', 'Angular', 'Vue', 'Next.js', 'Riot.js', 'Svelte', 'Blitz.js']}
             />
           
           </Group>
-          <Group spacing={5} className={classes.links} >
+          <Group spacing={5} className={classes.links,'w-50'} >
             {items}
           </Group>
           <ShoppingCart />
