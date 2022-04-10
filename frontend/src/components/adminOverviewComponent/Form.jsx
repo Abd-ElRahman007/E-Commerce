@@ -24,6 +24,7 @@ export default function Form() {
 	const [dataStoke, setStoke] = useState(1);
 	const [dataDescription, setDescrition] = useState('');
 	const [imageData, setImageData] = useState('')
+	const [imagePath, setImagePath] = useState('')
 	const [exisitingCategories, setExisitingCategories] = useState([])
 	const [existingBrands, setExistingBrands] = useState([])
 	
@@ -92,7 +93,7 @@ export default function Form() {
 	function image(childData) {
 		const imagePath=URL.createObjectURL(childData[0]);
 		setImageData(imagePath)
-		form.setFieldValue('image',imagePath)
+		setImagePath(childData)
 	}
 
 	const getCategories = () => {
@@ -149,13 +150,39 @@ const clearInput = () => {
 	 setImageData('');
     }
 
-	const handelSubmit = (values) => {
-		//e.preventDefault(e)
-		axios.post('http://localhost:5000/products', values)
+async function getSignature(){
+	const response =await fetch('http://localhost:5000/imageSignature');
+	const data=await response.json();
+	const {signature,timestamp}=data;
+	return {signature,timestamp};
+}
+function makePath(i){
+	form.setFieldValue('image',i)
+	console.log(form.values)
+}
+async function wait(call){
+	const url=`https://api.cloudinary.com/v1_1/storephotos/upload`;
+		const {signature,timestamp}=await getSignature();
+		const formData=new FormData();
+		formData.append('file',imagePath[0]);
+		formData.append('signature',signature);
+		formData.append('timestamp',timestamp);
+		formData.append('api_key',437159287973424);
+		const response=await axios.post(url,formData);
+		const secured_url=response.data.secure_url;
+		form.values.image=secured_url;
+		
+		call()
+		}
+
+	const handelSubmit = () => {
+		
+		const values=form.values;
+	axios.post('http://localhost:5000/products', values)
 			.then((response) => {
 				clearInput()
 			})
-			.catch(function (error) { console.log(error) })
+			.catch(function (error) { console.log(error) }) 	
 	}
 
 	useEffect(() => {
@@ -168,7 +195,7 @@ const clearInput = () => {
 	
 
 	return (
-		<form onSubmit={form.onSubmit((values)=>console.log(values))}>
+		<form onSubmit={form.onSubmit(()=>wait(handelSubmit))}>
 		 <SimpleGrid cols={2} breakpoints={[{ maxWidth: 'xs', cols: 1 }]}>
 <PhotoImport toParent={image} height='360px' radius='md' data={imageData}/>
         <Group direction="column" className="overflow-auto d-inline-block">
