@@ -24,12 +24,24 @@ import ByCategoryOrBrand from './components/user/ByCategoryOrBrand';
 import { authState } from './redux/slices/authSlice';
 import { useSelector } from "react-redux"
 import { HomeAdmin } from './components/admin/HomeAdmin';
+import ProductThumb from './components/ProductThumb';
+import { useState, useEffect } from "react";
 
 
 
 function App() {
+
   const {status} =useSelector(authState)
+
+
+  /* useEffect(() => {
+   
+    
+  }, [status]) */
+
   if (status==="admin")
+
+  
   return (
     <Container className="app" style={{ padding: " 10px 10px" }}>
       <TempUser />
@@ -37,11 +49,12 @@ function App() {
        
         <Route exact path='/' element={<HomeAdmin/>} />
         <Route exact path='/adminOverview' element={<AdminOverview/>} />
+        <Route exact path='/Login' element={<Login/>} />
         <Route exact path='/car' element={<Home/>} />
      </Routes>
    </Container>
   )
- else 
+ else if (status!=="admin")
   return (
     <Container className="app" style={{ padding: " 10px 10px" }}>
      {/*  <Headerx /> */}
@@ -64,6 +77,7 @@ function App() {
         <Route exact path='/EditStuff' element={<EditStuff/>} />
         <Route exact path='/Cart' element={<Cart/>} />
         <Route exact path='/bycategoryurbrand/:id' element={<ByCategoryOrBrand/>} />
+        <Route exact path='/ProductThumb/:id' element={<ProductThumb/>} />
        {/*  <Route exact path='/homeAdmin' element={<HomeAdmin />} />
         <Route exact path='/newCategory' element={<NewCategory />} />
         <Route exact path='/newBrand' element={<NewBrand />} /> */}

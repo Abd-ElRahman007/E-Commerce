@@ -47,9 +47,9 @@ const navigate=useNavigate()
 
         return () => {
 
-            setExisitingCategories(
+            setExisitingCategories()
                 setExistingBrands()
-            )   
+              
         }
 
     }, [])
@@ -88,17 +88,17 @@ const navigate=useNavigate()
                         gutter={1}
                         position="left"
                         control={
-                            <Menu.Item className={classes.link}>
+                            <a className={classes.link}>
 
                                 <Center>
                                     <span className={classes.linkLabel}>By Category</span>
                                     <ChevronDown size={12} />
                                 </Center>
-                            </Menu.Item>
+                            </a>
                         }
                     >
                         {exisitingCategories?.map((x) => {
-                            return <Menu.Item as={Link} key={x.id}> {x.name}</Menu.Item>
+                            return <Menu.Item as={Link} to="/cart" key={x.id}> {x.name}</Menu.Item>
                         })}
 
                     </Menu>
@@ -122,7 +122,7 @@ const navigate=useNavigate()
                         }
                     >
                         {existingBrands?.map((x) => {
-                                 return    <Menu.Item  as="button" onClick={()=>{navigate("/cart")}} key={x.id}> {x.name} as button</Menu.Item>
+                                 return    <Menu.Item  component={Link} to={"./cart"} key={x.id}> {x.name} as button</Menu.Item>
                                              
                         })}
 

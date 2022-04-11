@@ -12,7 +12,7 @@ import { useSelector } from "react-redux"
 import { showNotification } from '@mantine/notifications';
 import { ShoppingCartPlus, ShoppingCartX, ShoppingCartOff, LetterX, Tournament, ShoppingCart } from 'tabler-icons-react';
 import Rating from '@mui/material/Rating';
-import {useNavigate}from 'react-router-dom'
+import {useNavigate , Link}from 'react-router-dom'
 
 import { authState } from "../redux/slices/authSlice"
 
@@ -161,19 +161,22 @@ let navigate=useNavigate();
 
   return (
     <>
-      <div style={{ width: 340, margin: 'auto' }}>
+      <div style={{ width: "90%", margin: 'auto' }}>
         <Card shadow="sm" p="lg">
           <Card.Section>
-            <Image src={image}
-              alt="Product"
-              radius={10}
-              height={180}
-              fit="contain"
-			  onClick={(event) => {
+            <Image  src={image}
+                    alt="Product"
+                    radius={10}
+                    height={180}
+                    fit="contain"
+
+             /*  component={Link}
+              to={`./ProductOverview/${id}`} */
+			        onClick={(event) => {
                     event.preventDefault()
                     navigate(`./ProductOverview/${id}`)
                 }}
-			style={{cursor:'pointer'}}
+		        	style={{cursor:'pointer'}}
             />
           </Card.Section>
 
@@ -202,10 +205,7 @@ let navigate=useNavigate();
             </Badge>
           </Group>
 
-          {/* <Text size="sm" style={{ color: secondaryColor, lineHeight: 1.5 }}>
-            With Fjord Tours you can explore more of the magical fjord landscapes with tours and
-            activities on and around the fjords of Norway
-          </Text> */}
+         
           <Group grow position="center" style={{ marginBottom: 5, marginTop: theme.spacing.sm }}>
             <ActionIcon
               disabled={quantity === 0 || full === true      // <----------
@@ -213,21 +213,12 @@ let navigate=useNavigate();
                         : false}
               onClick={() => {
                 cartAddFunction(id, name, image, price, quantity, stock, vote_count, vote_total)
-
-                /*  dispatch(addToCart( {id , name , main_image , price , quantity} ))
-                 setQuantity(1)
-  
-                 showNotification({
-                   title: 'Default notification',
-                   message: message()  ,
-                 }) */
               }}
             >
 
               {quantity > 0
                 ? <ShoppingCartPlus size={30} color={'#40bf59'} />
                 : <ShoppingCartX size={30} color={'#d279c6'} />
-
                      }
 
             </ActionIcon>
@@ -268,3 +259,18 @@ onClick={() => {
 >
  Add to Cart
 </Button> */
+
+
+/*  dispatch(addToCart( {id , name , main_image , price , quantity} ))
+                 setQuantity(1)
+  
+                 showNotification({
+                   title: 'Default notification',
+                   message: message()  ,
+                 }) */
+
+
+            {/* <Text size="sm" style={{ color: secondaryColor, lineHeight: 1.5 }}>
+            With Fjord Tours you can explore more of the magical fjord landscapes with tours and
+            activities on and around the fjords of Norway
+          </Text> */}      

@@ -110,7 +110,11 @@ export function Login(props) {
     { 
       handleError()
          }
-    if (isSuccess)
+    if (isSuccess && status==="admin")
+     { 
+      navigate("/") 
+          }
+          if (isSuccess && status!=="admin" )
      { 
       navigate("/") 
           }
@@ -160,6 +164,7 @@ export function Login(props) {
           {type === 'register' && (
             <>
               <TextInput
+              
                 label="First Name"
                 placeholder="Your first name"
                 value={form.values.first_name}

@@ -3,6 +3,7 @@ import { Image, Name, Rating, Price, Description } from './productOverviewCompon
 import {useState, useEffect}from 'react';
 import * as api from '../helpers/api';
 import {useParams}from 'react-router-dom';
+import ProductThumb from "./ProductThumb";
 
 
 
@@ -15,7 +16,7 @@ const [dataProduct, setDataProduct] = useState({});
 	
 	async function getProduct(id){
 const data = await api.getProductOverview(id);
-setDataProduct({name:data.name,model:data.model,description:data.description,currency:data.currency,vote_count:data.vote_count,vote_total:data.vote_total,price:data.price,image:data.image});	
+        setDataProduct(data);	
 }
 
 useEffect(() => {
@@ -23,34 +24,41 @@ useEffect(() => {
 	}, [])
 
     return (
+
         <Container my="md">
-            <SimpleGrid
-                cols={2}
-                spacing="md"
-                breakpoints={[{ maxWidth: 'sm', cols: 1 }]}>
-                <Image
-					image={dataProduct.image}
-                    title={dataProduct.name}
-                    author="" />
+        <SimpleGrid
+            cols={2}
+            spacing="md"
+            breakpoints={[{ maxWidth: 'sm', cols: 1 }]}>
+            <Image dim={{width:"300px"}}
+                image={dataProduct.image}
+                title={dataProduct.name}
+                />
                 <Grid gutter="md">
-                    <Grid.Col>
-					<Name name={[dataProduct.name,' ',dataProduct.model]} />
-                    </Grid.Col>
-                    <Grid.Col span={6}>
-                        <Price price={dataProduct.price} currency={dataProduct.currency.toUpperCase()} />
-                    </Grid.Col>
-                    <Grid.Col span={6}>
-                        <Rating data={{
-                            label: 'Rating',
-                            stats: [dataProduct.vote_total,' / 10'],
-                            color: 'green',
-                            icon: 'up',
-                            progress: dataProduct.vote_total / dataProduct.vote_count * 100
-                        }} />
-                    </Grid.Col>
-                </Grid>
-            </SimpleGrid>
-            <Description description={dataProduct.description} label="Description" />
-        </Container>
+                <Grid.Col>
+                    <Name name={[dataProduct.name,' ',dataProduct.model]} />
+                </Grid.Col>
+                <Grid.Col span={6}>
+                    <Price price={dataProduct.price} currency={dataProduct.currency} />
+                </Grid.Col>
+                <Grid.Col span={6}>
+                    <Rating data={{
+                        label: 'Rating',
+                        stats: [dataProduct.vote_total,' / 10'],
+                        color: 'green',
+                        icon: 'up',
+                        progress: dataProduct.vote_total / dataProduct.vote_count * 100
+                    }} />
+                </Grid.Col>
+            </Grid>
+        </SimpleGrid>
+        <Description description={dataProduct.description} label="Description" />
+    </Container> 
+       
     );
 }
+
+
+ /*
+    <ProductThumb product={dataProduct}/>
+ */
