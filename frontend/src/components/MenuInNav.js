@@ -69,6 +69,7 @@ export default function MenuInNav(props) {
                     transitionDuration={0}
                     placement="end"
                     gutter={1}
+					className="w-50"
                     control={
                         <a className={classes.link}>
 

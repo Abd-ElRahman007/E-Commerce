@@ -11,6 +11,10 @@ export const getBrands =async () => {
     const data = await axios.get('http://localhost:5000/brands',)
          return data.data
 }
+export const getProductOverview =async (id) => {
+    const data = await axios.get(`http://localhost:5000/products/${id}`)
+         return data.data
+}
 
 
 export const getProductsLimited =async (limit) => {

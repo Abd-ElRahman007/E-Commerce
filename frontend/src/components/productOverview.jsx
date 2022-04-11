@@ -1,7 +1,26 @@
 import { Container, Grid, SimpleGrid } from '@mantine/core';
 import { Image, Name, Rating, Price, Description } from './productOverviewComponents/componentExport';
+import {useState, useEffect}from 'react';
+import * as api from '../helpers/api';
+import {useParams}from 'react-router-dom';
+
+
+
+
 
 export default function ProductOverview() {
+const [dataProduct, setDataProduct] = useState({});
+
+	const {id}=useParams();
+	
+	async function getProduct(id){
+const data = await api.getProductOverview(id);
+setDataProduct({name:data.name,model:data.model,description:data.description,currency:data.currency,vote_count:data.vote_count,vote_total:data.vote_total,price:data.price,image:data.image});	
+}
+
+useEffect(() => {
+		getProduct(id);
+	}, [])
 
     return (
         <Container my="md">
@@ -10,28 +29,28 @@ export default function ProductOverview() {
                 spacing="md"
                 breakpoints={[{ maxWidth: 'sm', cols: 1 }]}>
                 <Image
-                    image="https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
-                    title="Journey to Swiss Alps"
-                    author="Robert Gluesticker" />
+					image={dataProduct.image}
+                    title={dataProduct.name}
+                    author="" />
                 <Grid gutter="md">
                     <Grid.Col>
-                        <Name name="lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum" />
+					<Name name={[dataProduct.name,' ',dataProduct.model]} />
                     </Grid.Col>
                     <Grid.Col span={6}>
-                        <Price price='20' currency='EG' />
+                        <Price price={dataProduct.price} currency={dataProduct.currency.toUpperCase()} />
                     </Grid.Col>
                     <Grid.Col span={6}>
                         <Rating data={{
                             label: 'Rating',
-                            stats: '4.5 / 10',
+                            stats: [dataProduct.vote_total,' / 10'],
                             color: 'green',
                             icon: 'up',
-                            progress: 45
+                            progress: dataProduct.vote_total / dataProduct.vote_count * 100
                         }} />
                     </Grid.Col>
                 </Grid>
             </SimpleGrid>
-            <Description description="adklfja;ddfjdkfj" label="Description" />
+            <Description description={dataProduct.description} label="Description" />
         </Container>
     );
 }
