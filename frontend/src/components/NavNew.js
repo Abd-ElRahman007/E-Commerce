@@ -5,7 +5,7 @@ import { ChevronDown } from 'tabler-icons-react';
 import { Search } from 'tabler-icons-react';
 import { User, ShoppingCart } from 'tabler-icons-react';
 import { Link, useNavigate } from 'react-router-dom';
-import Usernav from './User';
+
 import MenuInNav from './MenuInNav';
 import UserDisplay from './user/UserDisplay';
 

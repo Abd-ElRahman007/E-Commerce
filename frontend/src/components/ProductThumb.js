@@ -12,7 +12,7 @@ import { useSelector } from "react-redux"
 import { showNotification } from '@mantine/notifications';
 import { ShoppingCartPlus, ShoppingCartX, ShoppingCartOff, LetterX, Tournament, ShoppingCart } from 'tabler-icons-react';
 import Rating from '@mui/material/Rating';
-
+import { authState } from "../redux/slices/authSlice"
 export default function ProductThumb(props) {
   const { id, name, image, price, currency, stock , vote_count , vote_total } = props.product
   //  console.log(" , props", props)
@@ -22,8 +22,10 @@ export default function ProductThumb(props) {
   const [currentQuantity, setCurrentQuantity] = useState(0)
   const [full, setFull] = useState(false)
 
+  const user = useSelector(authState)
+  console.log("userId" , user.id ) 
   const cartItems = useSelector(cartState)
-   console.log("cartItems" , cartItems ) 
+   //console.log("cartItems" , cartItems ) 
   const quantityInCart = cartItems.filter((item) => {
 
     return id === item.id
@@ -168,7 +170,18 @@ export default function ProductThumb(props) {
           <Group position="center" style={{ marginBottom: 5, marginTop: theme.spacing.sm }}>
             <Text weight={500}>{name}</Text>
 
-            <Rating name="read-only" size="small" value={2} readOnly />
+            <Rating name="read-only"
+                    size="small"
+                     value={ vote_total || vote_count == 0
+                              ? 0
+                              : vote_total/vote_count
+
+                        } readOnly ={ user.id === null
+                                      ? true
+                                      :false
+
+                        }
+                         />
 
             <Badge color="pink" variant="light" size="xl" >
               {price}{currency}

@@ -5,7 +5,7 @@ import { ChevronDown } from 'tabler-icons-react';
 import { Search } from 'tabler-icons-react';
 import { User, ShoppingCart  } from 'tabler-icons-react';
 import { Link, useNavigate } from 'react-router-dom';
-import Usernav from './User';
+
 
 
 const useStyles = createStyles((theme) => ({
@@ -176,7 +176,7 @@ export function HeaderMenu() {
           </Group>
 
 
-          <Usernav/>
+         
           <ShoppingCart />
           <Burger
             opened={opened}
