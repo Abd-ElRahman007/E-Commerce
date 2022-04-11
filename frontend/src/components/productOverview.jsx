@@ -37,7 +37,7 @@ useEffect(() => {
 					<Name name={[dataProduct.name,' ',dataProduct.model]} />
                     </Grid.Col>
                     <Grid.Col span={6}>
-                        <Price price={dataProduct.price} currency={dataProduct.currency} />
+                        <Price price={dataProduct.price} currency={dataProduct.currency.toUpperCase()} />
                     </Grid.Col>
                     <Grid.Col span={6}>
                         <Rating data={{
