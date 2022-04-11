@@ -7,6 +7,7 @@ import { User, ShoppingCart } from 'tabler-icons-react';
 import { Link, useNavigate } from 'react-router-dom';
 import Usernav from './User';
 import MenuInNav from './MenuInNav';
+import UserLogin from './UserLogin'
 
 
 const useStyles = createStyles((theme) => ({
@@ -127,7 +128,7 @@ export function NavNew() {
                         </a>
                     }
                 >
-                    {menuItems}jjjj
+                    {menuItems}
                 </Menu>
             );
         }
@@ -149,17 +150,12 @@ export function NavNew() {
     });
 
 
-
-
-
-
-
     return (
         <Header height={56} mb={12}>
             <Container>
                 <div className={classes.inner}>
-                    <h1>NavBar</h1>
-                    <Group className={"w-50"} >
+                    <h1><Link style={{textDecoration:'none',color:'black'}} to="/">NavBar</Link></h1>
+                    <Group className={"w-25"} >
                         <Autocomplete  /* styles={{   50 ,50 (other group)
                                     root: { width: '200px' } }} */
                             radius="lg"
@@ -194,13 +190,13 @@ export function NavNew() {
                       <ShoppingCart/>
                     </ActionIcon>
                     
-                    <User/>
                     <Burger
                         opened={opened}
                         onClick={() => toggleOpened()}
                         className={classes.burger}
                         size="sm"
                     />
+               <UserLogin name="Sprints" email="mockemail@example.com"/>                    
                 </div>
             </Container>
         </Header>

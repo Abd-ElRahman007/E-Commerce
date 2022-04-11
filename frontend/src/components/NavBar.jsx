@@ -150,7 +150,6 @@ export function HeaderMenu() {
 
 
 
-
   return (
     <Header height={56} mb={12}>
       <Container>
@@ -172,7 +171,6 @@ export function HeaderMenu() {
           </Group>
 
 
-          <Usernav/>
           <ShoppingCart />
           <Burger
             opened={opened}
