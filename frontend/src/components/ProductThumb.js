@@ -12,6 +12,8 @@ import { useSelector } from "react-redux"
 import { showNotification } from '@mantine/notifications';
 import { ShoppingCartPlus, ShoppingCartX, ShoppingCartOff, LetterX, Tournament, ShoppingCart } from 'tabler-icons-react';
 import Rating from '@mui/material/Rating';
+import {useNavigate}from 'react-router-dom'
+
 import { authState } from "../redux/slices/authSlice"
 
 import { HashLink } from 'react-router-hash-link';
@@ -155,7 +157,7 @@ export default function ProductThumb(props) {
     }
   }, [cartItems, thisQ])
 
-
+let navigate=useNavigate();
 
   return (
     <>
@@ -167,7 +169,11 @@ export default function ProductThumb(props) {
               radius={10}
               height={180}
               fit="contain"
-
+			  onClick={(event) => {
+                    event.preventDefault()
+                    navigate(`./ProductOverview/${id}`)
+                }}
+			style={{cursor:'pointer'}}
             />
           </Card.Section>
 
@@ -192,7 +198,7 @@ export default function ProductThumb(props) {
                     />
             </HashLink>
             <Badge color="pink" variant="light" size="xl" >
-              {price}{currency}
+              {price} {currency}
             </Badge>
           </Group>
 

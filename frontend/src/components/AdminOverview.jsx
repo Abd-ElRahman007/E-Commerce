@@ -1,19 +1,13 @@
-import { SimpleGrid, Container, Group } from '@mantine/core';
-import PhotoImport from './adminOverviewComponent/PhotoImport';
+import {Container} from '@mantine/core';
 import Form from './adminOverviewComponent/Form';
 
 
-const importPhoto = (height) => <PhotoImport height={height} radius="md" />;
+//const importPhoto = (height) => <PhotoImport height={height} radius="md" />;
 const BASE_HEIGHT = 360;
 export default function AdminOverview() {
   return (
-    <Container my="md">
-      <SimpleGrid cols={2} breakpoints={[{ maxWidth: 'xs', cols: 1 }]}>
-        {importPhoto(BASE_HEIGHT)}
-        <Group direction="column" className="overflow-auto d-inline-block">
+    <Container my="md">     
 		<Form/>
-        </Group>
-      </SimpleGrid>
     </Container>
   );
 }
