@@ -75,7 +75,10 @@ export default function Home() {
 
                     </div>
                 ))}
+                    <div id="section1">
 
+                        are u here yet !!!
+                    </div>
                 {/* <Grid columns={3} gutter="lg" >
                     {products?.map((x) => {
                         console.log(x)

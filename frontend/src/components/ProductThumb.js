@@ -13,8 +13,12 @@ import { showNotification } from '@mantine/notifications';
 import { ShoppingCartPlus, ShoppingCartX, ShoppingCartOff, LetterX, Tournament, ShoppingCart } from 'tabler-icons-react';
 import Rating from '@mui/material/Rating';
 import { authState } from "../redux/slices/authSlice"
+
+import { HashLink } from 'react-router-hash-link';
+
+
 export default function ProductThumb(props) {
-  const { id, name, image, price, currency, stock , vote_count , vote_total } = props.product
+  const { id, name, image, price, currency, stock, vote_count, vote_total } = props.product
   //  console.log(" , props", props)
   const theme = useMantineTheme();
 
@@ -23,9 +27,9 @@ export default function ProductThumb(props) {
   const [full, setFull] = useState(false)
 
   const user = useSelector(authState)
-  console.log("userId" , user.id ) 
+  console.log("userId", user.id)
   const cartItems = useSelector(cartState)
-   //console.log("cartItems" , cartItems ) 
+  //console.log("cartItems" , cartItems ) 
   const quantityInCart = cartItems.filter((item) => {
 
     return id === item.id
@@ -33,15 +37,15 @@ export default function ProductThumb(props) {
   })
   //console.log("quantityInCart", quantityInCart.quantity, "this id", id)
   const thisQ = quantityInCart[0]
- // console.log("thisQ", thisQ, "this id", id)
+  // console.log("thisQ", thisQ, "this id", id)
 
   const increaseQuantity = () => {
     // stock logic here 
     if (currentQuantity > 0) {
       if (quantity == stock - currentQuantity)
         return
-     /*  else if (currentQuantity == stock)
-        return setFull(true) */
+      /*  else if (currentQuantity == stock)
+         return setFull(true) */
 
     }
     if (quantity == stock)
@@ -53,7 +57,7 @@ export default function ProductThumb(props) {
 
 
   const decreaseQuantity = () => {
-    
+
     if (currentQuantity > 0) {
       if (quantity <= -currentQuantity)
         return;
@@ -62,8 +66,8 @@ export default function ProductThumb(props) {
     else
       if (quantity <= 1) return
 
-      if(currentQuantity==stock)
-       setFull(true)
+    if (currentQuantity == stock)
+      setFull(true)
     const number = quantity - 1
     setQuantity(number)
     setFull(false)
@@ -78,7 +82,7 @@ export default function ProductThumb(props) {
   }
 
 
-  const cartAddFunction = (id, name, image, price, quantity , stock , vote_count , vote_total) => {
+  const cartAddFunction = (id, name, image, price, quantity, stock, vote_count, vote_total) => {
     if (currentQuantity == stock && quantity > 0) {
       showNotification({
         title: "invalid ",
@@ -96,7 +100,7 @@ export default function ProductThumb(props) {
       showNotification(message())
       return
     }
-    dispatch(addToCart({ id, name, image, price, quantity , stock ,vote_count , vote_total }))
+    dispatch(addToCart({ id, name, image, price, quantity, stock, vote_count, vote_total }))
     setQuantity(1)
     showNotification(message())
 
@@ -170,19 +174,23 @@ export default function ProductThumb(props) {
           <Group position="center" style={{ marginBottom: 5, marginTop: theme.spacing.sm }}>
             <Text weight={500}>{name}</Text>
 
-            <Rating name="read-only"
-                    size="small"
-                     value={ vote_total || vote_count == 0
-                              ? 0
-                              : vote_total/vote_count
-
-                        } readOnly ={ user.id === null
-                                      ? true
-                                      :false
-
-                        }
-                         />
-
+            <HashLink smooth to={user.id === null
+                                  ? '/login'
+                                  : '/cart'   /* product view feedback section  */
+                                     }
+            >
+              <Rating name="read-only"
+                      size="small"
+                      value={vote_total || vote_count == 0
+                            ? 0
+                            : vote_total / vote_count
+                                }
+                      readOnly={user.id === null
+                            ? true
+                            : false
+                                }
+                    />
+            </HashLink>
             <Badge color="pink" variant="light" size="xl" >
               {price}{currency}
             </Badge>
@@ -195,10 +203,10 @@ export default function ProductThumb(props) {
           <Group grow position="center" style={{ marginBottom: 5, marginTop: theme.spacing.sm }}>
             <ActionIcon
               disabled={quantity === 0 || full === true      // <----------
-                ? true
-                : false}
+                        ? true
+                        : false}
               onClick={() => {
-                cartAddFunction(id, name, image, price, quantity , stock,vote_count , vote_total)
+                cartAddFunction(id, name, image, price, quantity, stock, vote_count, vote_total)
 
                 /*  dispatch(addToCart( {id , name , main_image , price , quantity} ))
                  setQuantity(1)
@@ -214,7 +222,7 @@ export default function ProductThumb(props) {
                 ? <ShoppingCartPlus size={30} color={'#40bf59'} />
                 : <ShoppingCartX size={30} color={'#d279c6'} />
 
-              }
+                     }
 
             </ActionIcon>
             <AddremoveButtons
