@@ -6,7 +6,6 @@ import parseJwt from '../service/jwtParsing';
 
 dotenv.config();
 const secret: string = process.env.token as unknown as string;
-
 const product_obj = new Product();
 
 async function index(req: Request, res: Response) {
@@ -67,24 +66,51 @@ async function update(req: Request, res: Response) {
     }
 
     if ((permession && user.user.status=='admin')||isSuperAdmin) {
+        const product_ = await product_obj.show(Number(req.params.id));
         try {
-            const p: product = {
-                id: Number(req.params.id),
-                name: req.body.name,
-                price: Number(req.body.price),
-                code:req.body.code,
-                model:req.body.model,
-                image:req.body.image,
-                images:req.body.images,
-                description:req.body.description,
-                category_id:Number(req.body.category_id),
-                currency:req.body.currency,
-                vote_count:Number(req.body.vote_count),
-                vote_total:Number(req.body.vote_total),
-                stock:Number(req.body.stock),
-                brand_id:Number(req.body.brand_id),
-            };
-            const result = await product_obj.update(p);
+            
+            if(req.body.name){
+                product_.name = req.body.name;
+            }
+            if(req.body.price){
+                product_.price = Number(req.body.price);
+            }
+            if(req.body.code){
+                product_.code = req.body.code;
+            }
+            if(req.body.model){
+                product_.model = req.body.model;
+            }
+            if(req.body.image){
+                product_.image = req.body.image;
+            }
+            if(req.body.images){
+                product_.images = req.body.images;
+            }
+            if(req.body.description){
+                product_.description = req.body.description;
+            }
+            if(req.body.category_id){
+                product_.category_id = Number(req.body.category_id);
+            }
+            if(req.body.currency){
+                product_.currency = req.body.currency;
+            }
+            if(req.body.vote_count){
+                product_.vote_count = Number(req.body.vote_count);
+            }
+            if(req.body.vote_total){
+                product_.vote_total = Number(req.body.vote_total);
+            }
+            if(req.body.stock){
+                product_.stock = Number(req.body.stock);
+            }
+            if(req.body.brand_id){
+                product_.brand_id = Number(req.body.brand_id);
+            }
+                
+            
+            const result = await product_obj.update(product_);
             res.status(200).json(result);
         } catch (e) {
             res.status(400).json(`${e}`);
@@ -161,3 +187,4 @@ function mainRoutes(app: Application) {
 }
 
 export default mainRoutes;
+

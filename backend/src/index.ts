@@ -9,6 +9,7 @@ import usersRoute from './handlars/users';
 import couponRoute from './handlars/coupon';
 import ordersRoute from './handlars/orders';
 import feedbackRoute from './handlars/feedback';
+import imageAPI from './service/imageSignature';
 
 dotenv.config();
 
@@ -32,6 +33,6 @@ couponRoute(app);
 usersRoute(app);
 categoriesRoute(app);
 ordersRoute(app);
-
+imageAPI(app);
 //export the app to use when importing the file
 export default app;

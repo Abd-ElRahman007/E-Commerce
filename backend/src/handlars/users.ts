@@ -2,7 +2,7 @@ import { Application, Response, Request } from 'express';
 import nodemailer from 'nodemailer';
 import { User, user } from '../models/users';
 import parseJwt from '../service/jwtParsing';
-import jwt, { JwtPayload } from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 
 dotenv.config();
