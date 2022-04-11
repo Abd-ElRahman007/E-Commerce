@@ -36,10 +36,16 @@ const cartSlice = createSlice({
                 state.items.push({
                     id: action.payload.id,
                     name: action.payload.name,
-                    main_image : action.payload.main_image ,
+                    image : action.payload.image ,
                     price : action.payload.price ,
+                    currency : action.payload.currency ,
+                    stock : action.payload.stock ,
+                    vote_count : action.payload.vote_count ,
+                    vote_total : action.payload.vote_total ,
                     quantity: action.payload.quantity,
+                  //  total_price :[action.payload.quantity*action.payload.price]
                 })
+                
             }
         },
  

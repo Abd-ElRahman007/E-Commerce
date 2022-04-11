@@ -42,8 +42,8 @@ export default function Home() {
     else
         return (
             <Container my="md">
-                <TempUser />
-                      <TempCart/>  
+                
+                      
                 {category?.map((x) => (
                     <div key={x.id}>
                           <Text

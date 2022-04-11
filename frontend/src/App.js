@@ -15,6 +15,8 @@ import Headerx from './components/Headerx';
 import { NavNew } from './components/NavNew'
 import EditStuff from './components/EditStuff';
 import Cart from './components/user/Cart';
+import TempCart from './components/TempCart';
+import TempUser from './components/TempUser';
 /* import HomeAdmin from './components/admin/HomeAdmin';
 import NewBrand from './components/admin/NewBrand ';
 import NewCategory from './components/admin/NewCategory'; */
@@ -25,6 +27,8 @@ function App() {
     <Container className="app" style={{ padding: " 10px 10px" }}>
      {/*  <Headerx /> */}
      <NavNew />
+     <TempCart/>
+     <TempUser />
       <Routes>
         <Route exact path='/' element={<Home/>} />
         <Route exact path='/overView' element={<ProductOverview/>} />

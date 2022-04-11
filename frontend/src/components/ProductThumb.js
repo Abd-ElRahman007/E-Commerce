@@ -14,25 +14,28 @@ import { ShoppingCartPlus, ShoppingCartX, ShoppingCartOff, LetterX, Tournament, 
 import Rating from '@mui/material/Rating';
 import {useNavigate}from 'react-router-dom'
 
+import { authState } from "../redux/slices/authSlice"
 export default function ProductThumb(props) {
-  const { id, name, image, price, currency, stock } = props.product
-  console.log(" , props", props)
+  const { id, name, image, price, currency, stock , vote_count , vote_total } = props.product
+  //  console.log(" , props", props)
   const theme = useMantineTheme();
 
   const [quantity, setQuantity] = useState(1)
   const [currentQuantity, setCurrentQuantity] = useState(0)
   const [full, setFull] = useState(false)
 
+  const user = useSelector(authState)
+  console.log("userId" , user.id ) 
   const cartItems = useSelector(cartState)
-  // console.log("cartItems" , cartItems ) 
+   //console.log("cartItems" , cartItems ) 
   const quantityInCart = cartItems.filter((item) => {
 
     return id === item.id
 
   })
-  console.log("quantityInCart", quantityInCart.quantity, "this id", id)
+  //console.log("quantityInCart", quantityInCart.quantity, "this id", id)
   const thisQ = quantityInCart[0]
-  console.log("thisQ", thisQ, "this id", id)
+ // console.log("thisQ", thisQ, "this id", id)
 
   const increaseQuantity = () => {
     // stock logic here 
@@ -65,7 +68,7 @@ export default function ProductThumb(props) {
        setFull(true)
     const number = quantity - 1
     setQuantity(number)
-    setFull=(false)
+    setFull(false)
 
   }
 
@@ -77,11 +80,11 @@ export default function ProductThumb(props) {
   }
 
 
-  const cartAddFunction = (id, name, image, price, quantity) => {
+  const cartAddFunction = (id, name, image, price, quantity , stock , vote_count , vote_total) => {
     if (currentQuantity == stock && quantity > 0) {
       showNotification({
         title: "invalid ",
-        message: `${id} cant be added any more`,
+        message: `${name} cant be added ,no more in stock`,
         color: 'yellow',
         icon: <LetterX />
         // radius and other props can be added 
@@ -95,7 +98,7 @@ export default function ProductThumb(props) {
       showNotification(message())
       return
     }
-    dispatch(addToCart({ id, name, image, price, quantity }))
+    dispatch(addToCart({ id, name, image, price, quantity , stock ,vote_count , vote_total }))
     setQuantity(1)
     showNotification(message())
 
@@ -108,7 +111,7 @@ export default function ProductThumb(props) {
     setQuantity(1)
     showNotification({
       title: "Cart changed",
-      message: `${id} has been removed from the cart`,
+      message: `${name} has been removed from the cart`,
       color: 'red',
       icon: <ShoppingCartX />
       // radius and other props can be added 
@@ -123,16 +126,16 @@ export default function ProductThumb(props) {
     if (quantity === 0)
       return { title: "invalid amount", message: "0 is not a valid quantity" }
     if (currentQuantity === 0)
-      return { title: "Cart changed", message: `${id} has been added to the cart`, icon: <ShoppingCartPlus />, color: "green" }
+      return { title: "Cart changed", message: `${name} has been added to the cart`, icon: <ShoppingCartPlus />, color: "green" }
 
     else if (currentQuantity > 0 && quantity < 0 && currentQuantity === -quantity)
-      return { title: "Cart changed", message: `${id} has been removed from the cart`, icon: <ShoppingCartX />, color: "red" }
+      return { title: "Cart changed", message: `${name} has been removed from the cart`, icon: <ShoppingCartX />, color: "red" }
 
     else if (currentQuantity > 0 && quantity < 0)
-      return { title: "Cart changed", message: `${id} has been decreased by ${-quantity}`, icon: <ShoppingCartX />, color: 'pink' }
+      return { title: "Cart changed", message: `${name} has been decreased by ${-quantity}`, icon: <ShoppingCartX />, color: 'pink' }
 
     else if (currentQuantity > 0 && quantity > 0)
-      return { title: "Cart changed", message: `${id} has been increased by ${quantity}`, icon: <ShoppingCartPlus />, color: "green" }
+      return { title: "Cart changed", message: `${name} has been increased by ${quantity}`, icon: <ShoppingCartPlus />, color: "green" }
 
 
 
@@ -173,7 +176,18 @@ let navigate=useNavigate();
           <Group position="center" style={{ marginBottom: 5, marginTop: theme.spacing.sm }}>
             <Text weight={500}>{name}</Text>
 
-            <Rating name="read-only" size="small" value={2} readOnly />
+            <Rating name="read-only"
+                    size="small"
+                     value={ vote_total || vote_count == 0
+                              ? 0
+                              : vote_total/vote_count
+
+                        } readOnly ={ user.id === null
+                                      ? true
+                                      :false
+
+                        }
+                         />
 
             <Badge color="pink" variant="light" size="xl" >
               {price} {currency}
@@ -186,11 +200,11 @@ let navigate=useNavigate();
           </Text> */}
           <Group grow position="center" style={{ marginBottom: 5, marginTop: theme.spacing.sm }}>
             <ActionIcon
-              disabled={quantity === 0 /* && full === true    <---------- */  
+              disabled={quantity === 0 || full === true      // <----------
                 ? true
                 : false}
               onClick={() => {
-                cartAddFunction(id, name, image, price, quantity)
+                cartAddFunction(id, name, image, price, quantity , stock,vote_count , vote_total)
 
                 /*  dispatch(addToCart( {id , name , main_image , price , quantity} ))
                  setQuantity(1)

@@ -10,7 +10,7 @@ export default function TempCart() {
     return (
         <div>
             <h2>Cart</h2>
-            <p>items in Cart : {cartItems.map((item)=>  item.name+item.id + " , quantity :" + item.quantity)} </p>
+            <p>items in Cart : {cartItems.map((item)=>  item.name+item.id + " , quantity : " + item.quantity +" price "+item.price)} </p>
             <p>Number of items :  </p>
             <p>total cost :  </p>
         </div>

@@ -5,9 +5,10 @@ import { ChevronDown } from 'tabler-icons-react';
 import { Search } from 'tabler-icons-react';
 import { User, ShoppingCart } from 'tabler-icons-react';
 import { Link, useNavigate } from 'react-router-dom';
-import Usernav from './User';
+
 import MenuInNav from './MenuInNav';
 import UserLogin from './UserLogin'
+import UserDisplay from './user/UserDisplay';
 
 
 const useStyles = createStyles((theme) => ({
@@ -101,7 +102,7 @@ export function NavNew() {
 
 
 
-    const items = navLinks.links.map((link) => {
+   /*  const items = navLinks.links.map((link) => {
         const menuItems = link.links?.map((item) => (
             <Menu.Item key={item.link} component={Link} to='/car'>{item.label}</Menu.Item>
         ));
@@ -148,13 +149,16 @@ export function NavNew() {
             </a>
         );
     });
-
+ */
 
     return (
         <Header height={56} mb={12}>
             <Container>
                 <div className={classes.inner}>
-                    <h1><Link style={{textDecoration:'none',color:'black'}} to="/">NavBar</Link></h1>
+
+                    <Link style={{textDecoration:'none',color:'black'}} to="./">
+                    <h1>NavBar</h1>
+                    </Link>
                     <Group className={"w-25"} >
                         <Autocomplete  /* styles={{   50 ,50 (other group)
                                     root: { width: '200px' } }} */
@@ -190,6 +194,8 @@ export function NavNew() {
                       <ShoppingCart/>
                     </ActionIcon>
                     
+                    <User/>
+                    <UserDisplay/>
                     <Burger
                         opened={opened}
                         onClick={() => toggleOpened()}

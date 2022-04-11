@@ -11,9 +11,11 @@ const initialState = {
   
 
     id :null,
+    status : "",
     first_name : "",
     last_name : "",
-     status : "",
+    email:"" , 
+    
     isError: false,
     isSuccess: false,
     isLoading: false,
@@ -101,18 +103,22 @@ const authSlice = createSlice({
       state.isLoading = false
       state.isSuccess = true
       state.id = action.payload.id
+      state.status = action.payload.status
       state.first_name = action.payload.first_name
       state.last_name = action.payload.last_name
-      state.status = action.payload.status
+      state.email = action.payload.email
+      
      })
      .addCase(login.rejected , (state,action)=>{
       state.isLoading = false
       state.isError = true
       state.message = action.payload
-      state.id = null
+      /* state.id = null
+      state.status = ""
       state.first_name = ""
       state.last_name =  ""
-      state.status = ""
+      state.email = "" */
+      
      })
        // register cases 
      .addCase(register.pending, (state)=>{
@@ -122,9 +128,11 @@ const authSlice = createSlice({
       state.isLoading = false
       state.isSuccess = true
       state.id = action.payload.id
+      state.status = action.payload.status
       state.first_name = action.payload.first_name
       state.last_name = action.payload.last_name
-      state.status = action.payload.status
+      state.email = action.payload.email
+      
      })
      .addCase(register.rejected , (state,action)=>{
       state.isLoading = false
@@ -140,9 +148,10 @@ const authSlice = createSlice({
       state.isError = false
       state.message = ""
       state.id = null
+      state.status = ""
       state.first_name = ""
       state.last_name =  ""
-      state.status = ""
+      state.email= ""
      })
   }
 
