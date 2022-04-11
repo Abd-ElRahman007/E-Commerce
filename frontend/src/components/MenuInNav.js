@@ -34,7 +34,7 @@ export default function MenuInNav(props) {
     }
 
 
-
+const navigate=useNavigate()
 
 
     useEffect(() => {
@@ -79,7 +79,7 @@ export default function MenuInNav(props) {
                         </a>
                     }
                 >
-                    <Menu
+                    <Menu  
                         trigger="hover"
                         delay={0}
                         transitionDuration={0}
@@ -87,17 +87,17 @@ export default function MenuInNav(props) {
                         gutter={1}
                         position="left"
                         control={
-                            <a className={classes.link}>
+                            <Menu.Item className={classes.link}>
 
                                 <Center>
                                     <span className={classes.linkLabel}>By Category</span>
                                     <ChevronDown size={12} />
                                 </Center>
-                            </a>
+                            </Menu.Item>
                         }
                     >
                         {exisitingCategories?.map((x) => {
-                            return <Menu.Item component={Link} to="/newbrand" key={x.id}> {x.name}</Menu.Item>
+                            return <Menu.Item as={Link} key={x.id}> {x.name}</Menu.Item>
                         })}
 
                     </Menu>
@@ -121,12 +121,16 @@ export default function MenuInNav(props) {
                         }
                     >
                         {existingBrands?.map((x) => {
-                            return <Menu.Item component={Link} to="/newbrand" key={x.id}> {x.name}</Menu.Item>
+                                 return    <Menu.Item  as="button" onClick={()=>{navigate("/cart")}} key={x.id}> {x.name} as button</Menu.Item>
+                                             
                         })}
 
 
                     </Menu>
 
+                </Menu>
+                <Menu>
+                    <Menu.Item component="button" onClick={()=>{navigate("/cart")}}>  as button with navigate </Menu.Item>
                 </Menu>
 
             </>

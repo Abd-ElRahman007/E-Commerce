@@ -20,9 +20,28 @@ import TempUser from './components/TempUser';
 /* import HomeAdmin from './components/admin/HomeAdmin';
 import NewBrand from './components/admin/NewBrand ';
 import NewCategory from './components/admin/NewCategory'; */
+import ByCategoryOrBrand from './components/user/ByCategoryOrBrand';
+import { authState } from './redux/slices/authSlice';
+import { useSelector } from "react-redux"
+import { HomeAdmin } from './components/admin/HomeAdmin';
+
 
 
 function App() {
+  const {status} =useSelector(authState)
+  if (status==="admin")
+  return (
+    <Container className="app" style={{ padding: " 10px 10px" }}>
+      <TempUser />
+     <Routes>
+       
+        <Route exact path='/' element={<HomeAdmin/>} />
+        <Route exact path='/adminOverview' element={<AdminOverview/>} />
+        <Route exact path='/car' element={<Home/>} />
+     </Routes>
+   </Container>
+  )
+ else 
   return (
     <Container className="app" style={{ padding: " 10px 10px" }}>
      {/*  <Headerx /> */}
@@ -44,6 +63,7 @@ function App() {
         <Route exact path='/NavNew' element={<NavNew/>} />
         <Route exact path='/EditStuff' element={<EditStuff/>} />
         <Route exact path='/Cart' element={<Cart/>} />
+        <Route exact path='/bycategoryurbrand/:id' element={<ByCategoryOrBrand/>} />
        {/*  <Route exact path='/homeAdmin' element={<HomeAdmin />} />
         <Route exact path='/newCategory' element={<NewCategory />} />
         <Route exact path='/newBrand' element={<NewBrand />} /> */}

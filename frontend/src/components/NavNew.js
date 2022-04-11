@@ -161,7 +161,7 @@ export function NavNew() {
             <Container>
                 <div className={classes.inner}>
                     <Link to="./">
-                    <h1>NavBar</h1>
+                    <h2>Home</h2>
                     </Link>
                     <Group className={"w-50"} >
                         <Autocomplete  /* styles={{   50 ,50 (other group)

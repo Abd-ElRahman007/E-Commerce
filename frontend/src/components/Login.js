@@ -69,7 +69,7 @@ export function Login(props) {
 
   const userState = useSelector(authState)
 
-  const { message, isError, isLoading, isSuccess } = userState
+  const { message, isError, isLoading, isSuccess ,status } = userState
 
 
   const handelSubmit = () => {
@@ -104,6 +104,7 @@ export function Login(props) {
 
   }
 
+
   useEffect(() => {
     if (isError) 
     { 
@@ -120,6 +121,25 @@ export function Login(props) {
       cleanup
     } */
   }, [isError, isSuccess])
+
+ /*  useEffect(() => {
+    if (isError) 
+    { 
+      handleError()
+         }
+    if (isSuccess && status==="admin")
+        { 
+          navigate("/") 
+              }
+    if (isSuccess && status==="active")
+    { 
+      navigate("/") 
+          }         
+
+    dispatch(reset())
+
+     
+  }, [isError, isSuccess]) */
 
 
   return (
