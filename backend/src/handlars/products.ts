@@ -3,32 +3,33 @@ import { Product, product } from '../models/products';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import parseJwt from '../service/jwtParsing';
+import pagination from '../service/pagination';
 
 dotenv.config();
 const secret: string = process.env.token as unknown as string;
 const product_obj = new Product();
 
 async function index(req: Request, res: Response) {
+    const category_ = Number(req.query.category);
+    const brand_ = Number(req.query.brand);
+    const product_name = String(req.query.name);
+
+    console.log(product_name);
+    console.log(category_);
+    console.log(brand_);
+
     try {
-        const model_result = await product_obj.index();
+        let model_result:product[];
+        if(category_ && brand_ && product_name){
+            model_result = await product_obj.index_fillter(product_name,brand_,category_);
+        }else
+            model_result = await product_obj.index();
         
         const page = Number(req.query.page);
         const limit = Number(req.query.limit);
         //pagination
-        if(page && limit)
-        {
-            const start_index = (page-1)*limit;
-            const end_index = (page)*limit;
-            const result={next:{},data:{},previous:{}};
-            if(model_result.length > end_index){
-                result.next={page:page+1,limit:limit};
-            }        
-
-            if(start_index>0){
-                result.previous={page:page-1,limit:limit};
-            }
-            result.data=model_result.slice(start_index,end_index);
-            res.status(200).json(result);
+        if(limit && page){
+            res.status(200).json(pagination(page, limit, model_result));
         }else
             res.status(200).json(model_result);
         
@@ -46,14 +47,14 @@ async function show(req: Request, res: Response) {
     }
 }
 
-async function search_by_category(req: Request, res: Response) {
+/* async function search_by_category(req: Request, res: Response) {
     try {
         const result = await product_obj.search_by_category(req.params.category_id as unknown as number);
         res.status(200).json(result);
     } catch (e) {
         res.status(400).json(`${e}`);
     }
-}
+} */
 
 async function update(req: Request, res: Response) {
     const token = req.headers.token as unknown as string;
@@ -180,7 +181,7 @@ async function delete_(req: Request, res: Response) {
 function mainRoutes(app: Application) {
     app.get('/products', index);
     app.get('/products/:id', show);
-    app.get('/:category_id/products', search_by_category);
+    //app.get('/:category_id/products', search_by_category);
     app.post('/products', create);
     app.patch('/products/:id', update);
     app.delete('/products/:id', delete_);
