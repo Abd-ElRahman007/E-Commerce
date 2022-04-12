@@ -2,7 +2,8 @@ import { Application, Response, Request } from 'express';
 import nodemailer from 'nodemailer';
 import { User, user } from '../models/users';
 import parseJwt from '../service/jwtParsing';
-import jwt, { JwtPayload } from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
+import bcrypt from 'bcrypt';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -125,12 +126,12 @@ async function update(req: Request, res: Response) {
 async function create(req: Request, res: Response) {
     try {
         
-        
+        const hash = bcrypt.hashSync(req.body.password+process.env.extra, parseInt(process.env.round as string));
         const u: user = {
             f_name:req.body.f_name, 
             l_name:req.body.l_name, 
             email:req.body.email, 
-            password:req.body.password, 
+            password:hash, 
             birthday:req.body.birthday, 
             phone:req.body.phone, 
             status:'active',
@@ -165,8 +166,8 @@ async function delete_(req: Request, res: Response) {
 async function login(req: Request, res: Response) {
     try {
         const { email, password } = req.body;
-        
-        const resault = await user_obj.auth(email, password);
+        const hash = bcrypt.hashSync(password+process.env.extra, parseInt(process.env.round as string));
+        const resault = await user_obj.auth(email, hash);
     
         if(resault){
             if (resault.status!='suspended') {
