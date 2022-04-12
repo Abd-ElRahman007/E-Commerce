@@ -4,6 +4,7 @@ import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import parseJwt from '../service/jwtParsing';
 import pagination from '../service/pagination';
+import isTrue from '../service/filtering';
 
 dotenv.config();
 const secret: string = process.env.token as unknown as string;
@@ -12,19 +13,22 @@ const product_obj = new Product();
 async function index(req: Request, res: Response) {
     const category_ = Number(req.query.category);
     const brand_ = Number(req.query.brand);
-    const product_name = String(req.query.name);
+    const product_name = req.query.name as string;
 
-    console.log(product_name);
-    console.log(category_);
-    console.log(brand_);
 
     try {
-        let model_result:product[];
-        if(category_ && brand_ && product_name){
-            model_result = await product_obj.index_fillter(product_name,brand_,category_);
-        }else
-            model_result = await product_obj.index();
+        let model_result = await product_obj.index();
         
+        if(!isNaN(brand_)){
+            model_result = model_result.filter(x => x.brand_id == brand_);
+        }
+        if(!isNaN(category_)){
+            model_result = model_result.filter(x => x.category_id == category_ );
+        }   
+        if(product_name != undefined){
+            model_result = model_result.filter(x => isTrue(x.name, product_name));
+        }   
+
         const page = Number(req.query.page);
         const limit = Number(req.query.limit);
         //pagination
@@ -47,14 +51,6 @@ async function show(req: Request, res: Response) {
     }
 }
 
-/* async function search_by_category(req: Request, res: Response) {
-    try {
-        const result = await product_obj.search_by_category(req.params.category_id as unknown as number);
-        res.status(200).json(result);
-    } catch (e) {
-        res.status(400).json(`${e}`);
-    }
-} */
 
 async function update(req: Request, res: Response) {
     const token = req.headers.token as unknown as string;
@@ -181,7 +177,6 @@ async function delete_(req: Request, res: Response) {
 function mainRoutes(app: Application) {
     app.get('/products', index);
     app.get('/products/:id', show);
-    //app.get('/:category_id/products', search_by_category);
     app.post('/products', create);
     app.patch('/products/:id', update);
     app.delete('/products/:id', delete_);

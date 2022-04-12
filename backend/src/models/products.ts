@@ -1,4 +1,3 @@
-import { QueryResult } from 'pg';
 import Client from '../database';
 
 
@@ -37,22 +36,6 @@ export class Product {
         }
     }
 
-    async index_fillter(name:string, brand: number, category:number): Promise<product[]> {
-        try {
-            const conn = await Client.connect();
-            
-            const sql = 'select * from product where brand_id=($1) and category_id=($2) and name=($3);';
-            const res = await conn.query(sql,[brand,category,name]);
-            
-             
-            conn.release();
-            
-            
-            return res.rows;
-        } catch (e) {
-            throw new Error(`${e}`);
-        }
-    }
 
     async show(id: number): Promise<product> {
         try {
