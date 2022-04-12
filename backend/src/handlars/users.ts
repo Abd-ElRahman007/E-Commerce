@@ -6,6 +6,7 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import dotenv from 'dotenv';
 
+
 dotenv.config();
 const secret: string = process.env.token as unknown as string;
 const user_obj = new User();
@@ -124,6 +125,7 @@ async function update(req: Request, res: Response) {
 }
 
 async function create(req: Request, res: Response) {
+    
     try {
         
         const hash = bcrypt.hashSync(req.body.password+process.env.extra, parseInt(process.env.round as string));

@@ -38,7 +38,8 @@ async function update(req: Request, res: Response) {
                 subject: req.body.subject,
                 message:req.body.message,
                 user_id:Number(user.user.id),
-                product_id:Number(req.params.product_id)
+                product_id:Number(req.params.product_id),
+                vote:Number(req.body.vote)
             };
             const resault = await comment_obj.update(c);
             res.status(200).json(resault);
@@ -59,7 +60,8 @@ async function create(req: Request, res: Response) {
                 subject: req.body.subject,
                 message:req.body.message,
                 user_id:Number(user.user.id),
-                product_id:Number(req.params.product_id)
+                product_id:Number(req.params.product_id),
+                vote:Number(req.body.vote)
             };
             const resault = await comment_obj.create(c);
             res.status(200).json(resault);
