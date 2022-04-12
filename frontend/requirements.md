@@ -6,10 +6,10 @@
 2 - index products by brand_id , with pagination 
 
 
-3 - search-index products by query , with pagination 
+3 - search-index products by query , with pagination   .  (products names that have the letters in query  )
 
 
-        (products names that have the letters in query  )
+        
         
         
 
