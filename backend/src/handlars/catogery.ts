@@ -39,11 +39,12 @@ async function update(req: Request, res: Response) {
     }
 
     if ((permession && user.user.status=='admin')||isSuperAdmin) {
+        const c = await catogery_obj.show(req.params.id as unknown as number);
         try {
-            const c: catogery = {
-                id: req.params.id as unknown as number,
-                name: req.body.name,
-            };
+            
+            if(req.body.name)
+                c.name = req.body.name;
+            
             const resault = await catogery_obj.update(c);
             res.status(200).json(resault);
         } catch (e) {

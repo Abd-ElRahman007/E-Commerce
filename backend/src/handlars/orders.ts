@@ -69,16 +69,20 @@ async function update(req: Request, res: Response) {
     const permession = jwt.verify(token, secret);
     const user = parseJwt(token);
     if (permession) {
+        const o = await order_obj.show(req.params.id as unknown as number, req.params.user_id as unknown as number);
         try {
-            const o: order = {
-                id: parseInt(req.params.order_id),
-                status: req.body.status,
-                user_id: parseInt(user.user.id),
-                total:Number(req.body.total),
-                time_start:req.body.time_start,
-                time_arrival:req.body.time_arrival,
-                compelete_at:req.body.compelete_at,
-            };
+            
+            if(req.body.status)  
+                o.status = req.body.status;
+            if(req.body.total)  
+                o.total = Number(req.body.total);
+            if(req.body.time_start)  
+                o.time_start = req.body.time_start;
+            if(req.body.time_arrival)      
+                o.time_arrival = req.body.time_arrival;
+            if(req.body.compelete_at)    
+                o.compelete_at = req.body.compelete_at;
+            
             const resault = await order_obj.update(o);
             res.json(resault);
         } catch (e) {
