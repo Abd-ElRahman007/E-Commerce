@@ -3,17 +3,34 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const { db_host, db_user, db_password, db_name } = process.env;
+const { db_host, db_user, db_password, db_ame } = process.env;
+const { test_db_host, test_db_user, test_db_password, test_db_name } = process.env;
 
+const dev = process.env.dev;
 
+let Client:Pool ;
 
-const Client = new Pool({
-    host: db_host,
-    database: db_name,
-    user: db_user,
-    password: db_password,
-    port:5432,
-    ssl:true
-});
+if(dev == 'test'){
+
+    Client= new Pool({
+        host: test_db_host,
+        database: test_db_name,
+        user: test_db_user,
+        password: test_db_password,
+        port:5432
+    });
+
+}else{
+
+    Client= new Pool({
+        host: db_host,
+        database: db_ame,
+        user: db_user,
+        password: db_password,
+        port:5432,
+        ssl:true
+    });
+
+}
 
 export default Client;

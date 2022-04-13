@@ -4,12 +4,12 @@ import Client from '../database';
 
 export type comment = {
     id?: number;
-    subject: string;
+    subject?: string;
     message:string;
     created_time?:Date;
     user_id:number;
     product_id:number;
-    vote:number;
+    vote?:number;
   };
 
 
@@ -41,7 +41,7 @@ export class Comment {
         }
     }
 
-    async create(c: comment): Promise<string> {
+    async create(c: comment): Promise<comment> {
         try {            
             const conn = await Client.connect();
             const sql = 'insert into comment (subject,message,created_time,user_id,product_id,vote) values($1,$2,$3,$4,$5,$6)RETURNING *;';
