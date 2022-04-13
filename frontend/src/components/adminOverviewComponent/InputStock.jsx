@@ -1,10 +1,10 @@
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import { createStyles, NumberInput, ActionIcon } from '@mantine/core';
 import { Plus, Minus } from 'tabler-icons-react';
 
 const useStyles = createStyles((theme) => ({
   wrapper: {
-	marginTop:'18px',
+    marginTop: '18px',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -36,13 +36,13 @@ const useStyles = createStyles((theme) => ({
 
 }));
 
-export default function InputStoke({ min = 1 ,toParent,value}) {
+export default function InputStoke({ min = 1, toParent, value }) {
   const { classes } = useStyles();
   const handlers = useRef();
 
   return (
     <div style={{ width: '100%' }} className={classes.wrapper}>
-      Add Stoke 
+      Add Stoke
       <ActionIcon
         size={28}
         variant="transparent"

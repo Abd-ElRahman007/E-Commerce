@@ -7,9 +7,8 @@ const useStyles = createStyles((theme, _params, getRef) => {
     card: {
       position: 'relative',
       height: 250,
-	    width:250,
+      width: 250,
       backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.colors.gray[0],
-
       [`&:hover .${image}`]: {
         transform: 'scale(1.03)',
       },
@@ -61,15 +60,15 @@ const useStyles = createStyles((theme, _params, getRef) => {
 });
 
 
-export default function Image({ image, title, author,dim,cols }) {
+export default function Image({ image, title, author, dim, cols }) {
   const { classes } = useStyles();
 
   return (
     <Card
-	    style={dim}
+      style={dim}
       p="lg"
       shadow="lg"
-      className={classes.card,cols}
+      className={[classes.card, cols]}
       radius="md"
       component="a"
       href={image}
@@ -77,13 +76,12 @@ export default function Image({ image, title, author,dim,cols }) {
     >
       <div className={classes.image} style={{ backgroundImage: `url(${image})` }} />
       <div className={classes.overlay} />
-
       <div className={classes.content}>
         <div>
           <Group position="apart" spacing="xs">
-          <Text size="lg" className={classes.title} weight={500}>
-            {title}
-          </Text>
+            <Text size="lg" className={classes.title} weight={500}>
+              {title}
+            </Text>
             <Text size="sm" className={classes.author}>
               {author}
             </Text>

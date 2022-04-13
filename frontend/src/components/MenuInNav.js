@@ -1,79 +1,51 @@
 import {
-    createStyles,
-    Header,
     Menu,
-    Group,
     Center,
-    Burger,
-    Container,
     Loader,
-    Select
 } from '@mantine/core';
-import { useBooleanToggle } from '@mantine/hooks';
 import { ChevronDown } from 'tabler-icons-react';
-import { Search } from 'tabler-icons-react';
-import { User, ShoppingCart } from 'tabler-icons-react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useState, useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 
 import * as api from "../helpers/api"
 
 export default function MenuInNav(props) {
     const classes = props.classes
-
-    const [exisitingCategories, setExisitingCategories] = useState()
+    const [existingCategories, setExistingCategories] = useState()
     const [existingBrands, setExistingBrands] = useState()
-
     const getCategories = async () => {
         const data = await api.getCategories()
-        setExisitingCategories(data)
+        setExistingCategories(data)
     }
-
     const getBrands = async () => {
         const data = await api.getBrands()
         setExistingBrands(data)
     }
 
-
-    const navigate = useNavigate()
-
-
     useEffect(() => {
         getCategories()
-        console.log("categoies in backend ", exisitingCategories)
-
+        console.log("categories in backend ", existingCategories)
         getBrands()
         console.log("brands in backend ", existingBrands)
-
-
         return () => {
-
-            setExisitingCategories()
+            setExistingCategories()
             setExistingBrands()
-
         }
+    })
 
-    }, [])
-
-
-    if (exisitingCategories === undefined && existingBrands === undefined)
+    if (existingCategories === undefined && existingBrands === undefined)
         return (
             <Loader />
         )
     else
         return (
-
             <>
                 <Menu
-                    trigger="hover"
-                    delay={0}
-                    transitionDuration={0}
                     placement="end"
                     gutter={1}
                     className="w-50"
                     control={
-                        <a className={classes.link}>
-
+                        <a className={classes.link}> hello {/* a tag require a href attribute */}
                             <Center>
                                 <span className={classes.linkLabel}>Categories</span>
                                 <ChevronDown size={12} />
@@ -81,18 +53,15 @@ export default function MenuInNav(props) {
                         </a>
                     }
                 >
-                    {exisitingCategories?.map((x) => {
+                    {existingCategories?.map((x) => {
                         return <Menu.Item component={Link}
-                                          to={`/browse/${x.id}` } 
-                                          state = {{type:"category"}}
-                                          key={x.id}
-
-                                          > 
-                                          {x.name}</Menu.Item>
+                            to={`/browse/${x.id}`}
+                            state={{ type: "category" }}
+                            key={x.id}
+                        >
+                            {x.name}</Menu.Item>
                     })}
-
                 </Menu>
-
                 <Menu
                     trigger="hover"
                     delay={0}
@@ -101,8 +70,7 @@ export default function MenuInNav(props) {
                     gutter={1}
                     position="bottom"
                     control={
-                        <a className={classes.link}>
-
+                        <a className={classes.link}> {/* a tag require a href attribute */}
                             <Center>
                                 <span className={classes.linkLabel}>Brands</span>
                                 <ChevronDown size={12} />
@@ -110,96 +78,11 @@ export default function MenuInNav(props) {
                         </a>
                     }
                 >
-
-
-
-
                     {existingBrands?.map((x) => {
                         return <Menu.Item component={Link} to={"/car"} key={x.id}> {x.name}</Menu.Item>
 
                     })}
                 </Menu>
-
-
-
-
-
             </>
         )
 }
-
-
-/*
-<>
-<Menu
-    trigger="hover"
-    delay={0}
-    transitionDuration={0}
-    placement="end"
-    gutter={1}
-    className="w-50"
-    control={
-        <a className={classes.link}>
-
-            <Center>
-                <span className={classes.linkLabel}>Browse Products</span>
-                <ChevronDown size={12} />
-            </Center>
-        </a>
-    }
->
-    <Menu
-        trigger="hover"
-        delay={0}
-        transitionDuration={0}
-        placement="start"
-        gutter={1}
-        position="left"
-        control={
-            <a className={classes.link}>
-
-                <Center>
-                    <span className={classes.linkLabel}>By Category</span>
-                    <ChevronDown size={12} />
-                </Center>
-            </a>
-        }
-    >
-        {exisitingCategories?.map((x) => {
-            return <Menu.Item as={Link} to="/cart" key={x.id}> {x.name}</Menu.Item>
-        })}
-
-    </Menu>
-
-
-    <Menu
-        trigger="hover"
-        delay={0}
-        transitionDuration={0}
-        placement="start"
-        gutter={1}
-        position="left"
-        control={
-            <a className={classes.link}>
-
-                <Center>
-                    <span className={classes.linkLabel}>By Brand</span>
-                    <ChevronDown size={12} />
-                </Center>
-            </a>
-        }
-    >
-        {existingBrands?.map((x) => {
-                 return    <Menu.Item  component={Link} to={"./cart"} key={x.id}> {x.name} as button</Menu.Item>
-
-        })}
-
-
-    </Menu>
-
-</Menu>
-<Menu>
-    <Menu.Item as="button" onClick={()=>{navigate("/cart")}}>  as button with navigate </Menu.Item>
-</Menu>
-
-</> */

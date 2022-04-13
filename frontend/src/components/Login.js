@@ -6,29 +6,19 @@ import {
   Text,
   Paper,
   Group,
-  PaperProps,
   Button,
   Divider,
   Checkbox,
-  Anchor, Modal, useMantineTheme
+  Anchor
 } from '@mantine/core';
-import { useState, useEffect } from "react";
-
-
-import { Alert } from '@mantine/core';
+import { useEffect } from "react";
 import { AlertCircle } from 'tabler-icons-react';
-//import { GoogleButton, TwitterButton } from '../SocialButtons/SocialButtons';
-
 import { useDispatch, useSelector } from 'react-redux';
-
 import { useNavigate } from "react-router-dom";
-
-
 import { authState, login, register, reset } from '../redux/slices/authSlice';
 import { showNotification } from '@mantine/notifications';
-export function Login(props) {
-  const theme = useMantineTheme();
 
+export function Login(props) {
   const [type, toggle] = useToggle('login', ['login', 'register']);
   const form = useForm({
     initialValues: {
@@ -38,13 +28,11 @@ export function Login(props) {
       password: '',
       terms: true,
     },
-
     validationRules: {
       /*  email: (val) => /^\S+@\S+$/.test(val), */
       password: (val) => val.length >= 1,
     },
   });
-
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
@@ -53,7 +41,6 @@ export function Login(props) {
     form.setFieldValue('first_name', "")
     form.setFieldValue('last_name', "")
     form.setFieldValue('password', "")
-
   }
 
   const handleError = () => {
@@ -61,15 +48,15 @@ export function Login(props) {
       title: "Error ",
       message: "Wrong email or password ",
       color: 'red',
-      icon: <AlertCircle /> ,
-    
+      icon: <AlertCircle />,
+
 
     })
   }
 
   const userState = useSelector(authState)
 
-  const { message, isError, isLoading, isSuccess ,status } = userState
+  const { isError, isSuccess, status } = userState
 
 
   const handelSubmit = () => {
@@ -81,12 +68,9 @@ export function Login(props) {
         email: email,
         password: password
       }
-
       dispatch(login(userInfo))
-
     }
     else if (type === "register") {
-
       const { email, password, first_name, last_name } = form.values
       const userInfo = {
         f_name: first_name,
@@ -94,77 +78,38 @@ export function Login(props) {
         email: email,
         password: password
       }
-
       dispatch(register(userInfo))
       clearInput()
       console.log("userInfo", userInfo)
-
     }
-
-
   }
 
-
   useEffect(() => {
-    if (isError) 
-    { 
+    if (isError) {
       handleError()
-         }
-    if (isSuccess && status==="admin")
-     { 
-      navigate("/") 
-          }
-          if (isSuccess && status!=="admin" )
-     { 
-      navigate("/") 
-          }
+    }
+    if (isSuccess && status === "admin") {
+      navigate("/")
+    }
+    if (isSuccess && status !== "admin") {
+      navigate("/")
+    }
 
     dispatch(reset())
 
-    /* return () => {
-      cleanup
-    } */
-  }, [isError, isSuccess])
-
- /*  useEffect(() => {
-    if (isError) 
-    { 
-      handleError()
-         }
-    if (isSuccess && status==="admin")
-        { 
-          navigate("/") 
-              }
-    if (isSuccess && status==="active")
-    { 
-      navigate("/") 
-          }         
-
-    dispatch(reset())
-
-     
-  }, [isError, isSuccess]) */
-
+  }, [isError, isSuccess]) //React Hook useEffect has missing dependencies: 'dispatch', 'navigate', and 'status'. Either include them or remove the dependency array
 
   return (
     <Paper radius="md" p="xl" withBorder {...props}>
       <Text size="lg" weight={500}>
         Welcome to Mantine, {type} with
       </Text>
-
-      {/* <Group grow mb="md" mt="md">
-        <GoogleButton radius="xl">Google</GoogleButton>
-        <TwitterButton radius="xl">Twitter</TwitterButton>
-      </Group> */}
-
       <Divider label="Or continue with email" labelPosition="center" my="lg" />
-
       <form onSubmit={form.onSubmit(handelSubmit)}>
         <Group direction="column" grow>
           {type === 'register' && (
             <>
               <TextInput
-              
                 label="First Name"
                 placeholder="Your first name"
                 value={form.values.first_name}
@@ -178,7 +123,6 @@ export function Login(props) {
               />
             </>
           )}
-
           <TextInput
             required
             label="Email"
@@ -187,7 +131,6 @@ export function Login(props) {
             onChange={(event) => form.setFieldValue('email', event.currentTarget.value)}
             error={form.errors.email && 'Invalid email'}
           />
-
           <PasswordInput
             required
             label="Password"
@@ -196,7 +139,6 @@ export function Login(props) {
             onChange={(event) => form.setFieldValue('password', event.currentTarget.value)}
             error={form.errors.password && 'Password should include at least 6 characters'}
           />
-
           {type === 'register' && (
             <Checkbox
               label="I accept terms and conditions"
@@ -205,7 +147,6 @@ export function Login(props) {
             />
           )}
         </Group>
-
         <Group position="apart" mt="xl">
           <Anchor component="button" type="button" color="gray" onClick={() => toggle()} size="xs">
             {type === 'register'
@@ -218,19 +159,3 @@ export function Login(props) {
     </Paper>
   );
 }
-
-
-
-
-
-{/* <Alert  icon={<AlertCircle size={30} />} 
-                       title="Error!" 
-                       color="red"
-                       radius="lg"
-                       withCloseButton
-                       
-                       onClose={()=>  dispatch(reset())}
-                
-                >
-      Something terrible happened! You made a mistake and there is no going back, your data was lost forever!
-      </Alert> */}

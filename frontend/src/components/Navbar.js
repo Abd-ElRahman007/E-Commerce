@@ -1,13 +1,10 @@
 import React from 'react';
-import { createStyles, Header,ActionIcon, Menu, Group, Center, Burger, Container, Autocomplete } from '@mantine/core';
+import { createStyles, Header, ActionIcon, Group, Burger, Container, Autocomplete } from '@mantine/core';
 import { useBooleanToggle } from '@mantine/hooks';
-import { ChevronDown } from 'tabler-icons-react';
 import { Search } from 'tabler-icons-react';
-import { User, ShoppingCart } from 'tabler-icons-react';
-import { Link, useNavigate } from 'react-router-dom';
-
+import { ShoppingCart } from 'tabler-icons-react';
+import { Link } from 'react-router-dom';
 import MenuInNav from './MenuInNav';
-
 import UserDisplay from './user/UserDisplay';
 
 
@@ -57,64 +54,38 @@ const useStyles = createStyles((theme) => ({
 
 
 export function Navbar() {
-  
     const [opened, toggleOpened] = useBooleanToggle(false);
     const { classes } = useStyles();
-    const navigate = useNavigate()
-
 
     return (
         <Header height={56} mb={12}>
             <Container>
                 <div className={classes.inner}>
-
-                    <Link style={{textDecoration:'none',color:'black'}} to="./">
-                    <h2>Home</h2>
+                    <Link style={{ textDecoration: 'none', color: 'black' }} to="./">
+                        <h2>Home</h2>
                     </Link>
                     <Group className={"w-25"} >
-                        <Autocomplete  /* styles={{   50 ,50 (other group)
-                                    root: { width: '200px' } }} */
+                        <Autocomplete
                             radius="lg"
-                            className={classes.search, "w-100"}
+                            className={[classes.search, "w-100"]}
                             placeholder="Search"
                             icon={<Search size={16} />}
                             data={['React', 'Angular', 'Vue', 'Next.js', 'Riot.js', 'Svelte', 'Blitz.js']}
                         />
-
                     </Group>
-
                     <Group spacing={5} className={classes.links} >
-                             <MenuInNav classes={classes}/>
-
-                       {/*  <a
-                            href=""
-                            className={classes.link}
-                            onClick={(event) => {
-                                event.preventDefault()
-                                navigate("./login")
-                            }}
-                        >
-                            About
-
-                        </a> */}
-                        
+                        <MenuInNav classes={classes} />
                     </Group>
-
-
-                    {/*  <Usernav/> */}
                     <ActionIcon component={Link} to="/cart" >
-                      <ShoppingCart/>
+                        <ShoppingCart />
                     </ActionIcon>
-                    
-                   
-                    <UserDisplay/>
+                    <UserDisplay />
                     <Burger
                         opened={opened}
                         onClick={() => toggleOpened()}
                         className={classes.burger}
                         size="sm"
                     />
-                                 
                 </div>
             </Container>
         </Header>

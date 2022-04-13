@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import { Text, Group, Button, createStyles, useMantineTheme } from '@mantine/core';
 import { Dropzone, IMAGE_MIME_TYPE } from '@mantine/dropzone';
 import { CloudUpload } from 'tabler-icons-react';
@@ -23,7 +23,7 @@ const useStyles = createStyles((theme) => ({
   control: {
     position: 'relative',
     width: 250,
-	marginBottom:'10px',
+    marginBottom: '10px',
     left: 'calc(50% - 125px)',
   },
 }));
@@ -38,20 +38,20 @@ function getActiveColor(status, theme) {
         : theme.black;
 }
 
-export default function PhotoImport({toParent,data}) {
+export default function PhotoImport({ toParent, data }) {
   const theme = useMantineTheme();
   const { classes } = useStyles();
   const openRef = useRef();
 
-function imgRender(img){
-	if(img){
-		return <Image image={img} dim={{height:'200px',width:'90%'}} col='col-12'/>
-	}
-}
+  function imgRender(img) {
+    if (img) {
+      return <Image image={img} dim={{ height: '200px', width: '90%' }} col='col-12' />
+    }
+  }
   return (
     <div className={classes.wrapper}>
       <Dropzone
-        multiple= {false}
+        multiple={false}
         openRef={openRef}
         onDrop={(file) => toParent(file)}
         className={classes.dropzone}
@@ -88,9 +88,9 @@ function imgRender(img){
       <Button className={classes.control} size="md" radius="xl" onClick={() => openRef.current()}>
         Select files
       </Button>
-	  <div className='row justify-content-evenly overflow-auto'>
-	  {imgRender(data)}
-	  </div>
+      <div className='row justify-content-evenly overflow-auto'>
+        {imgRender(data)}
+      </div>
     </div>
   );
 }
