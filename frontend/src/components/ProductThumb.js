@@ -1,7 +1,7 @@
 
 import {
   Card, Image, Text, Badge, Button, Group, useMantineTheme,
-  ActionIcon, ColorSchemeProvider
+  ActionIcon, ColorSchemeProvider , Container, Grid, SimpleGrid
 } from '@mantine/core';
 import { useState, useEffect } from 'react';
 import AddremoveButtons from './AddremoveButtons';
@@ -17,19 +17,22 @@ import {useNavigate , Link}from 'react-router-dom'
 import { authState } from "../redux/slices/authSlice"
 
 import { HashLink } from 'react-router-hash-link';
+import {Image as ImageOverview ,  Name, Rating as abdoRating, Price, Description } from "./productOverviewComponents/componentExport"
 
 
 export default function ProductThumb(props) {
-  const { id, name, image, price, currency, stock, vote_count, vote_total } = props.product
+  const { id, name, image, price, currency, stock, vote_count, vote_total , description , model } = props.product
   //  console.log(" , props", props)
   const theme = useMantineTheme();
 
   const [quantity, setQuantity] = useState(1)
   const [currentQuantity, setCurrentQuantity] = useState(0)
   const [full, setFull] = useState(false)
-
+ 
+const [type, setType] = useState("thumb")
+console.log("typeeeee", type)
   const user = useSelector(authState)
-  console.log("userId", user.id)
+ // console.log("userId", user.id)
   const cartItems = useSelector(cartState)
   //console.log("cartItems" , cartItems ) 
   const quantityInCart = cartItems.filter((item) => {
@@ -148,12 +151,14 @@ export default function ProductThumb(props) {
 
 
   useEffect(() => {
+    setType(props.type)
     if (thisQ)
       setCurrentQuantity(thisQ.quantity)
 
 
     return () => {
       setCurrentQuantity(0)
+    //  setType("thumb")
     }
   }, [cartItems, thisQ])
 
@@ -163,7 +168,8 @@ let navigate=useNavigate();
     <>
       <div style={{ width: "90%", margin: 'auto' }}>
         <Card shadow="sm" p="lg">
-          <Card.Section>
+          { type==="thumb"
+            ?  <Card.Section>
             <Image  src={image}
                     alt="Product"
                     radius={10}
@@ -174,11 +180,43 @@ let navigate=useNavigate();
               to={`./ProductOverview/${id}`} */
 			        onClick={(event) => {
                     event.preventDefault()
-                    navigate(`./ProductOverview/${id}`)
+                    navigate(`/ProductOverview/${id}`)
+                    /* setType("overview" )*/
                 }}
 		        	style={{cursor:'pointer'}}
             />
           </Card.Section>
+          : <Container my="md">
+          <SimpleGrid
+              cols={2}
+              spacing="md"
+              breakpoints={[{ maxWidth: 'sm', cols: 1 }]}>
+              <ImageOverview dim={{width:"300px"}}
+                              image={image}
+                              title={name}
+                  />
+                  <Grid gutter="md">
+                  <Grid.Col>
+                      <Name name={[name,' ',model]} />
+                  </Grid.Col>
+                  <Grid.Col span={6}>
+                      <Price price={price} currency={currency} />
+                  </Grid.Col>
+                  <Grid.Col span={6}>
+                      <abdoRating data={{
+                          label: 'Rating',
+                          stats: [vote_total,' / 10'],
+                          color: 'green',
+                          icon: 'up',
+                          progress: vote_total / vote_count * 100
+                      }} />
+                  </Grid.Col>
+              </Grid>
+          </SimpleGrid>
+          <Description description={description} label="Description" />
+      </Container>
+          }
+         
 
           <Group position="center" style={{ marginBottom: 5, marginTop: theme.spacing.sm }}>
             <Text weight={500}>{name}</Text>
