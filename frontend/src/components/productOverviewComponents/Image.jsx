@@ -7,7 +7,7 @@ const useStyles = createStyles((theme, _params, getRef) => {
     card: {
       position: 'relative',
       height: 250,
-	  width:250,
+	    width:250,
       backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.colors.gray[0],
 
       [`&:hover .${image}`]: {
@@ -66,7 +66,7 @@ export default function Image({ image, title, author,dim,cols }) {
 
   return (
     <Card
-	  style={dim}
+	    style={dim}
       p="lg"
       shadow="lg"
       className={classes.card,cols}

@@ -4,11 +4,12 @@ import Client from '../database';
 
 export type comment = {
     id?: number;
-    subject: string;
+    subject?: string;
     message:string;
     created_time?:Date;
     user_id:number;
     product_id:number;
+    vote?:number;
   };
 
 
@@ -40,11 +41,11 @@ export class Comment {
         }
     }
 
-    async create(c: comment): Promise<string> {
+    async create(c: comment): Promise<comment> {
         try {            
             const conn = await Client.connect();
-            const sql = 'insert into comment (subject,message,created_time,user_id,product_id) values($1,$2,$3,$4,$5)RETURNING *;';
-            const res = await conn.query(sql, [c.subject,c.message,new Date(),c.user_id,c.product_id]);
+            const sql = 'insert into comment (subject,message,created_time,user_id,product_id,vote) values($1,$2,$3,$4,$5,$6)RETURNING *;';
+            const res = await conn.query(sql, [c.subject,c.message,new Date(),c.user_id,c.product_id,c.vote]);
             conn.release();
             return res.rows[0];
         } catch (e) {
@@ -55,8 +56,8 @@ export class Comment {
     async update(c: comment): Promise<comment> {
         try {
             const conn = await Client.connect();
-            const sql = 'update comment set subject=($1),message=($2),product_id=($4) where id=($5) and user_id=($3) RETURNING *; ';
-            const res = await conn.query(sql, [c.subject,c.message,c.user_id,c.product_id, c.id]);
+            const sql = 'update comment set subject=($1),message=($2),product_id=($4),vote=($6) where id=($5) and user_id=($3) RETURNING *; ';
+            const res = await conn.query(sql, [c.subject,c.message,c.user_id,c.product_id, c.id,c.vote]);
             conn.release();
             return res.rows[0];
         } catch (e) {

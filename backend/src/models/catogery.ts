@@ -33,7 +33,7 @@ export class Catogery {
         }
     }
 
-    async create(c: catogery): Promise<string> {
+    async create(c: catogery): Promise<catogery> {
         try {
             const conn = await Client.connect();
             const sql = 'insert into catogery (name) values($1)RETURNING *;';
@@ -45,7 +45,7 @@ export class Catogery {
         }
     }
 
-    async update(c: catogery): Promise<string> {
+    async update(c: catogery): Promise<catogery> {
         try {
             const conn = await Client.connect();
             const sql = 'update catogery set name=($1) where id=($2) RETURNING *; ';

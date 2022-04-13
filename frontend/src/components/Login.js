@@ -69,7 +69,7 @@ export function Login(props) {
 
   const userState = useSelector(authState)
 
-  const { message, isError, isLoading, isSuccess } = userState
+  const { message, isError, isLoading, isSuccess ,status } = userState
 
 
   const handelSubmit = () => {
@@ -104,12 +104,17 @@ export function Login(props) {
 
   }
 
+
   useEffect(() => {
     if (isError) 
     { 
       handleError()
          }
-    if (isSuccess)
+    if (isSuccess && status==="admin")
+     { 
+      navigate("/") 
+          }
+          if (isSuccess && status!=="admin" )
      { 
       navigate("/") 
           }
@@ -120,6 +125,25 @@ export function Login(props) {
       cleanup
     } */
   }, [isError, isSuccess])
+
+ /*  useEffect(() => {
+    if (isError) 
+    { 
+      handleError()
+         }
+    if (isSuccess && status==="admin")
+        { 
+          navigate("/") 
+              }
+    if (isSuccess && status==="active")
+    { 
+      navigate("/") 
+          }         
+
+    dispatch(reset())
+
+     
+  }, [isError, isSuccess]) */
 
 
   return (
@@ -140,6 +164,7 @@ export function Login(props) {
           {type === 'register' && (
             <>
               <TextInput
+              
                 label="First Name"
                 placeholder="Your first name"
                 value={form.values.first_name}

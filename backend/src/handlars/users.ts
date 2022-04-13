@@ -2,8 +2,10 @@ import { Application, Response, Request } from 'express';
 import nodemailer from 'nodemailer';
 import { User, user } from '../models/users';
 import parseJwt from '../service/jwtParsing';
-import jwt, { JwtPayload } from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
+import bcrypt from 'bcrypt';
 import dotenv from 'dotenv';
+import {userShema} from '../service/validation';
 
 dotenv.config();
 const secret: string = process.env.token as unknown as string;
@@ -95,6 +97,7 @@ async function update(req: Request, res: Response) {
                 user.address=req.body.address;
 
             const resualt = await user_obj.update(user);
+            
             const new_token = jwt.sign({user:resualt},secret);
             res.status(200).json(new_token);
         }else if(permession && id!=user.id && user.status=='admin' && req.body.status!='admin'){
@@ -123,14 +126,15 @@ async function update(req: Request, res: Response) {
 }
 
 async function create(req: Request, res: Response) {
+    
     try {
         
-        
+        const hash = bcrypt.hashSync(req.body.password+process.env.extra, parseInt(process.env.round as string));
         const u: user = {
             f_name:req.body.f_name, 
             l_name:req.body.l_name, 
             email:req.body.email, 
-            password:req.body.password, 
+            password:hash, 
             birthday:req.body.birthday, 
             phone:req.body.phone, 
             status:'active',
@@ -138,6 +142,13 @@ async function create(req: Request, res: Response) {
             address:req.body.address,
             coupon_id:req.body.coupon_id
         };
+        const validate = userShema.validate(u);
+        console.log('v...........');
+        
+        console.log(validate);
+
+        console.log('v...........');
+
         
         const resault = await user_obj.create(u);
         const token = jwt.sign({ user: resault }, secret);
@@ -165,8 +176,8 @@ async function delete_(req: Request, res: Response) {
 async function login(req: Request, res: Response) {
     try {
         const { email, password } = req.body;
-        
-        const resault = await user_obj.auth(email, password);
+        const hash = bcrypt.hashSync(password+process.env.extra, parseInt(process.env.round as string));
+        const resault = await user_obj.auth(email, hash);
     
         if(resault){
             if (resault.status!='suspended') {

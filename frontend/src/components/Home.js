@@ -13,7 +13,7 @@ export default function Home() {
     const [products, setProducts] = useState();
     const [category, setCategory] = useState()
     const [loading, SetLoading] = useState(false);
-
+    const [type, setType] = useState("")
     const update = async () => {
         await api.getCategories()
             .then((res) => {
@@ -30,6 +30,7 @@ export default function Home() {
     }
 
     useEffect(() => {
+        setType("thumb")
         update()
 
         return () => {
@@ -66,7 +67,9 @@ export default function Home() {
                                       ]} >
                             {products?.filter((item) => item.category_id === x.id.toString())
                                 .slice(0, 6).map((p,index) => {
-                                    return    <ProductThumb product={p} key={p.id} />                                          
+                                    return    <ProductThumb product={p}
+                                                             key={p.id}
+                                                             type={type}                />                                          
                                    
 
                                 })}
@@ -75,7 +78,10 @@ export default function Home() {
 
                     </div>
                 ))}
+                    <div id="section1">
 
+                        are u here yet !!!
+                    </div>
                 {/* <Grid columns={3} gutter="lg" >
                     {products?.map((x) => {
                         console.log(x)

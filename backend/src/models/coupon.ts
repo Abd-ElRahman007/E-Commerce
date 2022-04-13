@@ -35,7 +35,7 @@ export class Coupon {
         }
     }
 
-    async create(c: coupon): Promise<string> {
+    async create(c: coupon): Promise<coupon> {
         try {
             const conn = await Client.connect();
             const sql = 'insert into coupon (code,value_of_100) values($1,$2)RETURNING *;';
@@ -47,7 +47,7 @@ export class Coupon {
         }
     }
 
-    async update(c: coupon): Promise<string> {
+    async update(c: coupon): Promise<coupon> {
         try {
             const conn = await Client.connect();
             const sql = 'update coupon set code=($1), value_of_100=($2) where id=($3) RETURNING *; ';

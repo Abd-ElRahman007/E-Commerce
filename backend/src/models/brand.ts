@@ -34,7 +34,7 @@ export class Brand {
         }
     }
 
-    async create(b: brand): Promise<string> {
+    async create(b: brand): Promise<brand> {
         try {
             const conn = await Client.connect();
             const sql =
@@ -47,7 +47,7 @@ export class Brand {
         }
     }
 
-    async update(b: brand): Promise<string> {
+    async update(b: brand): Promise<brand> {
         try {
             const conn = await Client.connect();
             const sql =

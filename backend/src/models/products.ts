@@ -5,18 +5,18 @@ import Client from '../database';
 export type product = {
     id?: number;
     code: string;
-    name: string;
-    model: string;
+    name?: string;
+    model?: string;
     images?: Array<string>;
-    image:string;
-    description: string;
-    category_id: number;
-    price: number;
-    currency: string;
-    vote_count: number;
-    vote_total: number;
-    stock: number;
-    brand_id: number;
+    image?:string;
+    description?: string;
+    category_id?: number;
+    price?: number;
+    currency?: string;
+    vote_count?: number;
+    vote_total?: number;
+    stock?: number;
+    brand_id?: number;
 };
 
 
@@ -36,7 +36,8 @@ export class Product {
         }
     }
 
-    async show(id: number): Promise<object> {
+
+    async show(id: number): Promise<product> {
         try {
             const conn = await Client.connect();
             const sql = 'select * from product where id =($1);';
@@ -62,7 +63,7 @@ export class Product {
     }
     
 
-    async create(p: product): Promise<string> {
+    async create(p: product): Promise<product> {
         try {
             const conn = await Client.connect();
 
@@ -90,7 +91,7 @@ export class Product {
         }
     }
 
-    async update(p: product): Promise<string> {
+    async update(p: product): Promise<product> {
         try {
             const conn = await Client.connect();
             const sql =
