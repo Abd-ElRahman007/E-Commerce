@@ -6,7 +6,8 @@ import {
     Center,
     Burger,
     Container,
-    Loader
+    Loader,
+    Select
 } from '@mantine/core';
 import { useBooleanToggle } from '@mantine/hooks';
 import { ChevronDown } from 'tabler-icons-react';
@@ -34,7 +35,7 @@ export default function MenuInNav(props) {
     }
 
 
-
+    const navigate = useNavigate()
 
 
     useEffect(() => {
@@ -47,9 +48,9 @@ export default function MenuInNav(props) {
 
         return () => {
 
-            setExisitingCategories(
-                setExistingBrands()
-            )   
+            setExisitingCategories()
+            setExistingBrands()
+
         }
 
     }, [])
@@ -69,68 +70,136 @@ export default function MenuInNav(props) {
                     transitionDuration={0}
                     placement="end"
                     gutter={1}
-					className="w-50"
+                    className="w-50"
                     control={
                         <a className={classes.link}>
 
                             <Center>
-                                <span className={classes.linkLabel}>Browse Products</span>
+                                <span className={classes.linkLabel}>Categories</span>
                                 <ChevronDown size={12} />
                             </Center>
                         </a>
                     }
                 >
-                    <Menu
-                        trigger="hover"
-                        delay={0}
-                        transitionDuration={0}
-                        placement="start"
-                        gutter={1}
-                        position="left"
-                        control={
-                            <a className={classes.link}>
+                    {exisitingCategories?.map((x) => {
+                        return <Menu.Item component={Link}
+                                          to={`/browse/${x.id}` } 
+                                          state = {{type:"category"}}
+                                          key={x.id}
 
-                                <Center>
-                                    <span className={classes.linkLabel}>By Category</span>
-                                    <ChevronDown size={12} />
-                                </Center>
-                            </a>
-                        }
-                    >
-                        {exisitingCategories?.map((x) => {
-                            return <Menu.Item component={Link} to="/newbrand" key={x.id}> {x.name}</Menu.Item>
-                        })}
-
-                    </Menu>
-
-
-                    <Menu
-                        trigger="hover"
-                        delay={0}
-                        transitionDuration={0}
-                        placement="start"
-                        gutter={1}
-                        position="left"
-                        control={
-                            <a className={classes.link}>
-
-                                <Center>
-                                    <span className={classes.linkLabel}>By Brand</span>
-                                    <ChevronDown size={12} />
-                                </Center>
-                            </a>
-                        }
-                    >
-                        {existingBrands?.map((x) => {
-                            return <Menu.Item component={Link} to="/newbrand" key={x.id}> {x.name}</Menu.Item>
-                        })}
-
-
-                    </Menu>
+                                          > 
+                                          {x.name}</Menu.Item>
+                    })}
 
                 </Menu>
+
+                <Menu
+                    trigger="hover"
+                    delay={0}
+                    transitionDuration={0}
+                    placement="start"
+                    gutter={1}
+                    position="bottom"
+                    control={
+                        <a className={classes.link}>
+
+                            <Center>
+                                <span className={classes.linkLabel}>Brands</span>
+                                <ChevronDown size={12} />
+                            </Center>
+                        </a>
+                    }
+                >
+
+
+
+
+                    {existingBrands?.map((x) => {
+                        return <Menu.Item component={Link} to={"/car"} key={x.id}> {x.name}</Menu.Item>
+
+                    })}
+                </Menu>
+
+
+
+
 
             </>
         )
 }
 
+
+/*
+<>
+<Menu
+    trigger="hover"
+    delay={0}
+    transitionDuration={0}
+    placement="end"
+    gutter={1}
+    className="w-50"
+    control={
+        <a className={classes.link}>
+
+            <Center>
+                <span className={classes.linkLabel}>Browse Products</span>
+                <ChevronDown size={12} />
+            </Center>
+        </a>
+    }
+>
+    <Menu
+        trigger="hover"
+        delay={0}
+        transitionDuration={0}
+        placement="start"
+        gutter={1}
+        position="left"
+        control={
+            <a className={classes.link}>
+
+                <Center>
+                    <span className={classes.linkLabel}>By Category</span>
+                    <ChevronDown size={12} />
+                </Center>
+            </a>
+        }
+    >
+        {exisitingCategories?.map((x) => {
+            return <Menu.Item as={Link} to="/cart" key={x.id}> {x.name}</Menu.Item>
+        })}
+
+    </Menu>
+
+
+    <Menu
+        trigger="hover"
+        delay={0}
+        transitionDuration={0}
+        placement="start"
+        gutter={1}
+        position="left"
+        control={
+            <a className={classes.link}>
+
+                <Center>
+                    <span className={classes.linkLabel}>By Brand</span>
+                    <ChevronDown size={12} />
+                </Center>
+            </a>
+        }
+    >
+        {existingBrands?.map((x) => {
+                 return    <Menu.Item  component={Link} to={"./cart"} key={x.id}> {x.name} as button</Menu.Item>
+
+        })}
+
+
+    </Menu>
+
+</Menu>
+<Menu>
+    <Menu.Item as="button" onClick={()=>{navigate("/cart")}}>  as button with navigate </Menu.Item>
+</Menu>
+
+</> */

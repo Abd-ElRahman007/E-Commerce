@@ -7,7 +7,7 @@ import { User, ShoppingCart } from 'tabler-icons-react';
 import { Link, useNavigate } from 'react-router-dom';
 
 import MenuInNav from './MenuInNav';
-import UserLogin from './UserLogin'
+
 import UserDisplay from './user/UserDisplay';
 
 
@@ -56,7 +56,7 @@ const useStyles = createStyles((theme) => ({
 
 
 
-export function NavNew() {
+export function Navbar() {
     const navLinks = {
         "links": [
             {
@@ -157,7 +157,7 @@ export function NavNew() {
                 <div className={classes.inner}>
 
                     <Link style={{textDecoration:'none',color:'black'}} to="./">
-                    <h1>NavBar</h1>
+                    <h2>Home</h2>
                     </Link>
                     <Group className={"w-25"} >
                         <Autocomplete  /* styles={{   50 ,50 (other group)
@@ -174,7 +174,7 @@ export function NavNew() {
                     <Group spacing={5} className={classes.links} >
                              <MenuInNav classes={classes}/>
 
-                        <a
+                       {/*  <a
                             href=""
                             className={classes.link}
                             onClick={(event) => {
@@ -184,7 +184,7 @@ export function NavNew() {
                         >
                             About
 
-                        </a>
+                        </a> */}
                         
                     </Group>
 
@@ -194,7 +194,7 @@ export function NavNew() {
                       <ShoppingCart/>
                     </ActionIcon>
                     
-                    <User/>
+                   
                     <UserDisplay/>
                     <Burger
                         opened={opened}
@@ -202,7 +202,7 @@ export function NavNew() {
                         className={classes.burger}
                         size="sm"
                     />
-               <UserLogin name="Sprints" email="mockemail@example.com"/>                    
+                                 
                 </div>
             </Container>
         </Header>

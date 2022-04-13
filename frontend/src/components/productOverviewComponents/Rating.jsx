@@ -17,7 +17,7 @@ export default function Rating({ data }) {
             size={80}
             roundCaps
             thickness={8}
-            sections={[{ value: data.progress, color: data.color }]}
+            sections={[{ value: data.progress || 50, color: data.color }]}
             label={
               <Center>
                 <Icon size={22} />

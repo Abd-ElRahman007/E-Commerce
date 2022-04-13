@@ -51,7 +51,7 @@ function imgRender(img){
   return (
     <div className={classes.wrapper}>
       <Dropzone
-multiple= {false}
+        multiple= {false}
         openRef={openRef}
         onDrop={(file) => toParent(file)}
         className={classes.dropzone}

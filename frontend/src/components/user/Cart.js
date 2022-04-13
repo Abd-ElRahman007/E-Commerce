@@ -80,7 +80,9 @@ export default function Cart() {
                     
                 {cartItems.map((item) => (
 
-                    <ProductThumb product={item} key={item.id} />
+                    <ProductThumb product={item} 
+                                    key={item.id}
+                                    type="thumb" />
                 ))
 
                 }
