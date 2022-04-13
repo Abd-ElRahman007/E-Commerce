@@ -8,7 +8,7 @@ import AdminOverview from './components/AdminOverview';
 import NewCategory from './components/admin/NewCategory';
 import NewBrand from './components/admin/NewBrand';
 import  {Login}  from './components/Login';
-import {Car} from "./components/Car"
+
 import { Navbar } from './components/Navbar';
 import EditStuff from './components/EditStuff';
 import Cart from './components/user/Cart';
@@ -66,8 +66,7 @@ function App() {
         <Route exact path='/NewCategory' element={<NewCategory />} />
         <Route exact path='/NewBrand' element={<NewBrand/>} />
         <Route exact path='/Login' element={<Login/>} />
-        <Route exact path='/car' element={<Car/>} />
-        <Route exact path='/bycategoryorbrand/:id' element={<ByCategoryOrBrand/>} />
+       
 
     
       
