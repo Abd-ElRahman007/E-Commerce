@@ -82,7 +82,13 @@ export default function MenuInNav(props) {
                     }
                 >
                     {exisitingCategories?.map((x) => {
-                        return <Menu.Item component={Link} to={`/bycategoryorbrand/${x.id}`} key={x.id}> {x.name}</Menu.Item>
+                        return <Menu.Item component={Link}
+                                          to={`/browse/${x.id}` } 
+                                          state = {{type:"category"}}
+                                          key={x.id}
+
+                                          > 
+                                          {x.name}</Menu.Item>
                     })}
 
                 </Menu>
@@ -98,7 +104,7 @@ export default function MenuInNav(props) {
                         <a className={classes.link}>
 
                             <Center>
-                                <span className={classes.linkLabel}>By Brand</span>
+                                <span className={classes.linkLabel}>Brands</span>
                                 <ChevronDown size={12} />
                             </Center>
                         </a>

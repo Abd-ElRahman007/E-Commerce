@@ -1,6 +1,6 @@
 import { useState , useEffect } from 'react'
 import { useParams } from 'react-router'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import * as api from '../../helpers/api'
 
 
@@ -11,24 +11,40 @@ import {
 
 import ProductThumb from '../ProductThumb';
 
-export default function ByCategoryOrBrand() {
+export default function Browse() {
 
 
-const{id}=useParams()
+const {id} =useParams()
+const location= useLocation()
+const type = location.state.type
+console.log("typeeeeeeeee" , type )
 
 const [products, setProducts] = useState()
-async function getProducts (id){  
+
+console.log("products  ---->", products )
+
+async function getProductsByCategory (id){  
     const productsData= await api.getProductsByCategory(id)
     setProducts(productsData)
 //   console.log("productsData  ---->", productsData )
         }
 
+        async function getProductsByBrand (id){  
+          const productsData= await api.getProductsByBrand(id)
+          setProducts(productsData)
+      //   console.log("productsData  ---->", productsData )
+              }
+      
+
 useEffect(() => {
-    getProducts(id)
+  if (type==="category")
+    { getProductsByCategory(id) }
+else 
+  { getProductsByBrand(id) }
    /*  return () => {
         cleanup
     } */
-}, [])
+}, [id])
 
 
     if (products=== undefined)
@@ -36,26 +52,21 @@ useEffect(() => {
      else
        return (
           <Container>
-        
-
-                    <SimpleGrid cols={3} spacing="lg"
+                <SimpleGrid cols={3} spacing="lg"
                         breakpoints={[
                             { maxWidth: 980, cols: 3, spacing: 'md' },
                             { maxWidth: 755, cols: 2, spacing: 'sm' },
                             { maxWidth: 600, cols: 1, spacing: 'sm' },
                         ]} >
                             
-                        {products.map((item) => (
-
-                            <ProductThumb product={item} key={item.id} />
-                        ))
-
+                     {products.map((item) => {
+                          return  <ProductThumb product={item}
+                                                key={item.id} 
+                                                type="thumb"       
+                                                             />
+                        })
                         }
-
-
-                    </SimpleGrid>
-
-
-</Container>
+                   </SimpleGrid>
+            </Container>
     )
 }

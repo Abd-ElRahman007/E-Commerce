@@ -17,7 +17,7 @@ import TempUser from './components/TempUser';
 /* import HomeAdmin from './components/admin/HomeAdmin';
 import NewBrand from './components/admin/NewBrand ';
 import NewCategory from './components/admin/NewCategory'; */
-import ByCategoryOrBrand from './components/user/ByCategoryOrBrand';
+import Browse from './components/user/Browse';
 import { authState } from './redux/slices/authSlice';
 import { useSelector } from "react-redux"
 import { HomeAdmin } from './components/admin/HomeAdmin';
@@ -67,17 +67,16 @@ function App() {
         <Route exact path='/NewBrand' element={<NewBrand/>} />
         <Route exact path='/Login' element={<Login/>} />
         <Route exact path='/car' element={<Car/>} />
-        
+        <Route exact path='/bycategoryorbrand/:id' element={<ByCategoryOrBrand/>} />
+
     
       
         
         <Route exact path='/EditStuff' element={<EditStuff/>} />
         <Route exact path='/Cart' element={<Cart/>} />
-        <Route exact path='/bycategoryurbrand/:id' element={<ByCategoryOrBrand/>} />
+        <Route exact path='/browse/:id' element={<Browse/>} />
         <Route exact path='/ProductThumb/:id' element={<ProductThumb/>} />
-       {/*  <Route exact path='/homeAdmin' element={<HomeAdmin />} />
-        <Route exact path='/newCategory' element={<NewCategory />} />
-        <Route exact path='/newBrand' element={<NewBrand />} /> */}
+     
       </Routes>
     </Container>
   );

@@ -12,7 +12,7 @@ export const getBrands =async () => {
          return data.data
 }
 export const getProductOverview =async (id) => {
-    const data = await axios.get(`http://localhost:5000/products/${id}`)
+    const data = await axios.get(`/products/${id}`)
          return data.data
 }
 
@@ -24,5 +24,10 @@ export const getProductsLimited =async (limit) => {
 
 export const getProductsByCategory =async (id) => {
     const data = await axios.get(`/${id}/products`,)
-         return data.data.data
+         return data.data
+}
+
+export const getProductsByBrand =async (id) => {
+    const data = await axios.get(`/${id}/products`,) // to be written 
+         return data.data
 }
