@@ -1,20 +1,11 @@
 import {
-    createStyles,
-    Header,
     Menu,
-    Group,
     Center,
-    Burger,
-    Container,
     Loader,
-    Select
 } from '@mantine/core';
-import { useBooleanToggle } from '@mantine/hooks';
 import { ChevronDown } from 'tabler-icons-react';
-import { Search } from 'tabler-icons-react';
-import { User, ShoppingCart } from 'tabler-icons-react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useState, useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 
 import * as api from "../helpers/api"
 
@@ -30,19 +21,17 @@ export default function MenuInNav(props) {
         const data = await api.getBrands()
         setExistingBrands(data)
     }
-    const navigate = useNavigate()
 
     useEffect(() => {
         getCategories()
-        console.log("categories in backend ", exisitingCategories)
+        console.log("categories in backend ", existingCategories)
         getBrands()
         console.log("brands in backend ", existingBrands)
         return () => {
             setExistingCategories()
             setExistingBrands()
         }
-    }, [])
-
+    })
 
     if (existingCategories === undefined && existingBrands === undefined)
         return (
@@ -56,8 +45,7 @@ export default function MenuInNav(props) {
                     gutter={1}
                     className="w-50"
                     control={
-                        <a className={classes.link}>
-
+                        <a className={classes.link}> hello {/* a tag require a href attribute */}
                             <Center>
                                 <span className={classes.linkLabel}>Categories</span>
                                 <ChevronDown size={12} />
@@ -82,8 +70,7 @@ export default function MenuInNav(props) {
                     gutter={1}
                     position="bottom"
                     control={
-                        <a className={classes.link}>
-
+                        <a className={classes.link}> {/* a tag require a href attribute */}
                             <Center>
                                 <span className={classes.linkLabel}>Brands</span>
                                 <ChevronDown size={12} />

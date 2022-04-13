@@ -9,8 +9,8 @@ const icons = {
 
 export default function Rating({ data }) {
   const Icon = icons[data.icon];
-    return (
-      <SimpleGrid cols={1} breakpoints={[{ maxWidth: 'sm', cols: 1 }]}>
+  return (
+    <SimpleGrid cols={1} breakpoints={[{ maxWidth: 'sm', cols: 1 }]}>
       <Paper withBorder radius="md" p="xs" key={data.label}>
         <Group>
           <RingProgress className='m-auto'
@@ -24,7 +24,6 @@ export default function Rating({ data }) {
               </Center>
             }
           />
-
           <div>
             <Text color="dimmed" size="xs" transform="uppercase" weight={700}>
               {data.label}
@@ -36,5 +35,5 @@ export default function Rating({ data }) {
         </Group>
       </Paper>
     </SimpleGrid>
-    );
+  );
 }

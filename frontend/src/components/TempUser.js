@@ -7,7 +7,7 @@ import { useDispatch } from "react-redux"
 export default function TempUser() {
     const dispatch = useDispatch()
 
-    const {id,first_name,last_name,status,email ,message ,isError}=useSelector(authState)
+    const { id, first_name, last_name, status, email, message, isError } = useSelector(authState)
     return (
         <div>
             <h3>user</h3>
@@ -18,9 +18,9 @@ export default function TempUser() {
             <h5>email : {email}</h5>
             <h5>message : {message}</h5>
             <h5>isError : {isError}</h5>
-            
-            <button onClick={()=>dispatch(logout())}>logout</button>
-           
+
+            <button onClick={() => dispatch(logout())}>logout</button>
+
         </div>
     )
 }

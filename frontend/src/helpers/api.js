@@ -1,33 +1,32 @@
 import axios from "axios"
 
+export const getCategories = async () => {
 
-export const getCategories = async() => {
-
- const data = await axios.get('/categories',)
-        return data.data
+    const data = await axios.get('/categories',)
+    return data.data
 }
 
-export const getBrands =async () => {
+export const getBrands = async () => {
     const data = await axios.get('/brands',)
-         return data.data
+    return data.data
 }
-export const getProductOverview =async (id) => {
+export const getProductOverview = async (id) => {
     const data = await axios.get(`/products/${id}`)
-         return data.data
+    return data.data
 }
 
 
-export const getProductsLimited =async (limit) => {
+export const getProductsLimited = async (limit) => {
     const data = await axios.get(`/products?page=1&limit=${limit}`,)
-         return data.data.data
+    return data.data.data
 }
 
-export const getProductsByCategory =async (id) => {
+export const getProductsByCategory = async (id) => {
     const data = await axios.get(`/${id}/products`,)
-         return data.data
+    return data.data
 }
 
-export const getProductsByBrand =async (id) => {
-    const data = await axios.get(`/${id}/products`,) // to be written 
-         return data.data
+export const getProductsByBrand = async (id) => {
+    const data = await axios.get(`/${id}/products`,) // to be written
+    return data.data
 }

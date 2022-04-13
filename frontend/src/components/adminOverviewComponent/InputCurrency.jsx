@@ -9,12 +9,12 @@ const data = [
   { value: 'aud', label: '🇦🇺 AUD' },
 ];
 
-export default function InputCurrency({dataInput,toParent,toParentTwo,currency}) {
+export default function InputCurrency({ dataInput, toParent, toParentTwo, currency }) {
   const select = (
     <NativeSelect
       data={data}
-	  value={currency}
-	  onChange={(event)=>toParentTwo(event.currentTarget.value)}
+      value={currency}
+      onChange={(event) => toParentTwo(event.currentTarget.value)}
       styles={{
         input: {
           fontWeight: 500,
@@ -26,16 +26,16 @@ export default function InputCurrency({dataInput,toParent,toParentTwo,currency})
   );
 
   return (
-  <div style={{width:'100%'}}>
-    <TextInput
-      type="number"
-      placeholder="1000"
-      label="Product Price"
-	  value={dataInput.value}
-	  onChange={(event)=>toParent(event.currentTarget.value)}
-      rightSection={select}
-      rightSectionWidth={92}
-    />
-	</div>
+    <div style={{ width: '100%' }}>
+      <TextInput
+        type="number"
+        placeholder="1000"
+        label="Product Price"
+        value={dataInput.value}
+        onChange={(event) => toParent(event.currentTarget.value)}
+        rightSection={select}
+        rightSectionWidth={92}
+      />
+    </div>
   );
 }
