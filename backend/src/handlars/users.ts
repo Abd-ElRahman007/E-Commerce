@@ -5,19 +5,10 @@ import parseJwt from '../service/jwtParsing';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import dotenv from 'dotenv';
-import {userShema} from '../service/validation';
 
 dotenv.config();
 const secret: string = process.env.token as unknown as string;
 const user_obj = new User();
-
-const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-        user: 'marwan4125882@gmail.com',
-        pass: process.env.email_password
-    }
-});
 
 
 async function index(req: Request, res: Response) {
@@ -86,7 +77,10 @@ async function update(req: Request, res: Response) {
             if(req.body.email)
                 user.email=req.body.email;
             if(req.body.password)
-                user.password=req.body.password;
+            {
+                const hash = bcrypt.hashSync(req.body.password+process.env.extra, parseInt(process.env.round as string));
+                user.password=hash;
+            }
             if(req.body.birthday)
                 user.birthday=req.body.birthday;
             if(req.body.phone)
@@ -101,21 +95,25 @@ async function update(req: Request, res: Response) {
             const new_token = jwt.sign({user:resualt},secret);
             res.status(200).json(new_token);
         }else if(permession && id!=user.id && user.status=='admin' && req.body.status!='admin'){
-            const u:user={
-                id:id,
-                coupon_id:Number(req.body.coupon_id),
-                status:req.body.status,
-            };
-            const resault = await user_obj.update(u);
+            const user_ = await user_obj.show(id);
+            
+            if(req.body.coupon_id)
+                user_.coupon_id = Number(req.body.coupon_id);
+            if(req.body.status)
+                user_.status = req.body.status;
+            
+            const resault = await user_obj.update(user_);
             const new_token = jwt.sign({user:resault},secret);
             res.status(200).json(new_token);
         }else if(req.body.admin_email==process.env.admin_email && req.body.admin_password==process.env.admin_password){
-            const u:user={
-                id:id,
-                coupon_id:Number(req.body.coupon_id),
-                status:req.body.status,
-            };
-            const resault = await user_obj.update(u);
+            const user_ = await user_obj.show(id);
+            
+            if(req.body.coupon_id)
+                user_.coupon_id = Number(req.body.coupon_id);
+            if(req.body.status)
+                user_.status = req.body.status;
+
+            const resault = await user_obj.update(user_);
             const new_token = jwt.sign({user:resault},secret);
             res.status(200).json(new_token);
         }else
@@ -142,14 +140,7 @@ async function create(req: Request, res: Response) {
             address:req.body.address,
             coupon_id:req.body.coupon_id
         };
-        const validate = userShema.validate(u);
-        console.log('v...........');
-        
-        console.log(validate);
-
-        console.log('v...........');
-
-        
+                
         const resault = await user_obj.create(u);
         const token = jwt.sign({ user: resault }, secret);
         res.status(200).json(token);
@@ -200,26 +191,8 @@ async function forget_password(req: Request, res: Response) {
        
         if(resault){
             if (resault.status!='suspended') {
-                const token = jwt.sign({ user: resault }, secret);
+                //const token = jwt.sign({ user: resault }, secret);
 
-                //send email to result.email with new token
-                const mailOptions = { 
-                    from: 'marwan4125882@gmail.com', 
-                    to: resault.email,
-                    subject: 'Reset Password Email',
-                    text: `${token}`
-                };
-                
-                transporter.sendMail(mailOptions, function(error, info)
-                {
-                    if (error) 
-                    { 
-                        console.log(error);
-                    } else {
-                    
-                        console.log('Email sent: ' + info.response);
-                    }});
-                ///////////////////////////////////////////////
                 res.status(200).json('check your email.');
             }else
                 res.status(400).json('user suspended');

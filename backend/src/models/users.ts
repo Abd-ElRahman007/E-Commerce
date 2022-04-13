@@ -1,19 +1,14 @@
 import Client from '../database';
-import bcrypt from 'bcrypt';
-import dotenv from 'dotenv';
-dotenv.config();
-
-const { extra } = process.env;
 
 export type user = {
   id?: number;
   f_name?: string;
   l_name?: string;
-  email?:string;
-  password?: string;
+  email:string;
+  password: string;
   birthday?:Date;
   phone?:string;
-  status?:string;
+  status:string;
   created_at?:Date;
   city?:string;
   address?:string;
