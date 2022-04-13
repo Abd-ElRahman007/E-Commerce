@@ -3,7 +3,7 @@ import {Coupon,coupon} from '../../models/coupon';
 const coupon_ = new Coupon();
 
 
-describe('Tests for Brand model', ()=>{
+describe('Tests for Coupon model', ()=>{
     
     
     //index function

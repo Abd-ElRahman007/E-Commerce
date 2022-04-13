@@ -6,7 +6,7 @@ import Client from '../database';
 export type brand = {
     id?: number;
     name: string;
-    description: string;
+    description?: string;
   };
 
 export class Brand {
