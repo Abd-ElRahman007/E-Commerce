@@ -6,7 +6,7 @@ export type comment = {
     id?: number;
     subject?: string;
     message:string;
-    created_time:Date;
+    created_time?:Date;
     user_id:number;
     product_id:number;
     vote?:number;

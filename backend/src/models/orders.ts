@@ -6,7 +6,7 @@ export type order = {
   id?: number;
   status: string;
   total:number;
-  time_start:Date;
+  time_start?:Date;
   time_arrival:Date;
   compelete_at:Date;
   user_id: number;
