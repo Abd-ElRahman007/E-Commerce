@@ -38,12 +38,13 @@ async function update(req: Request, res: Response) {
     }
 
     if ((permession && user.user.status=='admin')||isSuperAdmin) {
+        const c = await coupon_obj.show(req.params.id as unknown as number);
         try {
-            const c: coupon = {
-                id: req.params.id as unknown as number,
-                code: req.body.code,
-                value_of_100:req.body.value_of_100
-            };
+            if(req.body.code)
+                c.code = req.body.code;
+            
+            if(req.body.value_of_100)
+                c.value_of_100 = req.body.value_of_100;
             const resault = await coupon_obj.update(c);
             res.status(200).json(resault);
         } catch (e) {

@@ -32,14 +32,21 @@ async function update(req: Request, res: Response) {
     const user = parseJwt(token);
     const permession = jwt.verify(token, secret);
     if (permession) {
+        const c = await comment_obj.show(req.params.product_id as unknown as number, req.params.id as unknown as number);
         try {
-            const c: comment = {
-                id: Number(req.params.id),
-                subject: req.body.subject,
-                message:req.body.message,
-                user_id:Number(user.user.id),
-                product_id:Number(req.params.product_id)
-            };
+            
+            if(req.body.subject)  
+                c.subject = req.body.subject;
+
+            if(req.body.message)  
+                c.message = req.body.message;
+
+            if(req.body.user_id)  
+                c.user_id = Number(user.user.id);
+
+            if(req.body.vote)  
+                c.vote = Number(req.body.vote);
+            
             const resault = await comment_obj.update(c);
             res.status(200).json(resault);
         } catch (e) {
@@ -59,7 +66,8 @@ async function create(req: Request, res: Response) {
                 subject: req.body.subject,
                 message:req.body.message,
                 user_id:Number(user.user.id),
-                product_id:Number(req.params.product_id)
+                product_id:Number(req.params.product_id),
+                vote:Number(req.body.vote)
             };
             const resault = await comment_obj.create(c);
             res.status(200).json(resault);

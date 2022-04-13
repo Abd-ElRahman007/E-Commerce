@@ -5,6 +5,7 @@ import parseJwt from '../service/jwtParsing';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import dotenv from 'dotenv';
+import {userShema} from '../service/validation';
 
 dotenv.config();
 const secret: string = process.env.token as unknown as string;
@@ -124,6 +125,7 @@ async function update(req: Request, res: Response) {
 }
 
 async function create(req: Request, res: Response) {
+    
     try {
         
         const hash = bcrypt.hashSync(req.body.password+process.env.extra, parseInt(process.env.round as string));
@@ -139,6 +141,13 @@ async function create(req: Request, res: Response) {
             address:req.body.address,
             coupon_id:req.body.coupon_id
         };
+        const validate = userShema.validate(u);
+        console.log('v...........');
+        
+        console.log(validate);
+
+        console.log('v...........');
+
         
         const resault = await user_obj.create(u);
         const token = jwt.sign({ user: resault }, secret);

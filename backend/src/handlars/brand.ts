@@ -39,14 +39,16 @@ async function update(req: Request, res: Response) {
     if(req.body.admin_email == process.env.admin_email && req.body.admin_password == process.env.admin_password){
         isSuperAdmin=true;
     }
-
+    const b = await brand_obj.show(req.params.id as unknown as number);
     if ((permession && user.user.status=='admin')||isSuperAdmin) {
         try {
-            const b: brand = {
-                id:Number(req.params.id),
-                name: req.body.name,
-                description:req.body.description
-            };
+            
+            if(req.body.name)
+                b.name = req.body.name;
+            
+            if(req.body.description)
+                b.description = req.body.description;
+            
             const resault = await brand_obj.update(b);
             res.status(200).json(resault);
         } catch (e) {
