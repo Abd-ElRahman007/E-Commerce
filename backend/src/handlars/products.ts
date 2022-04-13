@@ -26,7 +26,7 @@ async function index(req: Request, res: Response) {
             model_result = model_result.filter(x => x.category_id == category_ );
         }   
         if(product_name != undefined){
-            model_result = model_result.filter(x => isTrue(x.name, product_name));
+            model_result = model_result.filter(x => isTrue(x.name as unknown as string, product_name));
         }   
 
         const page = Number(req.query.page);

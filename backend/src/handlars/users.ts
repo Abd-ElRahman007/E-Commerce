@@ -97,6 +97,7 @@ async function update(req: Request, res: Response) {
                 user.address=req.body.address;
 
             const resualt = await user_obj.update(user);
+            
             const new_token = jwt.sign({user:resualt},secret);
             res.status(200).json(new_token);
         }else if(permession && id!=user.id && user.status=='admin' && req.body.status!='admin'){

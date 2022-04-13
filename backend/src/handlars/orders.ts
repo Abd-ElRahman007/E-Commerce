@@ -67,7 +67,7 @@ async function show(req: Request, res: Response) {
 async function update(req: Request, res: Response) {
     const token = req.headers.token as unknown as string;
     const permession = jwt.verify(token, secret);
-    const user = parseJwt(token);
+    //const user = parseJwt(token);
     if (permession) {
         const o = await order_obj.show(req.params.id as unknown as number, req.params.user_id as unknown as number);
         try {
