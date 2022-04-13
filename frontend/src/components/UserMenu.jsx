@@ -2,6 +2,9 @@ import { ChevronRight,Dashboard,ShoppingCart,Logout } from 'tabler-icons-react';
 import { Group, Avatar, Text, Menu, UnstyledButton } from '@mantine/core';
 import { forwardRef} from 'react';
 import {Link} from 'react-router-dom'
+import { authState, logout } from "../redux/slices/authSlice"
+import { useDispatch } from "react-redux"
+import { useSelector } from "react-redux"
 
 
 const UserButton = forwardRef(
@@ -40,7 +43,11 @@ const UserButton = forwardRef(
   )
 );
 
-export default function UserLogin({name,email}) {
+export default function UserMenu({name,email}) {
+
+  const dispatch = useDispatch()
+  const user = useSelector(authState)
+  console.log("id", user.id)
   return (
     <Group position="center">
       <Menu
@@ -69,7 +76,7 @@ export default function UserLogin({name,email}) {
 		
         <Menu.Item
 		color="red"
-		component={Link} to="/Logout"
+		as="button" onClick={()=>dispatch(logout())}
 		icon={<Logout size={19}/>}
 		>
 		Logout

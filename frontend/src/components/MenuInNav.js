@@ -64,9 +64,6 @@ export default function MenuInNav(props) {
 
             <>
                 <Menu
-                    trigger="hover"
-                    delay={0}
-                    transitionDuration={0}
                     placement="end"
                     gutter={1}
 					className="w-50"
@@ -81,9 +78,6 @@ export default function MenuInNav(props) {
                     }
                 >
                     <Menu
-                        trigger="hover"
-                        delay={0}
-                        transitionDuration={0}
                         placement="start"
                         gutter={1}
                         position="left"
@@ -98,16 +92,13 @@ export default function MenuInNav(props) {
                         }
                     >
                         {exisitingCategories?.map((x) => {
-                            return <Menu.Item component={Link} to="/newbrand" key={x.id}> {x.name}</Menu.Item>
+                            return <Menu.Item component={Link} to="/newbrand" key={x.id}>{x.name}</Menu.Item>
                         })}
 
                     </Menu>
 
 
                     <Menu
-                        trigger="hover"
-                        delay={0}
-                        transitionDuration={0}
                         placement="start"
                         gutter={1}
                         position="left"
