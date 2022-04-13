@@ -6,7 +6,8 @@ import {
     Center,
     Burger,
     Container,
-    Loader
+    Loader,
+    Select
 } from '@mantine/core';
 import { useBooleanToggle } from '@mantine/hooks';
 import { ChevronDown } from 'tabler-icons-react';
@@ -34,7 +35,7 @@ export default function MenuInNav(props) {
     }
 
 
-const navigate=useNavigate()
+    const navigate = useNavigate()
 
 
     useEffect(() => {
@@ -48,8 +49,8 @@ const navigate=useNavigate()
         return () => {
 
             setExisitingCategories()
-                setExistingBrands()
-              
+            setExistingBrands()
+
         }
 
     }, [])
@@ -69,72 +70,130 @@ const navigate=useNavigate()
                     transitionDuration={0}
                     placement="end"
                     gutter={1}
-					className="w-50"
+                    className="w-50"
                     control={
                         <a className={classes.link}>
 
                             <Center>
-                                <span className={classes.linkLabel}>Browse Products</span>
+                                <span className={classes.linkLabel}>Categories</span>
                                 <ChevronDown size={12} />
                             </Center>
                         </a>
                     }
                 >
-                    <Menu  
-                        trigger="hover"
-                        delay={0}
-                        transitionDuration={0}
-                        placement="start"
-                        gutter={1}
-                        position="left"
-                        control={
-                            <a className={classes.link}>
-
-                                <Center>
-                                    <span className={classes.linkLabel}>By Category</span>
-                                    <ChevronDown size={12} />
-                                </Center>
-                            </a>
-                        }
-                    >
-                        {exisitingCategories?.map((x) => {
-                            return <Menu.Item as={Link} to="/cart" key={x.id}> {x.name}</Menu.Item>
-                        })}
-
-                    </Menu>
-
-
-                    <Menu
-                        trigger="hover"
-                        delay={0}
-                        transitionDuration={0}
-                        placement="start"
-                        gutter={1}
-                        position="left"
-                        control={
-                            <a className={classes.link}>
-
-                                <Center>
-                                    <span className={classes.linkLabel}>By Brand</span>
-                                    <ChevronDown size={12} />
-                                </Center>
-                            </a>
-                        }
-                    >
-                        {existingBrands?.map((x) => {
-                                 return    <Menu.Item  component={Link} to={"./cart"} key={x.id}> {x.name} as button</Menu.Item>
-                                             
-                        })}
-
-
-                    </Menu>
+                    {exisitingCategories?.map((x) => {
+                        return <Menu.Item component={Link} to={`/bycategoryorbrand/${x.id}`} key={x.id}> {x.name}</Menu.Item>
+                    })}
 
                 </Menu>
-                <Menu>
-                    <Menu.Item component="button" onClick={()=>{navigate("/cart")}}>  as button with navigate </Menu.Item>
+
+                <Menu
+                    trigger="hover"
+                    delay={0}
+                    transitionDuration={0}
+                    placement="start"
+                    gutter={1}
+                    position="bottom"
+                    control={
+                        <a className={classes.link}>
+
+                            <Center>
+                                <span className={classes.linkLabel}>By Brand</span>
+                                <ChevronDown size={12} />
+                            </Center>
+                        </a>
+                    }
+                >
+
+
+
+
+                    {existingBrands?.map((x) => {
+                        return <Menu.Item component={Link} to={"/car"} key={x.id}> {x.name}</Menu.Item>
+
+                    })}
                 </Menu>
+
+
+
+
 
             </>
         )
 }
 
+
+/*
+<>
+<Menu
+    trigger="hover"
+    delay={0}
+    transitionDuration={0}
+    placement="end"
+    gutter={1}
+    className="w-50"
+    control={
+        <a className={classes.link}>
+
+            <Center>
+                <span className={classes.linkLabel}>Browse Products</span>
+                <ChevronDown size={12} />
+            </Center>
+        </a>
+    }
+>
+    <Menu
+        trigger="hover"
+        delay={0}
+        transitionDuration={0}
+        placement="start"
+        gutter={1}
+        position="left"
+        control={
+            <a className={classes.link}>
+
+                <Center>
+                    <span className={classes.linkLabel}>By Category</span>
+                    <ChevronDown size={12} />
+                </Center>
+            </a>
+        }
+    >
+        {exisitingCategories?.map((x) => {
+            return <Menu.Item as={Link} to="/cart" key={x.id}> {x.name}</Menu.Item>
+        })}
+
+    </Menu>
+
+
+    <Menu
+        trigger="hover"
+        delay={0}
+        transitionDuration={0}
+        placement="start"
+        gutter={1}
+        position="left"
+        control={
+            <a className={classes.link}>
+
+                <Center>
+                    <span className={classes.linkLabel}>By Brand</span>
+                    <ChevronDown size={12} />
+                </Center>
+            </a>
+        }
+    >
+        {existingBrands?.map((x) => {
+                 return    <Menu.Item  component={Link} to={"./cart"} key={x.id}> {x.name} as button</Menu.Item>
+
+        })}
+
+
+    </Menu>
+
+</Menu>
+<Menu>
+    <Menu.Item as="button" onClick={()=>{navigate("/cart")}}>  as button with navigate </Menu.Item>
+</Menu>
+
+</> */

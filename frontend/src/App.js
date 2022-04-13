@@ -5,14 +5,11 @@ import 'bootstrap/dist/js/bootstrap.bundle.min';
 import ProductOverview from './components/productOverview';
 import Home from './components/Home';
 import AdminOverview from './components/AdminOverview';
-import { HeaderMenu } from './components/NavBar'
 import NewCategory from './components/admin/NewCategory';
 import NewBrand from './components/admin/NewBrand';
 import  {Login}  from './components/Login';
 import {Car} from "./components/Car"
-import {NewNav} from "./components/NewNav"
-import Headerx from './components/Headerx';
-import { NavNew } from './components/NavNew'
+import { Navbar } from './components/Navbar';
 import EditStuff from './components/EditStuff';
 import Cart from './components/user/Cart';
 import TempCart from './components/TempCart';
@@ -34,10 +31,10 @@ function App() {
   const {status} =useSelector(authState)
 
 
-  /* useEffect(() => {
+  useEffect(() => {
    
     
-  }, [status]) */
+  }, [status])
 
   if (status==="admin")
 
@@ -58,7 +55,7 @@ function App() {
   return (
     <Container className="app" style={{ padding: " 10px 10px" }}>
      {/*  <Headerx /> */}
-     <NavNew />
+     <Navbar />
      <TempCart/>
      <TempUser />
       <Routes>
@@ -70,10 +67,10 @@ function App() {
         <Route exact path='/NewBrand' element={<NewBrand/>} />
         <Route exact path='/Login' element={<Login/>} />
         <Route exact path='/car' element={<Car/>} />
-        <Route exact path='/NewNav' element={<NewNav/>} />
-        <Route exact path='/Headerx' element={<Headerx/>} />
-        <Route exact path='/navbar' element={<HeaderMenu/>} />
-        <Route exact path='/NavNew' element={<NavNew/>} />
+        
+    
+      
+        
         <Route exact path='/EditStuff' element={<EditStuff/>} />
         <Route exact path='/Cart' element={<Cart/>} />
         <Route exact path='/bycategoryurbrand/:id' element={<ByCategoryOrBrand/>} />

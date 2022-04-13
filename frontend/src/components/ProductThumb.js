@@ -17,7 +17,7 @@ import {useNavigate , Link}from 'react-router-dom'
 import { authState } from "../redux/slices/authSlice"
 
 import { HashLink } from 'react-router-hash-link';
-import {Image as ImageOverview ,  Name, Rating as abdoRating, Price, Description } from "./productOverviewComponents/componentExport"
+import {Image as ImageOverview ,  Name, Rating as AbdoRating, Price, Description } from "./productOverviewComponents/componentExport"
 
 
 export default function ProductThumb(props) {
@@ -203,7 +203,7 @@ let navigate=useNavigate();
                       <Price price={price} currency={currency} />
                   </Grid.Col>
                   <Grid.Col span={6}>
-                      <abdoRating data={{
+                      <AbdoRating data={{
                           label: 'Rating',
                           stats: [vote_total,' / 10'],
                           color: 'green',
