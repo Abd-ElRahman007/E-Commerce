@@ -1,7 +1,7 @@
 
 import {
   Card, Image, Text, Badge, Button, Group, useMantineTheme,
-  ActionIcon, ColorSchemeProvider , Container, Grid, SimpleGrid
+  ActionIcon, ColorSchemeProvider, Container, Grid, SimpleGrid
 } from '@mantine/core';
 import { useState, useEffect } from 'react';
 import AddremoveButtons from './AddremoveButtons';
@@ -12,27 +12,27 @@ import { useSelector } from "react-redux"
 import { showNotification } from '@mantine/notifications';
 import { ShoppingCartPlus, ShoppingCartX, ShoppingCartOff, LetterX, Tournament, ShoppingCart } from 'tabler-icons-react';
 import Rating from '@mui/material/Rating';
-import {useNavigate , Link}from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 
 import { authState } from "../redux/slices/authSlice"
 
 import { HashLink } from 'react-router-hash-link';
-import {Image as ImageOverview ,  Name, Rating as AbdoRating, Price, Description } from "./productOverviewComponents/componentExport"
+import { Image as ImageOverview, Name, Rating as AbdoRating, Price, Description } from "./productOverviewComponents/componentExport"
 
 
 export default function ProductThumb(props) {
-  const { id, name, image, price, currency, stock, vote_count, vote_total , description , model } = props.product
+  const { id, name, image, price, currency, stock, vote_count, vote_total, description, model } = props.product
   //  console.log(" , props", props)
   const theme = useMantineTheme();
 
   const [quantity, setQuantity] = useState(1)
   const [currentQuantity, setCurrentQuantity] = useState(0)
   const [full, setFull] = useState(false)
- 
-const [type, setType] = useState("thumb")
-console.log("typeeeee", type)
+
+  const [type, setType] = useState("thumb")
+  console.log("typeeeee", type)
   const user = useSelector(authState)
- // console.log("userId", user.id)
+  // console.log("userId", user.id)
   const cartItems = useSelector(cartState)
   //console.log("cartItems" , cartItems ) 
   const quantityInCart = cartItems.filter((item) => {
@@ -158,97 +158,122 @@ console.log("typeeeee", type)
 
     return () => {
       setCurrentQuantity(0)
-    //  setType("thumb")
+      //  setType("thumb")
     }
   }, [cartItems, thisQ])
 
-let navigate=useNavigate();
+  let navigate = useNavigate();
 
   return (
     <>
       <div style={{ width: "90%", margin: 'auto' }}>
         <Card shadow="sm" p="lg">
-          { type==="thumb"
-            ?  <Card.Section>
-            <Image  src={image}
-                    alt="Product"
-                    radius={10}
-                    height={180}
-                    fit="contain"
+          {type === "thumb"
+            ? <Card.Section>
+              <Image src={image}
+                alt="Product"
+                radius={10}
+                height={180}
+                fit="contain"
 
-             /*  component={Link}
-              to={`./ProductOverview/${id}`} */
-			        onClick={(event) => {
-                    event.preventDefault()
-                    navigate(`/ProductOverview/${id}`)
-                    /* setType("overview" )*/
+                /*  component={Link}
+                 to={`./ProductOverview/${id}`} */
+                onClick={(event) => {
+                  event.preventDefault()
+                  navigate(`/ProductOverview/${id}`)
+                  /* setType("overview" )*/
                 }}
-		        	style={{cursor:'pointer'}}
-            />
-          </Card.Section>
-          : <Container my="md">
-          <SimpleGrid
-              cols={2}
-              spacing="md"
-              breakpoints={[{ maxWidth: 'sm', cols: 1 }]}>
-              <ImageOverview dim={{width:"300px"}}
-                              image={image}
-                              title={name}
-                  />
-                  <Grid gutter="md">
+                style={{ cursor: 'pointer' }}
+              />
+            </Card.Section>
+            : <>
+              <Container my="md">   {/*  productOverview old code  */}
+              <SimpleGrid
+                cols={2}
+                spacing="md"
+                breakpoints={[{ maxWidth: 'sm', cols: 1 }]}>
+                <ImageOverview dim={{ width: "300px" }}
+                  image={image}
+                  title={name}
+                />
+                <Grid gutter="md">
                   <Grid.Col>
-                      <Name name={[name,' ',model]} />
+                    <Name name={[name, ' ', model]} />
                   </Grid.Col>
                   <Grid.Col span={6}>
-                      <Price price={price} currency={currency} />
+                    <Price price={price} currency={currency} />
                   </Grid.Col>
                   <Grid.Col span={6}>
-                      <AbdoRating data={{
-                          label: 'Rating',
-                          stats: [vote_total,' / 10'],
-                          color: 'green',
-                          icon: 'up',
-                          progress: vote_total / vote_count * 100
-                      }} />
+                    <AbdoRating data={{
+                      label: 'Rating',
+                      stats: [vote_total, ' / 10'],
+                      color: 'green',
+                      icon: 'up',
+                      progress: vote_total / vote_count * 100
+                    }} />
                   </Grid.Col>
-              </Grid>
-          </SimpleGrid>
-          <Description description={description} label="Description" />
-      </Container>
-          }
+                </Grid>
+              </SimpleGrid>
+              <Description description={description} label="Description" />
+            </Container>
          
-
-          <Group position="center" style={{ marginBottom: 5, marginTop: theme.spacing.sm }}>
-            <Text weight={500}>{name}</Text>
-
             <HashLink smooth to={user.id === null
-                                  ? '/login'
-                                  : '/cart'   /* product view feedback section  */
-                                     }
+              ? '/login'
+              : '/cart'   /* product view feedback section  */
+            }
             >
               <Rating name="read-only"
-                      size="small"
-                      value={vote_total || vote_count == 0
-                            ? 0
-                            : vote_total / vote_count
-                                }
-                      readOnly={user.id === null
-                            ? true
-                            : false
-                                }
-                    />
+                size="small"
+                value={vote_total || vote_count == 0
+                  ? 0
+                  : vote_total / vote_count
+                }
+                readOnly={user.id === null
+                  ? true
+                  : false
+                }
+              />
             </HashLink>
-            <Badge color="pink" variant="light" size="xl" >
-              {price} {currency}
-            </Badge>
-          </Group>
-
          
+            </>
+
+          }
+
+          {type === "thumb"
+            ? <Group position="center" style={{ marginBottom: 5, marginTop: theme.spacing.sm }}>
+              <Text weight={500}>{name}</Text>
+
+              <HashLink smooth to={user.id === null
+                ? '/login'
+                : '/cart'   /* product view feedback section  */
+              }
+              >
+                <Rating name="read-only"
+                  size="small"
+                  value={vote_total || vote_count == 0
+                    ? 3
+                    : vote_total / vote_count
+                  }
+                  readOnly={user.id === null
+                    ? true
+                    : false
+                  }
+                />
+              </HashLink>
+              <Badge color="pink" variant="light" size="xl" >
+                {price} {currency}
+              </Badge>
+            </Group>
+            : null
+          }
+
+
+
           <Group grow position="center" style={{ marginBottom: 5, marginTop: theme.spacing.sm }}>
             <ActionIcon
               disabled={quantity === 0 || full === true      // <----------
-                        ? true
-                        : false}
+                ? true
+                : false}
               onClick={() => {
                 cartAddFunction(id, name, image, price, quantity, stock, vote_count, vote_total)
               }}
@@ -257,7 +282,7 @@ let navigate=useNavigate();
               {quantity > 0
                 ? <ShoppingCartPlus size={30} color={'#40bf59'} />
                 : <ShoppingCartX size={30} color={'#d279c6'} />
-                     }
+              }
 
             </ActionIcon>
             <AddremoveButtons
@@ -308,7 +333,7 @@ onClick={() => {
                  }) */
 
 
-            {/* <Text size="sm" style={{ color: secondaryColor, lineHeight: 1.5 }}>
+{/* <Text size="sm" style={{ color: secondaryColor, lineHeight: 1.5 }}>
             With Fjord Tours you can explore more of the magical fjord landscapes with tours and
             activities on and around the fjords of Norway
-          </Text> */}      
+          </Text> */}

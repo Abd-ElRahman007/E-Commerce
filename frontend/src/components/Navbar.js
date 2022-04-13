@@ -57,99 +57,11 @@ const useStyles = createStyles((theme) => ({
 
 
 export function Navbar() {
-    const navLinks = {
-        "links": [
-            {
-                "link": "/about",
-                "label": "Features"
-            },
-
-            {
-                "link": "#1",
-                "label": "Browse Products",
-                "links": [
-                    {
-                        "link": "/docs",
-                        "label": "by category"
-                    },
-                    {
-                        "link": "/resources",
-                        "label": "by brand",
-                    },
-                    {
-                        "link": "/community",
-                        "label": "Community"
-                    },
-                    {
-                        "link": "/blog",
-                        "label": "Blog"
-                    }
-                ]
-            },
-            {
-                "link": "/about",
-                "label": "About"
-            },
-            {
-                "link": "/pricing",
-                "label": "Pricing"
-            },
-        ]
-    }
+  
     const [opened, toggleOpened] = useBooleanToggle(false);
     const { classes } = useStyles();
     const navigate = useNavigate()
 
-
-
-   /*  const items = navLinks.links.map((link) => {
-        const menuItems = link.links?.map((item) => (
-            <Menu.Item key={item.link} component={Link} to='/car'>{item.label}</Menu.Item>
-        ));
-
-        if (menuItems) {  // drop down menu 
-            return (
-                <Menu
-                    key={link.label}
-                    trigger="hover"
-                    delay={0}
-                    transitionDuration={0}
-                    placement="end"
-                    gutter={1}
-                    control={
-                        <a
-                            href={link.link}
-                            className={classes.link}
-                            onClick={(event) => event.preventDefault()}
-                        >
-                            <Center>
-                                <span className={classes.linkLabel}>{link.label}</span>
-                                <ChevronDown size={12} />
-                            </Center>
-                        </a>
-                    }
-                >
-                    {menuItems}
-                </Menu>
-            );
-        }
-
-        return (
-            <a
-                key={link.label}
-                href={link.link}
-                className={classes.link}
-                onClick={(event) => {
-                    event.preventDefault()
-                    navigate("./login")
-                }}
-            >
-                {link.label}
-
-            </a>
-        );
-    });
- */
 
     return (
         <Header height={56} mb={12}>
