@@ -5,18 +5,18 @@ import Client from '../database';
 export type product = {
     id?: number;
     code: string;
-    name?: string;
+    name: string;
     model?: string;
     images?: Array<string>;
-    image?:string;
+    image:string;
     description?: string;
-    category_id?: number;
-    price?: number;
-    currency?: string;
+    category_id: number;
+    price: number;
+    currency: string;
     vote_count?: number;
     vote_total?: number;
-    stock?: number;
-    brand_id?: number;
+    stock: number;
+    brand_id: number;
 };
 
 

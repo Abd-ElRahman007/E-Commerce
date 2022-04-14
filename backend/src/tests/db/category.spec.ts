@@ -3,7 +3,7 @@ import {Catogery,catogery} from '../../models/catogery';
 const category_ = new Catogery();
 
 
-describe('Tests for Brand model', ()=>{
+describe('Tests for Category model', ()=>{
     
     
     //index function
