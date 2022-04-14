@@ -56,7 +56,7 @@ function App() {
           <Route exact path='/Cart' element={<Cart />} />
           <Route exact path='/browse/:id' element={<Browse />} />
           <Route exact path='/ProductThumb/:id' element={<ProductThumb />} />
-          <Route exact path='/AdminDashboard' element={<AdminDashboard />} />
+          <Route exact path='/AdminDashboard/:id' element={<AdminDashboard />} />
 
         </Routes>
       </Container>

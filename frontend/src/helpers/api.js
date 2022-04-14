@@ -14,7 +14,11 @@ export const getProductOverview = async (id) => {
     const data = await axios.get(`http://localhost:5000/products/${id}`)
     return data.data
 }
-
+export const getUser=async(id)=>{
+	const token = JSON.parse(localStorage.getItem('userToken'))
+	const data=await axios.get(`http://localhost:5000/users/${id}`,'',{headers:{token:token}});
+	return data.data
+}
 
 export const getProductsLimited = async (limit) => {
     const data = await axios.get(`http://localhost:5000/products?page=1&limit=${limit}`,)

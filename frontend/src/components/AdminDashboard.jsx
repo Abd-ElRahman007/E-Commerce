@@ -1,10 +1,12 @@
 import React from 'react';
-import { createStyles, TextInput, Group, Button, NumberInput } from '@mantine/core';
+import { createStyles, TextInput, Group, Button, NumberInput,Loader } from '@mantine/core';
 import { At, Phone, MapPin, Map2 } from 'tabler-icons-react';
 import { useForm } from '@mantine/form';
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import { DatePicker } from '@mantine/dates'
-
+import { useParams } from 'react-router-dom';
+import * as api from '../helpers/api';
+import axios from 'axios';
 
 const useStyles = createStyles((theme) => ({
 	input: {
@@ -27,6 +29,26 @@ export default function AdminDashboard() {
 	const { classes } = useStyles();
 	const [enable, setEnable] = useState(true);
 	const [button, setButton] = useState('Edit');
+	const [dataUser, setDataUser] = useState();
+    const { id } = useParams();
+
+async function getUser(id) {
+        const data = await api.getUser(id);
+        setDataUser(data);
+		putData(data)
+    }
+function putData(data){
+	form.setFieldValue('f_name',data.f_name)
+		form.setFieldValue('l_name',data.l_name)
+		form.setFieldValue('email',data.email)
+		form.setFieldValue('phone',data.phone)
+		form.setFieldValue('birthday',data.birthday)
+		form.setFieldValue('address',data.address)
+		form.setFieldValue('city',data.city)
+}
+    useEffect(() => {
+        getUser(id);
+    }, [])
 
 	const form = useForm({
 		initialValues: {
@@ -36,7 +58,7 @@ export default function AdminDashboard() {
 			birthday: 0,
 			phone: '',
 			address: '',
-			city: ''
+			city: '',
 		}
 	})
 
@@ -45,10 +67,24 @@ export default function AdminDashboard() {
 			return new Date(d.getTime() - (d.getTimezoneOffset() * 60000)).toISOString();
 		}
 	}
+	
+	async function handleSubmit(){
+		const token = JSON.parse(localStorage.getItem('userToken'));
+		axios.patch(`http://localhost:5000/users/${id}`, form.values,{headers:{token:token}})
+			.then((response) => {
+				console.log(response)
+			})
+			.catch(function (error) { console.log(error) })
 
+	}
 
+if(dataUser===undefined){
+	return(
+	<Loader/>
+	)
+}else{
 	return (
-		<form onSubmit={form.onSubmit(() => console.log(form.values))}>
+		<form onSubmit={form.onSubmit(() => handleSubmit())}>
 			<TextInput
 				disabled={enable}
 				label="First Name"
@@ -136,9 +172,9 @@ export default function AdminDashboard() {
 					}
 				}
 				}>{button}</Button>
-				<Button type="submit">Submit</Button>
+				<Button disabled={enable} type="submit">Submit</Button>
 
 			</Group>
 		</form>
-	);
+)};
 }

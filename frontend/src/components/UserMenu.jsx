@@ -8,7 +8,7 @@ import { useSelector } from "react-redux"
 
 
 const UserButton = forwardRef(
-  ({ image, name, email, icon, ...others }, ref) => (
+  ({ image, firstname,lastname, email, icon, ...others }, ref) => (
     <UnstyledButton
       ref={ref}
       sx={(theme) => ({
@@ -28,7 +28,7 @@ const UserButton = forwardRef(
 
         <div style={{ flex: 1 }}>
           <Text size="sm" weight={500}>
-            {name}
+            {firstname} {lastname}
           </Text>
           <Text color="dimmed" size="xs">
             {email}
@@ -43,7 +43,6 @@ const UserButton = forwardRef(
 export default function UserMenu({ name, email }) {
   const dispatch = useDispatch()
   const user = useSelector(authState)
-  console.log("id", user.id)
   return (
     <Group position="center">
       <Menu
@@ -51,13 +50,14 @@ export default function UserMenu({ name, email }) {
         placement="center"
         control={
           <UserButton
-            name={name}
-            email={email}
+            firstname={user.f_name}
+			lastname={user.l_name}
+            email={user.email}
           />
         }
       >
         <Menu.Item
-          component={Link} to="/User"
+          component={Link} to={"/AdminDashboard/"+ user.id}
           icon={<Dashboard size={19} />}
         >
           Dashboard
