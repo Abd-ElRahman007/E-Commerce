@@ -31,7 +31,7 @@ export default function MenuInNav(props) {
             setExistingCategories()
             setExistingBrands()
         }
-    },[])
+    },[]);
 
     if (existingCategories === undefined && existingBrands === undefined)
         return (
@@ -41,11 +41,14 @@ export default function MenuInNav(props) {
         return (
             <>
                 <Menu
+					trigger="hover"
+					delay={0}
+                    transitionDuration={0}
                     placement="end"
                     gutter={1}
                     className="w-50"
                     control={
-                        <a className={classes.link}> hello {/* a tag require a href attribute */}
+                        <a className={classes.link}>{/* a tag require a href attribute */}
                             <Center>
                                 <span className={classes.linkLabel}>Categories</span>
                                 <ChevronDown size={12} />
@@ -79,7 +82,7 @@ export default function MenuInNav(props) {
                     }
                 >
                     {existingBrands?.map((x) => {
-                        return <Menu.Item component={Link} to={"/car"} key={x.id}> {x.name}</Menu.Item>
+                        return <Menu.Item component={Link} to={`/browse/${x.id}`} state={{type:"brand"}} key={x.id}> {x.name}</Menu.Item>
 
                     })}
                 </Menu>

@@ -8,7 +8,7 @@ import AdminOverview from './components/AdminOverview';
 import NewCategory from './components/admin/NewCategory';
 import NewBrand from './components/admin/NewBrand';
 import { Login } from './components/Login';
-import { AdminDashboard } from './components/AdminDashboard';
+import AdminDashboard  from './components/AdminDashboard';
 import { Navbar } from './components/Navbar';
 import EditStuff from './components/EditStuff';
 import Cart from './components/user/Cart';
