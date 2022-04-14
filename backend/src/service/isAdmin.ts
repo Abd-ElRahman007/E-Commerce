@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken';
 dotenv.config();
 const {secret,admin_email, admin_password} = process.env;
 
-
+//return true if the token or the email and passwrod for super admin or admin 
 function isAdmin(email:string, password:string, token:string):boolean{
    
     if(email == admin_email && password == admin_password){

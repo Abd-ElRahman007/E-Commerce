@@ -1,5 +1,5 @@
 
-
+//return the data filtered by name if contains
 function isTrue(name:string, filter_name:string){
     if(name){
         name = name.toLowerCase();        
