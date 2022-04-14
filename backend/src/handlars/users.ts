@@ -301,7 +301,7 @@ async function get_token(req: Request, res: Response) {
         res.status(400).json(`${e}`);
     }
 }
-
+//main routes of user model
 function mainRoutes(app: Application) {
     app.post('/auth/login', login);
     app.post('/auth/forget_password', forget_password);
