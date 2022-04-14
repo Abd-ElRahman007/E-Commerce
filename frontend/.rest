@@ -104,3 +104,8 @@ content-type: application/json
 
 DELETE  http://localhost:5000/categories/1  HTTP/1.1
 content-type: application/json
+
+###
+
+get  http://localhost:5000/products?name=x  HTTP/1.1
+content-type: application/json

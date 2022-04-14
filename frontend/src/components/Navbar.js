@@ -1,13 +1,17 @@
-import React from 'react';
-import { createStyles, Header, ActionIcon, Group, Burger, Container, Autocomplete } from '@mantine/core';
+import React , { forwardRef }  from 'react'
+import { createStyles, Header, ActionIcon, Group, Burger, Container, Autocomplete ,Avatar,Text } from '@mantine/core';
 import { useBooleanToggle } from '@mantine/hooks';
-import { Search } from 'tabler-icons-react';
 import { ShoppingCart } from 'tabler-icons-react';
 import { Link } from 'react-router-dom';
 import MenuInNav from './MenuInNav';
 import UserDisplay from './user/UserDisplay';
+import SearchNav from './SearchNav';
+import { useNavigate } from "react-router-dom";
 
 
+import { useState , useEffect , useRef} from 'react';
+
+import * as api from "../helpers/api"
 const useStyles = createStyles((theme) => ({
     search: {
         border: 'none',
@@ -57,6 +61,48 @@ export function Navbar() {
     const [opened, toggleOpened] = useBooleanToggle(false);
     const { classes } = useStyles();
 
+    const [products, setProducts] = useState([])
+
+    const query = useRef(null);
+    const navigate=useNavigate()
+
+
+ 
+    const Search = async (q)=>{
+        if (q === "" ||  q === undefined || q ===null)
+              {setProducts([])}
+          else 
+            { const SearchedData = await api.searchProducts(q)               
+                setProducts(SearchedData)
+             }                                 
+             }
+
+
+    const SearchedProducts =()=>{   
+
+        let results=[]
+
+        products?.forEach( (x)=>{
+               results.push( { value :x.name ,
+                               id : x.id ,
+                               image :x.image,
+                               price :x.price })             
+          })      
+       return results
+
+    }
+
+    useEffect(() => {
+        if (query.current.value === "" ||  query.current.value ===  undefined || query.current.value === null)
+        setProducts([]) 
+        else
+        Search(query.current.value)
+        
+          return () => {
+            setProducts([])             
+          };
+          }, [query]);
+
     return (
         <Header height={56} mb={12}>
             <Container>
@@ -65,13 +111,47 @@ export function Navbar() {
                         <h2>Home</h2>
                     </Link>
                     <Group className={"w-25"} >
-                        <Autocomplete
+
+                    <Autocomplete 
+                            transition="pop-top-left"
+                            transitionDuration={80}
+                            transitionTimingFunction="ease"
                             radius="lg"
+                            limit={10}
                             className={[classes.search, "w-100"]}
                             placeholder="Search"
-                            icon={<Search size={16} />}
-                            data={['React', 'Angular', 'Vue', 'Next.js', 'Riot.js', 'Svelte', 'Blitz.js']}
-                        />
+                         
+                            data={SearchedProducts()}
+                            ref={query}
+                            itemComponent={forwardRef(({value, id, image,price,...others}, query) => {
+                                
+                              return (
+                                <div {...others}  ref={query}>                     
+                                                         
+                                 <Group noWrap> 
+                                     <Avatar src={image} /> 
+                          
+                                     <div>
+                                        <Text>{value}</Text>
+                                        <Text size="xs" color="dimmed">
+                                          {price}
+                                        </Text>
+                                      </div> 
+                                    </Group>                        
+                                   
+                              </div>  
+                              )
+                            })}
+                            onChange={() => {Search(query.current.value)                    
+                             }}
+              
+              
+                             onItemSubmit={(item) => 
+                                navigate(`/ProductOverview/${item.id}`)  
+                              }
+                />
+
+
                     </Group>
                     <Group spacing={5} className={classes.links} >
                         <MenuInNav classes={classes} />

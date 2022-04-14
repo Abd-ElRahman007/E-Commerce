@@ -27,6 +27,12 @@ export const getProductsByCategory = async (id) => {
 }
 
 export const getProductsByBrand = async (id) => {
-    const data = await axios.get(`/products?brand=${id}`) // to be written
+    const data = await axios.get(`/products?brand=${id}`) 
+    return data.data
+}
+
+export const searchProducts= async (q) => {
+    const data = await axios.get(`/products?name=${q}`) 
+    console.log ("query search ", data )
     return data.data
 }
