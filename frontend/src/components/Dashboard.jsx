@@ -24,7 +24,7 @@ const useStyles = createStyles((theme) => ({
 	},
 }));
 
-export default function AdminDashboard() {
+export default function Dashboard() {
 	// You can add these classes as classNames to any Mantine input, it will work the same
 	const { classes } = useStyles();
 	const [enable, setEnable] = useState(true);

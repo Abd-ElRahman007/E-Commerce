@@ -57,7 +57,7 @@ export default function UserMenu({ name, email }) {
         }
       >
         <Menu.Item
-          component={Link} to={"/AdminDashboard/"+ user.id}
+          component={Link} to={"/Dashboard/"+ user.id}
           icon={<Dashboard size={19} />}
         >
           Dashboard
