@@ -33,9 +33,8 @@ export default function Browse() {
 
   useEffect(() => {
     if (type === "category") { getProductsByCategory(id) }
-    else if(type === "brand")
-        { getProductsByBrand(id) }
-  }, [id, type])
+    else { getProductsByBrand(id) }
+  }, [id])
 
 
   if (products === undefined)
