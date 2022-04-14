@@ -31,15 +31,15 @@ POST http://localhost:5000/users HTTP/1.1
 content-type: application/json
 
 {
-    "f_name": "John", 
-    "l_name": "Smith", 
-    "email": "j@gmail.com", 
-    "password" :"123", 
+    "f_name": "first", 
+    "l_name": "last", 
+    "email": "e", 
+    "password" :"e", 
     "birthday":"2022-04-02T22:00:00.000Z", 
-    "phone":"5555", 
+    "phone":"56565656", 
     "status":"active",
-    "city": "sss",
-    "address":"asdasdasd"
+    "city": "my city",
+    "address":"my adress"
 }
 
 ###
@@ -96,7 +96,7 @@ content-type: application/json
 
 ###
 
-GET     http://localhost:5000/products  HTTP/1.1
+GET     http://localhost:5000/categories/3  HTTP/1.1
 content-type: application/json
 
 
