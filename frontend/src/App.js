@@ -8,7 +8,7 @@ import AdminOverview from './components/AdminOverview';
 import NewCategory from './components/admin/NewCategory';
 import NewBrand from './components/admin/NewBrand';
 import { Login } from './components/Login';
-import { AdminDashboard } from './components/AdminDashboard';
+import Dashboard  from './components/Dashboard';
 import { Navbar } from './components/Navbar';
 import EditStuff from './components/EditStuff';
 import Cart from './components/user/Cart';
@@ -56,7 +56,7 @@ function App() {
           <Route exact path='/Cart' element={<Cart />} />
           <Route exact path='/browse/:id' element={<Browse />} />
           <Route exact path='/ProductThumb/:id' element={<ProductThumb />} />
-          <Route exact path='/AdminDashboard' element={<AdminDashboard />} />
+          <Route exact path='/Dashboard/:id' element={<Dashboard />} />
 
         </Routes>
       </Container>
