@@ -1,13 +1,10 @@
 import { Application, Response, Request } from 'express';
 import { Product, product } from '../models/products';
-import jwt from 'jsonwebtoken';
-import dotenv from 'dotenv';
-import parseJwt from '../service/jwtParsing';
 import pagination from '../service/pagination';
 import isTrue from '../service/filtering';
+import isAdminFun from '../service/isAdmin';
 
-dotenv.config();//get variable from .env file
-const {secret, admin_password, admin_email} = process.env;
+
 const product_obj = new Product();
 
 /*
@@ -62,23 +59,14 @@ async function show(req: Request, res: Response) {
 
 //update product and return the product after changes [only for admin and super admin]
 async function update(req: Request, res: Response) {
-    const token = req.headers.token as string;
-    let isAdmin = false;
-    //check if the user super admin or admin
-    if(req.body.admin_email == admin_email && req.body.admin_password == admin_password){
-        isAdmin=true;
-    }else if(token){//if token exist make sure that the token for an admin user
-        const user = parseJwt(token);
-        const permession = jwt.verify(token, secret as string);
-
-        if(permession && user.user.status =='admin'){
-            isAdmin = true;
-        }
-    }
+    const token = req.headers.token as unknown as string;
+    //check if the request from super admin?
+    const isAdmin = isAdminFun(req.body.admin_email,req.body.admin_password,token);
     //if admin or super admin the changes will occure to the product
     if (isAdmin) {
-        const product_ = await product_obj.show(parseInt(req.params.id));
+        
         try {
+            const product_ = await product_obj.show(parseInt(req.params.id));
             
             if(req.body.name){
                 product_.name = req.body.name;
@@ -129,19 +117,9 @@ async function update(req: Request, res: Response) {
 }
 
 async function create(req: Request, res: Response) {
-    const token = req.headers.token as string;
-    let isAdmin = false;
-    //check if the user super admin or admin
-    if(req.body.admin_email == admin_email && req.body.admin_password == admin_password){
-        isAdmin=true;
-    }else if(token){//if token exist make sure that the token for an admin user
-        const user = parseJwt(token);
-        const permession = jwt.verify(token, secret as string);
-
-        if(permession && user.user.status =='admin'){
-            isAdmin = true;
-        }
-    }
+    const token = req.headers.token as unknown as string;
+    //check if the request from super admin?
+    const isAdmin = isAdminFun(req.body.admin_email,req.body.admin_password,token);
     //if admin or super admin the product will be created in database
     if (isAdmin) {
         try {
@@ -170,19 +148,9 @@ async function create(req: Request, res: Response) {
 }
 //delete product using id in request params [only for admins]
 async function delete_(req: Request, res: Response) {
-    let isAdmin = false;
     const token = req.headers.token as unknown as string;
-    if(req.body.admin_email == admin_email && req.body.admin_password == admin_password)
-        isAdmin=true;
-
-    else if(token){//if token exist make sure that the token for an admin user
-        const user = parseJwt(token);
-        const permession = jwt.verify(token, secret as string);
-
-        if(permession && user.user.status =='admin'){
-            isAdmin = true;
-        }
-    }
+    //check if the request from super admin?
+    const isAdmin = isAdminFun(req.body.admin_email,req.body.admin_password,token);
 
     if (isAdmin) {//if admin or super admin will return deleted and delete the product
         try {

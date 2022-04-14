@@ -2,6 +2,7 @@ import { Application, Response, Request } from 'express';
 //import nodemailer from 'nodemailer';
 import { User, user } from '../models/users';
 import parseJwt from '../service/jwtParsing';
+import isAdminFun from '../service/isAdmin';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import dotenv from 'dotenv';
@@ -12,25 +13,11 @@ const user_obj = new User();
 
 //return a json data for all users in database [allowed only for admins]
 async function index(req: Request, res: Response) {
-    const{admin_email, admin_password} = process.env;
     const token = req.headers.token as unknown as string;
+    //check if the request from super admin?
+    const isAdmin = isAdminFun(req.body.admin_email,req.body.admin_password,token);
 
-    try {
-        //check if the request from super admin?
-        let isAdmin = false;
-        if(req.body.admin_email === admin_email && req.body.admin_password === admin_password){
-            isAdmin=true;
-        }else if(token) //check request by using token to sure that request from admin
-        {
-            const permession = jwt.verify(token, secret);
-
-            if(permession)
-            {
-                const user = parseJwt(token);
-                if(user.user.status==='admin')
-                    isAdmin = true;
-            }
-        }
+    try {        
         //if request from admin or super admin will return data
         if (isAdmin) {
             try {
@@ -47,26 +34,11 @@ async function index(req: Request, res: Response) {
 }
 //return json data for a sungle user [allowed only for admins or user it self]
 async function show(req: Request, res: Response) {
-    try {
-        const{admin_email, admin_password}=process.env;
-        
-        const token = req.headers.token as unknown as string;
-        //check is request from admin or user it self
-        let isAdmin = false;
-        if(req.body.admin_email === admin_email && req.body.admin_password === admin_password){
-            isAdmin=true;
-        }else if(token)//check by token
-        {
-            const permession = jwt.verify(token, secret);
-
-            if(permession)
-            {
-                const user = parseJwt(token);
-
-                if(user.user.status==='admin' || user.user.id == parseInt(req.params.id))
-                    isAdmin = true;
-            }
-        }
+    const token = req.headers.token as unknown as string;
+    //check if the request from super admin?
+    const isAdmin = isAdminFun(req.body.admin_email,req.body.admin_password,token);
+    
+    try {        
         //if admin or user it self will return user data
         if (isAdmin) {
             
@@ -184,22 +156,10 @@ async function create(req: Request, res: Response) {
 }
 //return deleted and delete user using id in request params [only user delete it self]
 async function delete_(req: Request, res: Response) {
-    let isTrue = false;
     const token = req.headers.token as unknown as string;
     const id = parseInt(req.params.id);
-
-    if(token) //check request by using token to sure that request from admin
-    {
-        const permession = jwt.verify(token, secret);
-
-        if(permession)
-        {
-            const user = parseJwt(token);
-            if(user.user.id == id)
-                isTrue = true;
-        }else
-            res.status(400).json('not exist');
-    }
+    //check if the request from super admin?
+    const isTrue = isAdminFun(req.body.admin_email,req.body.admin_password,token);
     if (isTrue) {//if token exist and the request params.id == token user.id
         try {
             const resault = await user_obj.delete(id); //delete user from database by id
@@ -270,25 +230,11 @@ async function reset_password(req: Request, res: Response) {
 //return token for user with id from request params [only for admins]
 async function get_token(req: Request, res: Response) {
     
-    let isAdmin = false;
-    const{admin_email, admin_password} = process.env;
     const token = req.headers.token as unknown as string;
-    
-    try {
-        //check if the request from super admin?
-        if(req.body.admin_email === admin_email && req.body.admin_password === admin_password){
-            isAdmin=true;
-        }else if(token) //check request by using token to sure that request from admin
-        {
-            const permession = jwt.verify(token, secret);
+    //check if the request from super admin?
+    const isAdmin = isAdminFun(req.body.admin_email,req.body.admin_password,token);
 
-            if(permession)
-            {
-                const user = parseJwt(token);
-                if(user.user.status==='admin')
-                    isAdmin = true;
-            }
-        }
+    try {
 
         if(isAdmin){//if request from admin user or super admin will return token for user with id of request id
             const res_user = await user_obj.show(parseInt(req.params.id));
