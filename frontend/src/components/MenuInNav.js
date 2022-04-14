@@ -31,7 +31,7 @@ export default function MenuInNav(props) {
             setExistingCategories()
             setExistingBrands()
         }
-    })
+    },[])
 
     if (existingCategories === undefined && existingBrands === undefined)
         return (
