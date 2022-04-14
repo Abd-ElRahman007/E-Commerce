@@ -84,7 +84,8 @@ async function show(req: Request, res: Response) {
 /*
 return token for updated user [user can update all his data except (coupon_id, status), 
     super admin can update only(coupon_id,status),
-    admins can update (coupon_id, status when not == admin)]*/
+    admins can update (coupon_id, status when not == admin)]
+    */
 async function update(req: Request, res: Response) {
     let user_type = 'user';
     const{admin_email, admin_password}=process.env;
@@ -107,8 +108,11 @@ async function update(req: Request, res: Response) {
                     user_type = 'admin'; 
             }
         }
+        
         //if user send the request
         if(user_type === 'user'){
+            console.log('user');
+
             if(req.body.f_name)
                 user_.f_name=req.body.f_name;
             if(req.body.l_name)
@@ -138,6 +142,7 @@ async function update(req: Request, res: Response) {
                     user_.status = req.body.status;
                 else if(req.body.status == 'admin' && user_type === 'super_admin'){
                     user_.status = req.body.status;
+
                 }
             }
             
@@ -192,7 +197,8 @@ async function delete_(req: Request, res: Response) {
             const user = parseJwt(token);
             if(user.user.id == id)
                 isTrue = true;
-        }
+        }else
+            res.status(400).json('not exist');
     }
     if (isTrue) {//if token exist and the request params.id == token user.id
         try {

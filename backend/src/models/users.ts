@@ -57,8 +57,8 @@ export class User {
         try {
             const conn = await Client.connect();
             const sql =
-        'update users set f_name=($1), l_name=($2),email=($3),birthday=($4),phone=($5),city=($6),address=($7) where id=($8)RETURNING*; ';
-            const res = await conn.query(sql, [u.f_name, u.l_name, u.email, u.birthday, u.phone, u.city,u.address, u.id]);
+        'update users set f_name=($1), l_name=($2),email=($3),birthday=($4),phone=($5),city=($6),address=($7), status=($9),coupon_id=($10),password=($11) where id=($8)RETURNING*; ';
+            const res = await conn.query(sql, [u.f_name, u.l_name, u.email, u.birthday, u.phone, u.city,u.address, u.id,u.status,u.coupon_id,u.password]);
             conn.release();
             return res.rows[0];
         } catch (e) {
