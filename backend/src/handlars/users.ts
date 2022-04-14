@@ -221,7 +221,7 @@ async function login(req: Request, res: Response) {
     
         if(resault){//if their is user in database with input data will return token for that uer
             const user_token = jwt.sign({user:resault},secret);
-            res.status(200).json(user_token);
+            res.status(200).json({user:resault,token:user_token});
         }
         else res.status(400).send('failed');//else return failed
     } catch (e) {
