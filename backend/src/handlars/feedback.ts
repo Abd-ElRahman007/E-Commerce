@@ -3,6 +3,7 @@ import { Comment, comment } from '../models/feedback';
 import parseJwt from '../service/jwtParsing';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
+import isAdmin from '../service/isAdmin';
 
 dotenv.config();
 
@@ -37,12 +38,14 @@ async function update(req: Request, res: Response) {
         const permession = jwt.verify(token, secret as string);
         if(permession){
             isTrue = true;
-        }
-    }
+        }else throw new Error('user not exist.');
+    }else throw new Error('login required.');
+
     if (isTrue) {
-        const c = await comment_obj.show(req.params.product_id as unknown as number, req.params.id as unknown as number);
+
         try {
-            
+            const c = await comment_obj.show(req.params.product_id as unknown as number, req.params.id as unknown as number);
+        
             if(req.body.subject)  
                 c.subject = req.body.subject;
 
@@ -60,7 +63,7 @@ async function update(req: Request, res: Response) {
         } catch (e) {
             res.status(400).json(`${e}`);
         }
-    } else res.send('Not allowed!!');
+    } else throw new Error('user not exist.');
 }
 //create and return the comment with product_id in request params and data in request body
 async function create(req: Request, res: Response) {
@@ -73,8 +76,10 @@ async function create(req: Request, res: Response) {
         const permession = jwt.verify(token, secret as string);
         if(permession){
             isTrue = true;
-        }
-    }
+        }else throw new Error('user not exist.');
+
+    }else throw new Error('login required.');
+
     if (isTrue) {
         try {
             const c: comment = {
@@ -90,27 +95,32 @@ async function create(req: Request, res: Response) {
         } catch (e) {
             res.status(400).json(`${e}`);
         }
-    } else res.send('Not allowed login first!!');
+    } else throw new Error('user not exist.');
 }
 //delete and return deleted using id and product_id in request params
 async function delete_(req: Request, res: Response) {
+    const {admin_email,admin_password} = process.env;
     let isTrue = false;
     const token = req.headers.token as unknown as string;
     if(token){
         const permession = jwt.verify(token, secret as string);
         if(permession){
             isTrue = true;
-        }
-    }
+        } else throw new Error('user not exist.');
+
+    } else throw new Error('login required.');
+
+    const user = parseJwt(token).user;
     //if token is exist will delete the comment with product_id and id in params
-    if (isTrue) {
+    if (isAdmin(admin_email as string ,admin_password as string,token) || isTrue) {
         try {
-            const resault = await comment_obj.delete(Number(req.params.product_id),Number(req.params.id));
+            const resault = await comment_obj.delete(Number(req.params.product_id),Number(req.params.id),Number(user.id));
             res.status(200).json(resault);
         } catch (e) {
             res.status(400).json(`${e}`);
         }
-    } else res.send('Not allowed login first!!');
+        
+    } else throw new Error('user not exist.');
 }
 
 function mainRoutes(app: Application) {

@@ -42,7 +42,7 @@ async function update(req: Request, res: Response) {
         } catch (e) {
             res.status(400).json(`${e}`);
         }
-    } else res.send('Not allowed login first!!');
+    } else throw new Error('Not allowed this for you!!');
 }
 
 //create and return the coupon with data in request body
@@ -53,17 +53,18 @@ async function create(req: Request, res: Response) {
     const isAdmin = isAdminFun(req.body.admin_email,req.body.admin_password,token);
     //if admin or super admin the changes will occure to the coupon
     if (isAdmin) {
+        const c: coupon = {
+            code: req.body.code,//required
+            value_of_100:req.body.value_of_100
+        };
         try {
-            const c: coupon = {
-                code: req.body.code,
-                value_of_100:req.body.value_of_100
-            };
+            
             const resault = await coupon_obj.create(c);
             res.status(200).json(resault);
         } catch (e) {
             res.status(400).json(`${e}`);
         }
-    } else res.send('Not allowed login first!!');
+    } else throw new Error('Not allowed this for you!!');
 }
 
 //delete and return deleted using id in request params
@@ -81,7 +82,7 @@ async function delete_(req: Request, res: Response) {
         } catch (e) {
             res.status(400).json(`${e}`);
         }
-    } else res.send('Not allowed login first!!');
+    } else throw new Error('Not allowed this for you!!');
 }
 
 function mainRoutes(app: Application) {

@@ -113,7 +113,8 @@ async function update(req: Request, res: Response) {
         } catch (e) {
             res.status(400).json(`${e}`);
         }
-    } else res.send('Not allowed login first!!');
+    } else
+        throw new Error('token required.');
 }
 
 async function create(req: Request, res: Response) {

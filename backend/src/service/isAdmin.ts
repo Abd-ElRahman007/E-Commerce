@@ -21,7 +21,8 @@ function isAdmin(email:string, password:string, token:string):boolean{
         if(permession && user.user.status =='admin'){
             return true;
         }
-    }
+    }else
+        throw new Error('token required.');
     return false;
 }
 

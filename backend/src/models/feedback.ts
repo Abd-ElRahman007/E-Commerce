@@ -65,11 +65,11 @@ export class Comment {
         }
     }
 
-    async delete(product_id:number,id: number): Promise<string> {
+    async delete(product_id:number,id: number, user_id:number): Promise<string> {
         try {
             const conn = await Client.connect();
-            const sql = 'delete from comment where id =($1) and product_id=($2);';
-            await conn.query(sql, [id,product_id]);
+            const sql = 'delete from comment where id =($1) and product_id=($2) and user_id=($3);';
+            await conn.query(sql, [id,product_id, user_id]);
             conn.release();
             return 'deleted';
         } catch (e) {

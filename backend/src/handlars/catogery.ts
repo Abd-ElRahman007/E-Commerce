@@ -44,7 +44,7 @@ async function update(req: Request, res: Response) {
         } catch (e) {
             res.status(400).json(`${e}`);
         }
-    } else res.send('Not allowed login first!!');
+    } else throw new Error('Not allowed this for you!!');
 }
 
 //create and return the catogery with data in request body
@@ -65,7 +65,7 @@ async function create(req: Request, res: Response) {
         } catch (e) {
             res.status(400).json(`${e}`);
         }
-    } else res.send('Not allowed login first!!');
+    } else throw new Error('Not allowed this for you!!');
 }
 
 //delete and return deleted using id in request params
@@ -83,7 +83,7 @@ async function delete_(req: Request, res: Response) {
         } catch (e) {
             res.status(400).json(`${e}`);
         }
-    } else res.send('Not allowed login first!!');
+    } else throw new Error('Not allowed this for you!!');
 }
 
 function mainRoutes(app: Application) {

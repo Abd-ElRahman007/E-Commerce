@@ -16,43 +16,37 @@ async function index(req: Request, res: Response) {
     const token = req.headers.token as unknown as string;
     //check if the request from super admin?
     const isAdmin = isAdminFun(req.body.admin_email,req.body.admin_password,token);
-
-    try {        
-        //if request from admin or super admin will return data
-        if (isAdmin) {
-            try {
-                const resault = await user_obj.index();
+      
+    //if request from admin or super admin will return data
+    if (isAdmin) {
+        try {
+            const resault = await user_obj.index();
                 
-                res.status(200).json(resault);
-            } catch (e) {
-                res.status(400).json(`${e}`);
-            }
-        } else res.send('Not allowed for you!!');//else will return not allowed
-    } catch (e) {
-        res.status(400).send(`${e}`);
-    }
+            res.status(200).json(resault);
+        } catch (e) {
+            res.status(400).json(`${e}`);
+        }
+    } else res.send('Not allowed for you!!');//else will return not allowed
+    
 }
 //return json data for a sungle user [allowed only for admins or user it self]
 async function show(req: Request, res: Response) {
     const token = req.headers.token as unknown as string;
     //check if the request from super admin?
     const isAdmin = isAdminFun(req.body.admin_email,req.body.admin_password,token);
-    console.log(parseJwt(token));
-    
-    try {        
-        //if admin or user it self will return user data
-        if (isAdmin || parseInt(req.params.id) == parseInt(parseJwt(token).user.id)) {
+       
+    //if admin or user it self will return user data
+    if (isAdmin || (parseInt(req.params.id) == parseInt(parseJwt(token).user.id))) {
             
-            try {
-                const resault = await user_obj.show(parseInt(req.params.id));
-                res.status(200).json(resault);
-            } catch (e) {
-                res.status(400).json(`${e}`);
-            }
-        } else res.send('Not allowed login first!!');//else will return not allowed
-    } catch (e) {
-        res.status(400).send(`${e}`);
-    }
+        try {
+            const resault = await user_obj.show(parseInt(req.params.id));
+            res.status(200).json(resault);
+        } catch (e) {
+            res.status(400).json(`${e}`);
+        }
+    } else 
+        throw new Error('token required or paramd id error');//else will return not allowed
+
 }
 /*
 return token for updated user [user can update all his data except (coupon_id, status), 
@@ -97,8 +91,6 @@ async function update(req: Request, res: Response) {
             if(req.body.password)
             {
                 const hash = bcrypt.hashSync(req.body.password + process.env.extra, parseInt(process.env.round as string));
-                console.log(hash);
-                
                 user_.password=hash;
             }
             if(req.body.birthday)
@@ -111,7 +103,7 @@ async function update(req: Request, res: Response) {
                 user_.address=req.body.address;
 
             
-        }else {//if admin or super admin
+        }else { //if admin or super admin
 
             if(req.body.coupon_id)
                 user_.coupon_id = parseInt(req.body.coupon_id);
@@ -120,7 +112,6 @@ async function update(req: Request, res: Response) {
                     user_.status = req.body.status;
                 else if(req.body.status == 'admin' && user_type === 'super_admin'){
                     user_.status = req.body.status;
-
                 }
             }
             
@@ -165,16 +156,28 @@ async function create(req: Request, res: Response) {
 async function delete_(req: Request, res: Response) {
     const token = req.headers.token as unknown as string;
     const id = parseInt(req.params.id);
+    let permession = false;
+    if(token)
+    {
+        const per = jwt.verify(token,secret);
+        if(per)
+            permession = true; 
+        else
+            throw new Error('user not exist.');  
+    }else
+        throw new Error('login token required');
+
     //check if the request from super admin?
-    const isTrue = isAdminFun(req.body.admin_email,req.body.admin_password,token);
-    if (isTrue) {//if token exist and the request params.id == token user.id
+    //const isTrue = isAdminFun(req.body.admin_email,req.body.admin_password,token);
+    if (permession && (id == parseInt(parseJwt(token).user.id))) {//if token exist and the request params.id == token user.id
         try {
             const resault = await user_obj.delete(id); //delete user from database by id
             res.status(200).json(resault); //return deleted
         } catch (e) {
             res.status(400).json(`${e}`);
         }
-    } else res.send('Not allowed !!');//else returned not allowed
+    } else 
+        throw new Error('token required or id params wrong.');//else return error
 }
 //return token for user and login the user using email and password from request body
 async function login(req: Request, res: Response) {
@@ -190,7 +193,8 @@ async function login(req: Request, res: Response) {
             const user_token = jwt.sign({user:resault},secret);
             res.status(200).json({token:user_token});
         }
-        else res.status(400).send('failed');//else return failed
+        else
+            throw new Error('user not exist.');//else return failed
     } catch (e) {
         res.status(400).json(`${e}`);
     }
@@ -247,8 +251,7 @@ async function get_token(req: Request, res: Response) {
             const res_user = await user_obj.show(parseInt(req.params.id));
             const res_token = jwt.sign({ user: res_user }, secret);
             res.status(200).json(res_token);
-        }else
-            res.status(400).json('not allowed'); //else return not allowed        
+        }else throw new Error('not allowed.'); //else return not allowed        
         
     } catch (e) {
         res.status(400).json(`${e}`);
