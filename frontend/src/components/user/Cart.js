@@ -34,7 +34,7 @@ export default function Cart() {
             totalCost()
         return () => {
         }
-    }, [cartItems]) //React Hook useEffect has a missing dependency: 'totalCost'. Either include it or remove the dependency array
+    }, [cartItems]) 
 
     return (
         <Container >

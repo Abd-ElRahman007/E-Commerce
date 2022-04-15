@@ -22,8 +22,15 @@ import ProductThumb from './components/ProductThumb';
 import { useEffect } from "react";
 
 
+import { useWindowScroll } from '@mantine/hooks';
+import { Affix, Button, Text, Transition } from '@mantine/core';
+
 function App() {
   const { status } = useSelector(authState)
+
+  const [scroll, scrollTo] = useWindowScroll();
+
+
   useEffect(() => {
   }, [status])
   if (status === "admin")
@@ -59,6 +66,22 @@ function App() {
           <Route exact path='/Dashboard/:id' element={<Dashboard />} />
 
         </Routes>
+
+
+        <Affix position={{ bottom: 20, right: 20 }}>
+        <Transition transition="slide-up" mounted={scroll.y > 0}>
+          {(transitionStyles) => (
+            <Button
+             
+              style={transitionStyles}
+              onClick={() => scrollTo({ y: 0 })}
+            >
+              Scroll to top
+            </Button>
+          )}
+        </Transition>
+      </Affix>
+
       </Container>
     );
 }
