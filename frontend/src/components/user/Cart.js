@@ -1,6 +1,6 @@
-import { Container, SimpleGrid,Button } from '@mantine/core';
+import { Container, SimpleGrid, Button, Group , Badge } from '@mantine/core';
 import ProductThumb from '../ProductThumb';
-import { cartState , emptyAllCart  } from "../../redux/slices/cartSlice"
+import { cartState, emptyAllCart } from "../../redux/slices/cartSlice"
 import { useSelector } from "react-redux"
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
@@ -12,7 +12,7 @@ export default function Cart() {
         return item
     })
 
-
+    console.log("cartItems.length", cartItems.length)
     const totalCost = () => {
         let final = 0
         cartItems.map((item) => {  //arrow function expect a return
@@ -37,8 +37,12 @@ export default function Cart() {
     }, [cartItems]) //React Hook useEffect has a missing dependency: 'totalCost'. Either include it or remove the dependency array
 
     return (
-        <Container>
-            <Button onClick={()=>{dispatch(emptyAllCart())}}> Empty the cart </Button>
+        <Container >
+                <Group position="right" spacing="sm">
+                <Badge color="gray" size="xl" radius="xs" variant="outline">Total Cost</Badge>
+                <Badge color="gray" size="xl" radius="xs" variant="outline">{totalCost()} EGP </Badge>
+                </Group>
+ 
             <span>total : {totalCost()}  </span>
             <SimpleGrid cols={3} spacing="lg"
                 breakpoints={[
@@ -54,6 +58,28 @@ export default function Cart() {
                 }
             </SimpleGrid>
 
+
+            {cartItems.length > 0 &&
+                <Group grow position="right" style={{ width: "50%" }}>
+                    <Button fullWidth color="green">
+                        Checkout
+                    </Button>
+                    <Button fullWidth color="red"
+                             onClick={() => { dispatch(emptyAllCart()) }}>                                  
+                        Empty the cart </Button>
+                </Group>
+            }
+
+
+
+
+            {/*    <SimpleGrid cols={2} spacing="lg" style={{maxWidth:"50%"}}>
+            <Button color="red" >1
+                </Button>
+
+                <Button variant="outline">2</Button>
+
+            </SimpleGrid> */}
 
         </Container>
     )

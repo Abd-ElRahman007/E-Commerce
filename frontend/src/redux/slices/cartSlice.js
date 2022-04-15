@@ -56,7 +56,7 @@ const cartSlice = createSlice({
 
         },
  
-        emptyAllCart: (state, action) => {
+        emptyAllCart: (state) => {
 
             state.items = []
 
