@@ -20,10 +20,10 @@ import { useSelector } from "react-redux"
 import { HomeAdmin } from './components/admin/HomeAdmin';
 import ProductThumb from './components/ProductThumb';
 import { useEffect } from "react";
-
-
 import { useWindowScroll } from '@mantine/hooks';
-import { Affix, Button, Text, Transition } from '@mantine/core';
+import { Affix, Button, Text, Transition , ActionIcon} from '@mantine/core';
+import AffixDrawerCart from './components/features/AffixDrawerCart';
+
 
 function App() {
   const { status } = useSelector(authState)
@@ -68,20 +68,24 @@ function App() {
         </Routes>
 
 
-        <Affix position={{ bottom: 20, right: 20 }}>
-        <Transition transition="slide-up" mounted={scroll.y > 0}>
-          {(transitionStyles) => (
-            <Button
-             
-              style={transitionStyles}
-              onClick={() => scrollTo({ y: 0 })}
-            >
-              Scroll to top
-            </Button>
-          )}
-        </Transition>
-      </Affix>
+          <Affix position={{ bottom: 20, right: 20 }}>
+          <Transition transition="slide-up" mounted={scroll.y > 0}>
+            {(transitionStyles) => (
+              <Button
+              
+                style={transitionStyles}
+                onClick={() => scrollTo({ y: 0 })}
+              >
+                Scroll to top
+              </Button>
+            )}
+          </Transition>
+        </Affix>
 
+
+      <AffixDrawerCart/>
+
+      
       </Container>
     );
 }

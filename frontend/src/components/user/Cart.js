@@ -15,7 +15,7 @@ export default function Cart() {
     console.log("cartItems.length", cartItems.length)
     const totalCost = () => {
         let final = 0
-        cartItems.map((item) => {  //arrow function expect a return
+        cartItems.map((item) => { 
             let itemTotal = 0
             itemTotal = item.quantity * item.price
             final = final + itemTotal
