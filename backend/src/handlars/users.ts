@@ -37,10 +37,11 @@ async function show(req: Request, res: Response) {
     const token = req.headers.token as unknown as string;
     //check if the request from super admin?
     const isAdmin = isAdminFun(req.body.admin_email,req.body.admin_password,token);
+    console.log(parseJwt(token));
     
     try {        
         //if admin or user it self will return user data
-        if (isAdmin) {
+        if (isAdmin || parseInt(req.params.id) == parseInt(parseJwt(token).user.id)) {
             
             try {
                 const resault = await user_obj.show(parseInt(req.params.id));
