@@ -3,7 +3,7 @@ import { Application, Response, Request } from 'express';
 
 const cloud = cloudinary.v2;
 
-
+//return time stamp and signature of an image to front end
 async function api_image(req:Request, res:Response){
     try{
         const timestamp=Math.round((new Date).getTime()/1000);
@@ -19,7 +19,7 @@ async function api_image(req:Request, res:Response){
     }
 	
 }
-
+//route for function
 function mainRoutes(app: Application) {
     app.get('/imageSignature',api_image);
 }

@@ -1,14 +1,15 @@
 import { Application, Response, Request } from 'express';
 import { Comment, comment } from '../models/feedback';
+import parseJwt from '../service/jwtParsing';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
-import parseJwt from '../service/jwtParsing';
+import isAdmin from '../service/isAdmin';
 
 dotenv.config();
-const secret: string = process.env.token as unknown as string;
 
+const {secret} = process.env;
 const comment_obj = new Comment();
-
+//return all comments for one product with id in request params from database
 async function index(req: Request, res: Response) {
     try {
         const resault = await comment_obj.index(Number(req.params.product_id));
@@ -17,7 +18,7 @@ async function index(req: Request, res: Response) {
         res.status(400).json(`${e}`);
     }
 }
-
+//return only one comment from databse using id and product_id in request params
 async function show(req: Request, res: Response) {
     try {
         const resault = await comment_obj.show(Number(req.params.product_id),Number(req.params.id));
@@ -27,14 +28,24 @@ async function show(req: Request, res: Response) {
     }
 }
 
+//update and return the comment with id and product_id in request params and data in request body
 async function update(req: Request, res: Response) {
+    let id,isTrue = false;
     const token = req.headers.token as unknown as string;
-    const user = parseJwt(token);
-    const permession = jwt.verify(token, secret);
-    if (permession) {
-        const c = await comment_obj.show(req.params.product_id as unknown as number, req.params.id as unknown as number);
+    if(token){//make sure that token is exist
+        const user = parseJwt(token);
+        id = user.user.id;
+        const permession = jwt.verify(token, secret as string);
+        if(permession){
+            isTrue = true;
+        }else throw new Error('user not exist.');
+    }else throw new Error('login required.');
+
+    if (isTrue) {
+
         try {
-            
+            const c = await comment_obj.show(req.params.product_id as unknown as number, req.params.id as unknown as number);
+        
             if(req.body.subject)  
                 c.subject = req.body.subject;
 
@@ -42,59 +53,74 @@ async function update(req: Request, res: Response) {
                 c.message = req.body.message;
 
             if(req.body.user_id)  
-                c.user_id = Number(user.user.id);
+                c.user_id = id;
 
             if(req.body.vote)  
                 c.vote = Number(req.body.vote);
-            
+            //update and return new comment data
             const resault = await comment_obj.update(c);
             res.status(200).json(resault);
         } catch (e) {
             res.status(400).json(`${e}`);
         }
-    } else res.send('Not allowed!!');
+    } else throw new Error('user not exist.');
 }
-
+//create and return the comment with product_id in request params and data in request body
 async function create(req: Request, res: Response) {
     
+    let id,isTrue = false;
     const token = req.headers.token as unknown as string;
-    const user = parseJwt(token);
-    const permession = jwt.verify(token, secret);
-    if (permession) {
+    if(token){//make sure that token is exist
+        const user = parseJwt(token);
+        id = user.user.id;
+        const permession = jwt.verify(token, secret as string);
+        if(permession){
+            isTrue = true;
+        }else throw new Error('user not exist.');
+
+    }else throw new Error('login required.');
+
+    if (isTrue) {
         try {
             const c: comment = {
                 subject: req.body.subject,
                 message:req.body.message,
-                user_id:Number(user.user.id),
+                user_id:id,
                 product_id:Number(req.params.product_id),
                 vote:Number(req.body.vote)
             };
+            //update and return new comment data
             const resault = await comment_obj.create(c);
             res.status(200).json(resault);
         } catch (e) {
             res.status(400).json(`${e}`);
         }
-    } else res.send('Not allowed login first!!');
+    } else throw new Error('user not exist.');
 }
-
+//delete and return deleted using id and product_id in request params
 async function delete_(req: Request, res: Response) {
+    const {admin_email,admin_password} = process.env;
+    let isTrue = false;
     const token = req.headers.token as unknown as string;
-    const permession = jwt.verify(token, secret);
-    const user = parseJwt(token);
+    if(token){
+        const permession = jwt.verify(token, secret as string);
+        if(permession){
+            isTrue = true;
+        } else throw new Error('user not exist.');
 
-    let isSuperAdmin = false;
-    if(req.body.admin_email == process.env.admin_email && req.body.admin_password == process.env.admin_password){
-        isSuperAdmin=true;
-    }
+    } else throw new Error('login required.');
 
-    if (permession ||isSuperAdmin) {
+    const user = parseJwt(token).user;
+    //if token is exist will delete the comment with product_id and id in params
+    if (isAdmin(admin_email as string ,admin_password as string,token) || isTrue) {
         try {
-            const resault = await comment_obj.delete(Number(req.params.product_id),Number(req.params.id),Number(user.user.id));
+            const resault = await comment_obj.delete(Number(req.params.product_id),Number(req.params.id),Number(user.id));
             res.status(200).json(resault);
         } catch (e) {
             res.status(400).json(`${e}`);
         }
-    } else res.send('Not allowed login first!!');
+        
+    } else throw new Error('user not exist.');
 }
 
 function mainRoutes(app: Application) {

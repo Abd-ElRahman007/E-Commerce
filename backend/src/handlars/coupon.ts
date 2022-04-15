@@ -1,14 +1,9 @@
 import { Application, Response, Request } from 'express';
 import { Coupon, coupon } from '../models/coupon';
-import jwt from 'jsonwebtoken';
-import dotenv from 'dotenv';
-import parseJwt from '../service/jwtParsing';
-
-dotenv.config();
-const secret: string = process.env.token as unknown as string;
+import isAdminFun from '../service/isAdmin';
 
 const coupon_obj = new Coupon();
-
+//return all coupons in database
 async function index(req: Request, res: Response) {
     try {
         const resault = await coupon_obj.index();
@@ -17,7 +12,7 @@ async function index(req: Request, res: Response) {
         res.status(400).json(`${e}`);
     }
 }
-
+//return only one coupon from databse using id in request params
 async function show(req: Request, res: Response) {
     try {
         const resault = await coupon_obj.show(req.params.id as unknown as number);
@@ -27,17 +22,14 @@ async function show(req: Request, res: Response) {
     }
 }
 
+//update and return the coupon with id in request params and data in request body
 async function update(req: Request, res: Response) {
-    const token = req.headers.token as unknown as string;
-    const user = parseJwt(token);
-    const permession = jwt.verify(token, secret);
-
-    let isSuperAdmin = false;
-    if(req.body.admin_email == process.env.admin_email && req.body.admin_password == process.env.admin_password){
-        isSuperAdmin=true;
-    }
-
-    if ((permession && user.user.status=='admin')||isSuperAdmin) {
+    const token = req.headers.token as string;
+    
+    //check if the user super admin or admin
+    const isAdmin = isAdminFun(req.body.admin_email,req.body.admin_password,token);
+    //if admin or super admin the changes will occure to the coupon
+    if (isAdmin) {
         const c = await coupon_obj.show(req.params.id as unknown as number);
         try {
             if(req.body.code)
@@ -50,44 +42,38 @@ async function update(req: Request, res: Response) {
         } catch (e) {
             res.status(400).json(`${e}`);
         }
-    } else res.send('Not allowed login first!!');
+    } else throw new Error('Not allowed this for you!!');
 }
 
+//create and return the coupon with data in request body
 async function create(req: Request, res: Response) {
-    const token = req.headers.token as unknown as string;
-    const user = parseJwt(token);
-    const permession = jwt.verify(token, secret);
-
-    let isSuperAdmin = false;
-    if(req.body.admin_email == process.env.admin_email && req.body.admin_password == process.env.admin_password){
-        isSuperAdmin=true;
-    }
-
-    if ((permession && user.user.status=='admin')||isSuperAdmin) {
+   
+    const token = req.headers.token as string;
+    //check if the user super admin or admin
+    const isAdmin = isAdminFun(req.body.admin_email,req.body.admin_password,token);
+    //if admin or super admin the changes will occure to the coupon
+    if (isAdmin) {
+        const c: coupon = {
+            code: req.body.code,//required
+            value_of_100:req.body.value_of_100
+        };
         try {
-            const c: coupon = {
-                code: req.body.code,
-                value_of_100:req.body.value_of_100
-            };
+            
             const resault = await coupon_obj.create(c);
             res.status(200).json(resault);
         } catch (e) {
             res.status(400).json(`${e}`);
         }
-    } else res.send('Not allowed login first!!');
+    } else throw new Error('Not allowed this for you!!');
 }
 
+//delete and return deleted using id in request params
 async function delete_(req: Request, res: Response) {
     const token = req.headers.token as unknown as string;
-    const user = parseJwt(token);
-    const permession = jwt.verify(token, secret);
-
-    let isSuperAdmin = false;
-    if(req.body.admin_email == process.env.admin_email && req.body.admin_password == process.env.admin_password){
-        isSuperAdmin=true;
-    }
-
-    if ((permession && user.user.status=='admin')||isSuperAdmin) {
+    //check if the user super admin or admin
+    const isAdmin = isAdminFun(req.body.admin_email,req.body.admin_password,token);
+    //if admin or super admin the changes will occure to the coupon
+    if (isAdmin) {
         try {
             const resault = await coupon_obj.delete(
         req.params.id as unknown as number
@@ -96,7 +82,7 @@ async function delete_(req: Request, res: Response) {
         } catch (e) {
             res.status(400).json(`${e}`);
         }
-    } else res.send('Not allowed login first!!');
+    } else throw new Error('Not allowed this for you!!');
 }
 
 function mainRoutes(app: Application) {

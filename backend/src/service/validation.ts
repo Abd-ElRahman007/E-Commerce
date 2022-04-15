@@ -1,5 +1,5 @@
 import joi from 'joi';
-//users(id, f_name, l_name, email, password, birthday, phone,status, created_at,city,address,coupon_id);
+//validation schema file
 
 const userShema = joi.object({
     f_name:joi.string().min(3).max(30),

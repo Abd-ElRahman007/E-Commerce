@@ -39,7 +39,7 @@ export class Order {
         }
     }
 
-    async create(o: order): Promise<string> {
+    async create(o: order): Promise<order> {
         try {
             const conn = await Client.connect();
             const sql =
@@ -52,18 +52,16 @@ export class Order {
         }
     }
 
-    async update(o: order): Promise<string> {
+    async update(o: order): Promise<order> {
         try {
             const conn = await Client.connect();
-            const q = 'select user_id from orders where id=($1) and user_id=($2);';
-            const res = await conn.query(q, [o.id,o.user_id]);
-            if (res.rows[0]) {
-                const sql = 'update orders set status=($1), total=($2), compelete_at=($3),time_arrival=($4),time_start=($5) where id=($6) RETURNING *; ';
-                const res = await conn.query(sql, [o.status,o.total,o.compelete_at,o.time_arrival,new Date(),o.id]);
-                conn.release();
-                return res.rows[0];
-            }
-            return 'not allowed';
+            
+            const sql = 'update orders set status=($1), total=($2), compelete_at=($3),time_arrival=($4),time_start=($5) where id=($6) RETURNING *; ';
+            const res = await conn.query(sql, [o.status,o.total,o.compelete_at,o.time_arrival,new Date(),o.id]);
+            conn.release();
+            return res.rows[0];
+            
+            
         } catch (e) {
             throw new Error(`${e}`);
         }
