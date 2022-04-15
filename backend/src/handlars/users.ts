@@ -65,35 +65,39 @@ async function update(req: Request, res: Response) {
     const id = parseInt(req.params.id);
     try {
         const user_ = await user_obj.show(id);//get user from database with id in request params
+        //console.log(user_);
+        
         //check if request from super admin 
         if(req.body.admin_email === admin_email && req.body.admin_password === admin_password){
             user_type = 'super_admin';
         }else if(token){//check the token if exist to know if admin or user want to update
             const permession = jwt.verify(token, secret);
-
+            
             if(permession)
             {
                 const user = parseJwt(token);
-                if(user.user.id == id)
-                    user_type = 'user';
-                else
+                if(user.user.status == 'admin')
                     user_type = 'admin'; 
+                else if(id != user.user.id){
+                    throw new Error('not allowed this change');
+                }
             }
         }
         
         //if user send the request
-        if(user_type === 'user'){
-            console.log('user');
+        if(user_type == 'user'){
 
             if(req.body.f_name)
                 user_.f_name=req.body.f_name;
             if(req.body.l_name)
-                user_.f_name=req.body.l_name;
+                user_.l_name=req.body.l_name;
             if(req.body.email)
                 user_.email=req.body.email;
             if(req.body.password)
             {
-                const hash = bcrypt.hashSync(req.body.password+process.env.extra, parseInt(process.env.round as string));
+                const hash = bcrypt.hashSync(req.body.password + process.env.extra, parseInt(process.env.round as string));
+                console.log(hash);
+                
                 user_.password=hash;
             }
             if(req.body.birthday)
@@ -105,6 +109,7 @@ async function update(req: Request, res: Response) {
             if(req.body.address)
                 user_.address=req.body.address;
 
+            
         }else {//if admin or super admin
 
             if(req.body.coupon_id)
@@ -119,6 +124,7 @@ async function update(req: Request, res: Response) {
             }
             
         }
+
         //update and return the new token of updated user
         const resualt = await user_obj.update(user_);
         const new_token = jwt.sign({user:resualt},secret);

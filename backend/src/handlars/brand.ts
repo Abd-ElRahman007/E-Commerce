@@ -29,7 +29,7 @@ async function show(req: Request, res: Response) {
 
 //update and return the brand with id in request params and data in request body
 async function update(req: Request, res: Response) {
-    const token = req.headers.token as string;
+    const token = req.headers.token as unknown as string;
     
     //check if the user super admin or admin
     const isAdmin = isAdminFun(req.body.admin_email,req.body.admin_password,token);
