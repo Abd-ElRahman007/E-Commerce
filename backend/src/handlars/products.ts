@@ -35,8 +35,8 @@ async function index(req: Request, res: Response) {
         //if name or subset of name in the request params will filter the products with it
         if(product_name != undefined){
             model_result = model_result.filter(x => isTrue(x.name as unknown as string, product_name));
-        }   
-
+        }
+        
         //if page and limit exist in the request params will paginate the result
         if(limit && page){
             res.status(200).json(pagination(page, limit, model_result));
