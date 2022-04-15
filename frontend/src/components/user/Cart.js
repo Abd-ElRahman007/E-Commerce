@@ -43,7 +43,6 @@ export default function Cart() {
                 <Badge color="gray" size="xl" radius="xs" variant="outline">{totalCost()} EGP </Badge>
                 </Group>
  
-            <span>total : {totalCost()}  </span>
             <SimpleGrid cols={3} spacing="lg"
                 breakpoints={[
                     { maxWidth: 980, cols: 3, spacing: 'md' },

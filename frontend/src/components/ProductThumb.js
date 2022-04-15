@@ -1,6 +1,6 @@
 import {
   Card, Image, Text, Badge, Group, useMantineTheme,
-  ActionIcon, Container, Grid, SimpleGrid
+  ActionIcon, Container, Grid, SimpleGrid ,Tooltip , FloatingTooltip
 } from '@mantine/core';
 import { useState, useEffect } from 'react';
 import AddremoveButtons from './AddremoveButtons';
@@ -232,8 +232,12 @@ export default function ProductThumb(props) {
               }}
             >
               {quantity > 0
-                ? <ShoppingCartPlus size={30} color={'#40bf59'} />
-                : <ShoppingCartX size={30} color={'#d279c6'} />
+                ? <FloatingTooltip label="Add to cart" withArrow arrowSize={3}  position="bottom" radius="xl" color="green" >
+                     <ShoppingCartPlus size={30} color={'#40bf59'} /> 
+                   </FloatingTooltip>          /*  <ShoppingCartPlus size={30} color={'#40bf59'} /> */
+                : <FloatingTooltip label="Decrease from cart" withArrow arrowSize={3} position="bottom" radius="xl" color="grape"> 
+                    <ShoppingCartX size={30} color={'#d279c6'} />
+                  </FloatingTooltip>        /*  <ShoppingCartX size={30} color={'#d279c6'} /> */
               }
             </ActionIcon>
             <AddremoveButtons
@@ -243,7 +247,9 @@ export default function ProductThumb(props) {
             />
             {currentQuantity > 0 &&
               <ActionIcon onClick={() => { cartRemoveFunction() }}>
-                <ShoppingCartOff size={30} color={'red'} />
+                <FloatingTooltip label="Remove from cart" withArrow arrowSize={3}  position="bottom" radius="xl" color="red" >
+                  <ShoppingCartOff size={30} color={'red'} />
+                </FloatingTooltip>
               </ActionIcon>
             }
           </Group>
