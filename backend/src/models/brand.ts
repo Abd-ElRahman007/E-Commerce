@@ -59,7 +59,7 @@ export class Brand {
             throw new Error(`${e}`);
         }
     }
-
+    
     async delete(id: number): Promise<string> {
         try {
             const conn = await Client.connect();

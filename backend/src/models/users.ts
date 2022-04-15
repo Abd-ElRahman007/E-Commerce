@@ -84,7 +84,7 @@ export class User {
             const conn = await Client.connect();
             const sql = 'select * from users where email=($1);';
             const res = await conn.query(sql, [email]);
-            console.log(res.rows);
+            
             
             if (res.rows.length) {
                 if (pass == res.rows[0].password) return res.rows[0];
