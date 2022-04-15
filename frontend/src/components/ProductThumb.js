@@ -175,9 +175,9 @@ export default function ProductThumb(props) {
                 </SimpleGrid>
                 <Description description={description} label="Description" />
               </Container>
-              <HashLink smooth to={user.id === null
+             {/*  <HashLink smooth to={user.id === null
                 ? '/login'
-                : '/cart'   /* product view feedback section  */
+                : '/cart'   
               }
               >
                 <Rating name="read-only"
@@ -191,7 +191,7 @@ export default function ProductThumb(props) {
                     : false
                   }
                 />
-              </HashLink>
+              </HashLink> */}
             </>
           }
 
@@ -252,3 +252,32 @@ export default function ProductThumb(props) {
     </>
   )
 }
+
+
+/* {type === "thumb"
+? <Group position="center" style={{ marginBottom: 5, marginTop: theme.spacing.sm }}>
+  <Text weight={500}>{name}</Text>
+
+  <HashLink smooth to={user.id === null
+    ? '/login'
+    : '/cart'  
+  }
+  >
+    <Rating name="read-only"
+      size="small"
+      value={vote_total || vote_count == 0
+        ? 3
+        : vote_total / vote_count
+      }
+      readOnly={user.id === null
+        ? true
+        : false
+      }
+    />
+  </HashLink>
+  <Badge color="pink" variant="light" size="xl" >
+    {price} {currency}
+  </Badge>
+</Group>
+: null
+} */

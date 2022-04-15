@@ -41,8 +41,11 @@ const UserButton = forwardRef(
 );
 
 export default function UserMenu({ name, email }) {
+
   const dispatch = useDispatch()
   const user = useSelector(authState)
+
+
   return (
     <Group position="center">
       <Menu
@@ -50,8 +53,8 @@ export default function UserMenu({ name, email }) {
         placement="center"
         control={
           <UserButton
-            firstname={user.f_name}
-			lastname={user.l_name}
+            firstname={user.first_name}
+			      lastname={user.last_name}
             email={user.email}
           />
         }

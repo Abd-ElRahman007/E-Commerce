@@ -30,7 +30,8 @@ export default function SearchNav(props) {
                results.push( { value :x.name ,
                                id : x.id ,
                                image :x.image,
-                               price :x.price })             
+                               price :x.price ,
+                               currency : x.currency})             
           })      
        return results
 
@@ -58,7 +59,7 @@ export default function SearchNav(props) {
                           
                             data={SearchedProducts()}
                             ref={query}
-                            itemComponent={forwardRef(({value, id, image,price,...others}, query) => {
+                            itemComponent={forwardRef(({value, id, image,price,currency ,...others}, query) => {
                                 
                               return (
                                 <div {...others}  ref={query}>                     
@@ -69,7 +70,7 @@ export default function SearchNav(props) {
                                     <div>
                                        <Text>{value}</Text>
                                        <Text size="xs" color="dimmed">
-                                         {price}
+                                         {price} {currency}
                                        </Text>
                                      </div> 
                                    </Group>                        

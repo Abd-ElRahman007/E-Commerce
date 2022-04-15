@@ -1,8 +1,9 @@
-import { Container, SimpleGrid, } from '@mantine/core';
+import { Container, SimpleGrid,Button } from '@mantine/core';
 import ProductThumb from '../ProductThumb';
-import { cartState } from "../../redux/slices/cartSlice"
+import { cartState , emptyAllCart  } from "../../redux/slices/cartSlice"
 import { useSelector } from "react-redux"
 import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 
 
 export default function Cart() {
@@ -25,6 +26,8 @@ export default function Cart() {
     console.log("totalll", totalCost())
     console.log("cartItems", cartItems)
 
+    const dispatch = useDispatch()
+
 
     useEffect(() => {
         if (cartItems)
@@ -35,6 +38,7 @@ export default function Cart() {
 
     return (
         <Container>
+            <Button onClick={()=>{dispatch(emptyAllCart())}}> Empty the cart </Button>
             <span>total : {totalCost()}  </span>
             <SimpleGrid cols={3} spacing="lg"
                 breakpoints={[
