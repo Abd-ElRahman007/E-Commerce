@@ -1,11 +1,15 @@
 import { Application, Response, Request } from 'express';
-import { Order, order } from '../models/orders';
+import { Order, order ,order_product} from '../models/orders';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import isAdminFun from '../service/isAdmin';
+import { number, object } from 'joi';
+import parseJwt from '../service/jwtParsing';
 dotenv.config();
 
 const secret: string = process.env.token as unknown as string;
+
+
 
 const order_obj = new Order();
 //return orders of a user_id in req params
@@ -16,7 +20,8 @@ async function index(req: Request, res: Response) {
     const isAdmin = isAdminFun(req.body.admin_email,req.body.admin_password,token);
     if(token){
         const permession = jwt.verify(token,secret);
-        if(permession)
+        const user__ = parseJwt(token);
+        if(permession && (parseInt(req.params.id) == parseInt(user__.user.id)))
             isExist = true;
     }
     //if admin or super or user admin will return orders of user id
@@ -39,7 +44,8 @@ async function show(req: Request, res: Response) {
     const isAdmin = isAdminFun(req.body.admin_email,req.body.admin_password,token);
     if(token){
         const permession = jwt.verify(token,secret);
-        if(permession)
+        const user__ = parseJwt(token);
+        if(permession && (parseInt(req.params.id) == parseInt(user__.user.id)))
             isExist = true;
     }
     //if admin or super admin or user will return orders of user id [admin and user itself]
@@ -89,6 +95,7 @@ async function update(req: Request, res: Response) {
         }
     } else res.send('Not allowed login first!!');
 }
+
 //create order for a user id in req params
 async function create(req: Request, res: Response) {
     let isExist = false;
@@ -100,15 +107,25 @@ async function create(req: Request, res: Response) {
     }
     //if user exist will return orders of user id
     if (isExist) {
-        try {
-            const o: order = {
-                status: 'open',
-                user_id: parseInt(req.params.user_id),
-                total:Number(req.body.total),
-                time_arrival:req.body.time_arrival,
-                compelete_at:req.body.compelete_at,
-            };
+        const products = req.body.order_products  as order_product;
+        const o: order = {
+            status: 'open',
+            user_id: parseInt(req.params.user_id),
+            total:Number(req.body.total),
+            time_arrival:req.body.time_arrival,
+            compelete_at:req.body.compelete_at,
+        };
+        try {            
             const resault = await order_obj.create(o);
+            const id = resault.id as unknown as number;
+            // for(let i=0;i < products.length(); i++){
+            //     await order_obj.addProduct(
+            //         id,
+            //         parseInt(products[i].product_id),
+            //         parseInt(products[i].quantity)
+            //     );
+            // }
+
             res.json(resault);
         } catch (e) {
             res.status(400).json(`${e}`);

@@ -1,5 +1,8 @@
 import Client from '../database';
+import bcrypt from 'bcrypt';
+import dotenv from 'dotenv';
 
+dotenv.config();
 export type user = {
   id?: number;
   f_name?: string;
@@ -79,17 +82,18 @@ export class User {
         }
     }
 
-    async auth(email: string, pass: string): Promise<user|null> {
+    async auth(email: string,pass:string): Promise<user|undefined> {
         try {
             const conn = await Client.connect();
             const sql = 'select * from users where email=($1);';
             const res = await conn.query(sql, [email]);
             
+            console.log(res.rows[0]);
+            
             
             if (res.rows.length) {
-                if (pass == res.rows[0].password) return res.rows[0];
-            }
-            return null;
+                return res.rows[0];
+            }else throw new Error('email or password wrong.');
         } catch (e) {
             throw new Error(`${e}`);
         }
