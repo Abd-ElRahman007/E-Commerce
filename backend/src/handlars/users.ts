@@ -1,6 +1,6 @@
 import { Application, Response, Request } from 'express';
-//import nodemailer from 'nodemailer';
 import { userShema } from '../service/validation';
+import nodemailer from 'nodemailer';
 import { User, user } from '../models/users';
 import parseJwt from '../service/jwtParsing';
 import isAdminFun from '../service/isAdmin';
@@ -11,6 +11,15 @@ import dotenv from 'dotenv';
 dotenv.config();
 const secret: string = process.env.token as unknown as string;
 const user_obj = new User();
+
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: 'youremail@gmail.com',
+        pass: 'yourpassword'
+    }
+});
+  
 
 //return a json data for all users in database [allowed only for admins]
 async function index(req: Request, res: Response) {
@@ -117,7 +126,7 @@ async function update(req: Request, res: Response) {
             }
             
         }
-        console.log(user_);
+        
         //update and return the new token of updated user
         const resualt = await user_obj.update(user_);
         const new_token = jwt.sign({user:resualt},secret);
@@ -203,45 +212,64 @@ async function login(req: Request, res: Response) {
         res.status(400).json(`${e}`);
     }
 }
-//////////////////////////not finish yet////////////////////////////////////
+//send mail to the user which sending in request body
 async function forget_password(req: Request, res: Response) {
     try {
         const { email } = req.body;
-
+        //check for the user with sending email
         const resault = await user_obj.forget_password(email);
-       
+                
+        //if user exist
         if(resault){
             if (resault.status!='suspended') {
-                //const token = jwt.sign({ user: resault }, secret);
+                const token = jwt.sign({ user: resault }, secret);
+                
+                const mailOptions = {
+                    from: 'youremail@gmail.com',
+                    to: 'myfriend@yahoo.com',
+                    subject: 'Reset Possword',
+                    text:  `url + ${token}`
+                };
 
-                res.status(200).json('check your email.');
+                //send url with token
+                transporter.sendMail(mailOptions, function(error, info){
+                    if (error) {
+                        console.log(error);
+                    } else {
+                        console.log('Email sent: ' + info.response);
+                        res.status(200).json('check your email.');
+                    }
+                });
             }else
-                res.status(400).json('user suspended');
+                throw new Error('user suspended');
         }
-        else res.status(400).send('failed');
+        else throw new Error('user not exist.');
     } catch (e) {
         res.status(400).json(`${e}`);
     }
 }
-/////////////////////////////////////////////////////////////////////////
-
-////////////////////////////not finish yet///////////////////////////////
+//return new token for updating user and the user inforamtion token and password required
 async function reset_password(req: Request, res: Response) {
     try {
-        const token = req.headers.token as unknown as string;
-        const user = parseJwt(token);
-        const permession = jwt.verify(token,secret);
-        if(permession){
-            const result = user_obj.reset_password(user.user);
-            const newToken = jwt.sign({ user: result }, secret);
-            res.status(200).json({user:user,token:newToken});
-        }else
-            res.status(400).json('user not exist');
+        const token = req.query.token as unknown as string;
+        const new_password = req.body.new_password as unknown as string;
+        const user = parseJwt(token).user;
+        if(token){
+            const permession = jwt.verify(token,secret);
+            if(permession){
+                const hash = bcrypt.hashSync(new_password + process.env.extra, parseInt(process.env.round as string));
+                user.password = hash;
+                const result = user_obj.update(user);
+                const newToken = jwt.sign({ user: result }, secret);
+                res.status(200).json({user:user,token:newToken});
+            }else
+                throw new Error('user not exist');
+        }else 
+            throw new Error('token required.');
     } catch (e) {
         res.status(400).json(`${e}`);
     }
 }
-/////////////////////////////////////////////////////////////////////
 //return token for user with id from request params [only for admins]
 async function get_token(req: Request, res: Response) {
     
