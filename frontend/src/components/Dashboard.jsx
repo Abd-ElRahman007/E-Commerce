@@ -41,7 +41,7 @@ function putData(data){
 	form.setFieldValue('f_name',data.f_name)
 		form.setFieldValue('l_name',data.l_name)
 		form.setFieldValue('email',data.email)
-		form.setFieldValue('phone',data.phone)
+		form.setFieldValue('phone',Number (data.phone))
 		form.setFieldValue('birthday',data.birthday)
 		form.setFieldValue('address',data.address)
 		form.setFieldValue('city',data.city)
@@ -56,7 +56,7 @@ function putData(data){
 			l_name: '',
 			email: '',
 			birthday: 0,
-			phone: '',
+			phone: 0,
 			address: '',
 			city: '',
 		}
@@ -121,7 +121,7 @@ if(dataUser===undefined){
 				label="Birthday"
 				disabled={enable}
 				value={form.values.birthday}
-				onChange={(val) => form.setFieldValue('birthday', toISOLocal(val))}
+				onChange={(val) => form.setFieldValue('birthday', val)}
 				required
 			/>
 

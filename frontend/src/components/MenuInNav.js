@@ -82,7 +82,12 @@ export default function MenuInNav(props) {
                     }
                 >
                     {existingBrands?.map((x) => {
-                        return <Menu.Item component={Link} to={`/browse/${x.id}`} state={{type:"brand"}} key={x.id}> {x.name}</Menu.Item>
+                        return <Menu.Item component={Link}
+                                        to={`/browse/${x.id}`}
+                                        state={{ type: "brand" }}
+                                        key={x.id}
+                                              >
+                               {x.name}</Menu.Item>
 
                     })}
                 </Menu>
