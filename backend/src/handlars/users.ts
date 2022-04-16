@@ -1,5 +1,5 @@
 import { Application, Response, Request } from 'express';
-import { userShema } from '../service/validation';
+//import { userShema } from '../service/validation';
 import nodemailer from 'nodemailer';
 import { User, user } from '../models/users';
 import parseJwt from '../service/jwtParsing';
@@ -223,12 +223,12 @@ async function forget_password(req: Request, res: Response) {
         if(resault){
             if (resault.status!='suspended') {
                 const token = jwt.sign({ user: resault }, secret);
-                
+                const url = ''; //url will provid from front end developer
                 const mailOptions = {
                     from: 'youremail@gmail.com',
                     to: 'myfriend@yahoo.com',
                     subject: 'Reset Possword',
-                    text:  `url + ${token}`
+                    text:  `${url}?token=${token}`
                 };
 
                 //send url with token

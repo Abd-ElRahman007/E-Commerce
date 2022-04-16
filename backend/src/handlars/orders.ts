@@ -1,9 +1,8 @@
 import { Application, Response, Request } from 'express';
-import { Order, order ,order_product} from '../models/orders';
+import { Order, order } from '../models/orders';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import isAdminFun from '../service/isAdmin';
-import { number, object } from 'joi';
 import parseJwt from '../service/jwtParsing';
 dotenv.config();
 
@@ -21,20 +20,21 @@ async function index(req: Request, res: Response) {
     if(token){
         const permession = jwt.verify(token,secret);
         const user__ = parseJwt(token);
-        if(permession && (parseInt(req.params.id) == parseInt(user__.user.id)))
+        if(permession && (parseInt(req.params.user_id) == parseInt(user__.user.id)))
             isExist = true;
     }
     //if admin or super or user admin will return orders of user id
     if (isAdmin || isExist) {
         try {
             const resault = await order_obj.index(parseInt(req.params.user_id));
-            res.json(resault);
+            res.status(200).json(resault);
         } catch (e) {
             res.status(400).json(`${e}`);
         }
-    } else res.send('Not allowed!!');
+    } else res.status(400).send('Not allowed!!');
     
 }
+///////////////not yet///////////////////////////////////////////////////////
 //return one order of a user_id and id in req params [admin and user it self]
 async function show(req: Request, res: Response) {
     
@@ -45,7 +45,7 @@ async function show(req: Request, res: Response) {
     if(token){
         const permession = jwt.verify(token,secret);
         const user__ = parseJwt(token);
-        if(permession && (parseInt(req.params.id) == parseInt(user__.user.id)))
+        if(permession && (parseInt(req.params.user_id) == parseInt(user__.user.id)))
             isExist = true;
     }
     //if admin or super admin or user will return orders of user id [admin and user itself]
@@ -67,8 +67,9 @@ async function update(req: Request, res: Response) {
     let isExist = false;
     const token = req.headers.token as unknown as string;
     if(token){
+        const user__ = parseJwt(token);
         const permession = jwt.verify(token,secret);
-        if(permession)
+        if(permession && (parseInt(req.params.user_id) == parseInt(user__.user.id)))
             isExist = true;
     }
     //if user exist will return orders of user id
@@ -101,13 +102,14 @@ async function create(req: Request, res: Response) {
     let isExist = false;
     const token = req.headers.token as unknown as string;
     if(token){
+        const user__ = parseJwt(token);
         const permession = jwt.verify(token,secret);
-        if(permession)
+        if(permession && (parseInt(req.params.user_id) == parseInt(user__.user.id)))
             isExist = true;
     }
     //if user exist will return orders of user id
     if (isExist) {
-        const products = req.body.order_products  as order_product;
+        //const products = req.body.order_products  as order_product;
         const o: order = {
             status: 'open',
             user_id: parseInt(req.params.user_id),
@@ -117,7 +119,7 @@ async function create(req: Request, res: Response) {
         };
         try {            
             const resault = await order_obj.create(o);
-            const id = resault.id as unknown as number;
+            //const id = resault.id as unknown as number;
             // for(let i=0;i < products.length(); i++){
             //     await order_obj.addProduct(
             //         id,
@@ -156,8 +158,9 @@ async function addProduct(req: Request, res: Response) {
     let isExist = false;
     const token = req.headers.token as unknown as string;
     if(token){
+        const user__ = parseJwt(token);
         const permession = jwt.verify(token,secret);
-        if(permession)
+        if(permession && (parseInt(req.params.user_id) == parseInt(user__.user.id)))
             isExist = true;
     }
 

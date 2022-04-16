@@ -1,4 +1,5 @@
 import Client from '../database';
+import { Product } from './products';
 
 //create table catogery(id serial primary key, name varchar(100) unique not null);
 
@@ -58,12 +59,17 @@ export class Catogery {
     }
 
     async delete(id: number): Promise<string> {
+        const product_obj = new Product();
         try {
-            const conn = await Client.connect();
-            const sql = 'delete from catogery where id =($1);';
-            await conn.query(sql, [id]);
-            conn.release();
-            return 'deleted';
+            const products = await product_obj.search_by_cat_or_brand(id, 'category');
+            if(!products)
+            {
+                const conn = await Client.connect();
+                const sql = 'delete from catogery where id =($1);';
+                await conn.query(sql, [id]);
+                conn.release();
+                return 'deleted';
+            }else throw new Error('can not delete the brand');
         } catch (e) {
             throw new Error(`${e}`);
         }

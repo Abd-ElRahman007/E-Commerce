@@ -19,7 +19,7 @@ async function index(req: Request, res: Response) {
     const product_name = req.query.name as string;
     const page = Number(req.query.page);
     const limit = Number(req.query.limit);
-
+    
     try {
         //return all products from database
         let model_result = await product_obj.index();
