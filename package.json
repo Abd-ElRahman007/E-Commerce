@@ -17,5 +17,8 @@
   "bugs": {
     "url": "https://github.com/Mohammad-Osama/E-Commerce/issues"
   },
-  "homepage": "https://github.com/Mohammad-Osama/E-Commerce#readme"
+  "homepage": "https://github.com/Mohammad-Osama/E-Commerce#readme",
+  "dependencies": {
+    "cloudinary": "^1.29.0"
+  }
 }

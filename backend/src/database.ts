@@ -9,8 +9,8 @@ const { test_db_host, test_db_user, test_db_password, test_db_name } = process.e
 const dev = process.env.dev||'dev';
 
 let Client:Pool ;
-
-if(dev == 'test'){
+//test db connection
+if(dev === 'test'){
 
     Client= new Pool({
         host: test_db_host,
@@ -20,7 +20,7 @@ if(dev == 'test'){
         port:5432
     });
 
-}else{
+}else{//the main db connection
 
     Client= new Pool({
         host: db_host,

@@ -1,6 +1,6 @@
 import { product } from '../models/products';
 
-
+//paginate function with page number and limit the number of products per page
 function pagination(page:number ,limit:number, products:product[]){
     const start_index = (page-1)*limit;
     const end_index = (page)*limit;

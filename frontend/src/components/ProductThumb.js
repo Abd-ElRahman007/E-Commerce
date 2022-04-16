@@ -1,6 +1,6 @@
 import {
   Card, Image, Text, Badge, Group, useMantineTheme,
-  ActionIcon, Container, Grid, SimpleGrid
+  ActionIcon, Container, Grid, SimpleGrid ,Tooltip , FloatingTooltip
 } from '@mantine/core';
 import { useState, useEffect } from 'react';
 import AddremoveButtons from './AddremoveButtons';
@@ -127,7 +127,7 @@ export default function ProductThumb(props) {
 
   let navigate = useNavigate();
   function Trying({props,quan,fu}){
-			  
+
 		  return(
           <Group grow style={{ marginRight:'0px',gap:'10px',width:'90%',marginBottom: 5, marginTop: theme.spacing.sm }}>
             <ActionIcon
@@ -179,7 +179,7 @@ export default function ProductThumb(props) {
                   cols={2}
                   spacing="md"
                   breakpoints={[{ maxWidth: 'sm', cols: 1 }]}>
-				  
+
                   <OverviewImage dim={{ width: "100%" }}
                     image={props.product.image}
                     title={props.product.name}
@@ -196,7 +196,7 @@ export default function ProductThumb(props) {
           }
 
           {type === "thumb"
-            ? 
+            ?
 			<>
 			<Group position="center" style={{ marginBottom: 5, marginTop: theme.spacing.sm }}>
               <Text weight={500}>{name}</Text>
@@ -222,7 +222,7 @@ export default function ProductThumb(props) {
                 {price} {currency}
               </Badge>
             </Group>
-			<Trying props={props.product} quan={quantity} fu={full} />		  
+			<Trying props={props.product} quan={quantity} fu={full} />
 			</>
             : null
           }
@@ -231,3 +231,32 @@ export default function ProductThumb(props) {
     </>
   )
 }
+
+
+/* {type === "thumb"
+? <Group position="center" style={{ marginBottom: 5, marginTop: theme.spacing.sm }}>
+  <Text weight={500}>{name}</Text>
+
+  <HashLink smooth to={user.id === null
+    ? '/login'
+    : '/cart'
+  }
+  >
+    <Rating name="read-only"
+      size="small"
+      value={vote_total || vote_count == 0
+        ? 3
+        : vote_total / vote_count
+      }
+      readOnly={user.id === null
+        ? true
+        : false
+      }
+    />
+  </HashLink>
+  <Badge color="pink" variant="light" size="xl" >
+    {price} {currency}
+  </Badge>
+</Group>
+: null
+} */
