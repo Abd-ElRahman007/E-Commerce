@@ -50,8 +50,8 @@ export default function UserMenu({ name, email }) {
         placement="center"
         control={
           <UserButton
-            firstname={user.f_name}
-			lastname={user.l_name}
+            firstname={user.first_name}
+			lastname={user.last_name}
             email={user.email}
           />
         }

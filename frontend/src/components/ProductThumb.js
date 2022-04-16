@@ -14,8 +14,8 @@ import Rating from '@mui/material/Rating';
 import { useNavigate } from 'react-router-dom'
 import { authState } from "../redux/slices/authSlice"
 import { HashLink } from 'react-router-hash-link';
-import { Image as ImageOverview, Name, Rating as AbdoRating, Price, Description } from "./productOverviewComponents/componentExport"
-
+import Overview from './Overview';
+import {Image as OverviewImage,Description} from './productOverviewComponents/componentExport'
 
 export default function ProductThumb(props) {
   const { id, name, image, price, currency, stock, vote_count, vote_total, description, model } = props.product
@@ -126,6 +126,35 @@ export default function ProductThumb(props) {
   }, [cartItems, thisQ])//React Hook useEffect has a missing dependency: 'props.type'. Either include it or remove the dependency array. If 'setType' needs the current value of 'props.type', you can also switch to useReducer instead of useState and read 'props.type' in the reducer
 
   let navigate = useNavigate();
+  function Trying({props,quan,fu}){
+			  
+		  return(
+          <Group grow style={{ marginRight:'0px',gap:'10px',width:'90%',marginBottom: 5, marginTop: theme.spacing.sm }}>
+            <ActionIcon
+              disabled={quan === 0 || fu === true      // <----------
+                ? true
+                : false}
+              onClick={() => {
+                cartAddFunction(props.id, props.name, props.image, props.price, quan, props.stock, props.vote_count, props.vote_total)
+              }}
+            >
+              {quantity > 0
+                ? <ShoppingCartPlus size={30} color={'#40bf59'} />
+                : <ShoppingCartX size={30} color={'#d279c6'} />
+              }
+            </ActionIcon>
+            <AddremoveButtons
+              increaseQuantity={increaseQuantity}
+              decreaseQuantity={decreaseQuantity}
+              quantity={quan}
+            />
+            {currentQuantity > 0 &&
+              <ActionIcon onClick={() => { cartRemoveFunction() }}>
+                <ShoppingCartOff size={30} color={'red'} />
+              </ActionIcon>
+            }
+          </Group>
+		  )}
 
   return (
     <>
@@ -146,57 +175,30 @@ export default function ProductThumb(props) {
               />
             </Card.Section>
             : <>
-              <Container my="md">   {/*  productOverview old code  */}
-                <SimpleGrid
+			 <SimpleGrid
                   cols={2}
                   spacing="md"
                   breakpoints={[{ maxWidth: 'sm', cols: 1 }]}>
-                  <ImageOverview dim={{ width: "300px" }}
-                    image={image}
-                    title={name}
+				  
+                  <OverviewImage dim={{ width: "100%" }}
+                    image={props.product.image}
+                    title={props.product.name}
                   />
-                  <Grid gutter="md">
-                    <Grid.Col>
-                      <Name name={[name, ' ', model]} />
+				   <Grid gutter="md">
+			<Overview p={props.product} quantity={quantity} full={full} />
+		  <Grid.Col>
+			  <Trying props={props.product} quan={quantity} fu={full} />
                     </Grid.Col>
-                    <Grid.Col span={6}>
-                      <Price price={price} currency={currency} />
-                    </Grid.Col>
-                    <Grid.Col span={6}>
-                      <AbdoRating data={{
-                        label: 'Rating',
-                        stats: [vote_total, ' / 10'],
-                        color: 'green',
-                        icon: 'up',
-                        progress: vote_total / vote_count * 100
-                      }} />
-                    </Grid.Col>
-                  </Grid>
-                </SimpleGrid>
-                <Description description={description} label="Description" />
-              </Container>
-              <HashLink smooth to={user.id === null
-                ? '/login'
-                : '/cart'   /* product view feedback section  */
-              }
-              >
-                <Rating name="read-only"
-                  size="small"
-                  value={vote_total || vote_count == 0
-                    ? 0
-                    : vote_total / vote_count
-                  }
-                  readOnly={user.id === null
-                    ? true
-                    : false
-                  }
-                />
-              </HashLink>
+			  </Grid>
+			  </SimpleGrid>
+			  <Description description={props.product.description} label="Description" />
             </>
           }
 
           {type === "thumb"
-            ? <Group position="center" style={{ marginBottom: 5, marginTop: theme.spacing.sm }}>
+            ? 
+			<>
+			<Group position="center" style={{ marginBottom: 5, marginTop: theme.spacing.sm }}>
               <Text weight={500}>{name}</Text>
 
               <HashLink smooth to={user.id === null
@@ -220,33 +222,10 @@ export default function ProductThumb(props) {
                 {price} {currency}
               </Badge>
             </Group>
+			<Trying props={props.product} quan={quantity} fu={full} />		  
+			</>
             : null
           }
-          <Group grow position="center" style={{ marginBottom: 5, marginTop: theme.spacing.sm }}>
-            <ActionIcon
-              disabled={quantity === 0 || full === true      // <----------
-                ? true
-                : false}
-              onClick={() => {
-                cartAddFunction(id, name, image, price, quantity, stock, vote_count, vote_total)
-              }}
-            >
-              {quantity > 0
-                ? <ShoppingCartPlus size={30} color={'#40bf59'} />
-                : <ShoppingCartX size={30} color={'#d279c6'} />
-              }
-            </ActionIcon>
-            <AddremoveButtons
-              increaseQuantity={increaseQuantity}
-              decreaseQuantity={decreaseQuantity}
-              quantity={quantity}
-            />
-            {currentQuantity > 0 &&
-              <ActionIcon onClick={() => { cartRemoveFunction() }}>
-                <ShoppingCartOff size={30} color={'red'} />
-              </ActionIcon>
-            }
-          </Group>
         </Card>
       </div>
     </>
