@@ -1,5 +1,6 @@
 import { Application, Response, Request } from 'express';
 //import nodemailer from 'nodemailer';
+import { userShema } from '../service/validation';
 import { User, user } from '../models/users';
 import parseJwt from '../service/jwtParsing';
 import isAdminFun from '../service/isAdmin';
@@ -116,7 +117,7 @@ async function update(req: Request, res: Response) {
             }
             
         }
-
+        console.log(user_);
         //update and return the new token of updated user
         const resualt = await user_obj.update(user_);
         const new_token = jwt.sign({user:resualt},secret);
@@ -128,6 +129,7 @@ async function update(req: Request, res: Response) {
 }
 //create user by getting user data from request body
 async function create(req: Request, res: Response) {
+
     //hashin password using round and extra from .env file and password from request.body
     const hash = bcrypt.hashSync(req.body.password + process.env.extra, parseInt(process.env.round as string));
     //create type user with getting data to send to the database
@@ -147,7 +149,7 @@ async function create(req: Request, res: Response) {
     try {                
         const resault = await user_obj.create(u);
         const token = jwt.sign({ user: resault }, secret);
-        res.status(200).json(token);
+        res.status(200).json({resault,token});
     } catch (e) {
         res.status(400).json(`${e}`);
     }
@@ -184,14 +186,16 @@ async function login(req: Request, res: Response) {
     const { email, password } = req.body;//required
 
     try {
-        //hash the password to search by hashing and email in database 
+
         const hash = bcrypt.hashSync(password + process.env.extra, parseInt(process.env.round as string));
         //search in database by input data
-        const resault = await user_obj.auth(email, hash);
-    
+        const resault = await user_obj.auth(email,hash);
+        
         if(resault){//if their is user in database with input data will return token for that uer
+
             const user_token = jwt.sign({user:resault},secret);
             res.status(200).json({token:user_token});
+            
         }
         else
             throw new Error('user not exist.');//else return failed

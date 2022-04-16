@@ -12,7 +12,11 @@ export type order = {
   user_id: number;
 };
 
-
+export type order_product = {
+    order_id?:number;
+    product_id:number;
+    quantity:number
+}
 
 export class Order {
     async index(id: number): Promise<order[]> {
@@ -30,7 +34,7 @@ export class Order {
     async show(id: number,user_id:number): Promise<order> {
         try {
             const conn = await Client.connect();
-            const q = 'select * from orders left join order_product on orders.id=($1) and orders.user_id=($2);';
+            const q = 'select * from orders right join order_product on orders.id=($1) and orders.user_id=($2) left join product on order_product.product_id=product.id;;';
             const res = await conn.query(q, [id,user_id]);
             conn.release();
             return res.rows[0];
@@ -83,7 +87,7 @@ export class Order {
         order_id: number,
         product_id: number,
         quantity: number
-    ): Promise<string> {
+    ): Promise<order_product> {
         try {
             const conn = await Client.connect();
             const sql =
