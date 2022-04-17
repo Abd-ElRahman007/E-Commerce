@@ -9,8 +9,11 @@
 
 ### Description 
 
-    Create a [RESTful] full functionality API for e-commerce website to be accessible to the other developers. writing test, secured user information with encryption, and provide tokens for integration into the frontend. code contains user authentication and authorization
-
+    ```
+    Create a [RESTful] full functionality API for e-commerce website.
+     to be accessible to the other developers. writing test, secured user information with encryption,
+      and provide tokens for integration into the frontend. code contains user authentication and authorization
+    ```
     -How to run the project
         
         port: 5000
