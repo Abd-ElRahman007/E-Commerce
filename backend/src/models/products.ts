@@ -50,11 +50,16 @@ export class Product {
         }
     }
 
-    async search_by_category(category_id: number): Promise<product[]> {
+    async search_by_cat_or_brand(id: number, model_:string): Promise<product[]> {
         try {
+            let sql;
             const conn = await Client.connect();
-            const sql = 'select * from product where category_id =($1);';
-            const res = await conn.query(sql, [category_id]);
+            if(model_ == 'brand')
+                sql = 'select * from product where brand_id =($1);';
+            else
+                sql = 'select * from product where category_id =($1);';
+
+            const res = await conn.query(sql, [id]);
             conn.release();
             return res.rows;
         } catch (e) {
