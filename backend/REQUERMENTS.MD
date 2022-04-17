@@ -2,60 +2,61 @@ Database Schema:
         
     Products Table:
 
-        create table product (id serial primary key, code varchar(50)unique,name varchar(50),model varchar(150),image text, description text,category_id bigint references catogery(id)on delete set null, price float, currency varchar(20), vote_count int, vote_total int,stock bigint, brand_id bigint references brand(id)on delete set null);
-
-        create table product_images (id serial primary key, image text,product_id bigint references product(id)on delete cascade);
+        table product (id serial primary key, code varchar(50)unique,name varchar(50),model varchar(150),image text, images[] text, description text,category_id bigint references catogery(id)on delete set null, price float, currency varchar(20), vote_count int, vote_total int,stock bigint, brand_id bigint references brand(id)on delete set null);
 
 
-        index  --> /products?page=&limit=     [get] no content in body
-                                              [return] {id,name,price,stock,image,brand_id,category_id}
+        index  --> /products?page=&limit=&brand=&category=&name=
+
+                any of the query will return data only should put page and limit together to paginate.
+                                            [get] no content in body
+                                            [return] {id,code,name,model,images,description,currency,vote_count,vote_total,price,stock,image,brand_id,category_id}
 
         show   --> /products/:id [get] no content in body
+                                 [return] {id,code,name,model,images,description,currency,vote_count,vote_total,price,stock,image,brand_id,category_id}
+
+
+        create --> /products     [post] body{code[required],  name,  model,  image[required],  description,category_id[required],                             price[required], currency[required], vote_count,    vote_total, stock[required], brand_id[required]}       
+        
+                                header{token for admin only}
                                  [return] {id,code,name,model,,description,currency,vote_count,vote_total,price,stock,image,brand_id,category_id}
 
-        index  --> /:category_id/products [get] no content in body
-                                          [return] {id,code,name,model,,description,currency,vote_count,vote_total,price,stock,image,brand_id,category_id}
-
-        create --> /products     [post] body{code,  name,  model,  image,  description,category_id, price, currency, vote_count,    vote_total, stock, brand_id} header{token}
+        update --> /products/:id [patch]  body{code,  name,  model,  image,  description,category_id, price, currency , vote_count, vote_total, stock,                              brand_id} header{token for admins only}
                                  [return] {id,code,name,model,,description,currency,vote_count,vote_total,price,stock,image,brand_id,category_id}
 
-        update --> /products/:id [patch]  body{code,  name,  model,  image,  description,category_id, price, currency , vote_count, vote_total, stock, brand_id} header{token}
-                                 [return] {id,code,name,model,,description,currency,vote_count,vote_total,price,stock,image,brand_id,category_id}
-
-        delete --> /products/:id [delete]  header{token}
+        delete --> /products/:id [delete]  header{token admins only}
                                  [return] {'deleted'}
 
     Users Table:
 
-        create table users(id serial primary key, f_name varchar(50), l_name varchar(50), email varchar(500) unique not null, password varchar(500) not null, birthday date, phone varchar(12),status varchar(50), created_at timestamp,city varchar(150),address varchar(500),coupon_id bigint references coupon(id)on delete set null);
+        table users(id serial primary key, f_name varchar(50), l_name varchar(50), email varchar(500) unique not null, password varchar(500) not null, birthday date, phone varchar(12),status varchar(50), created_at timestamp,city varchar(150),address varchar(500),coupon_id bigint references coupon(id)on delete set null);
 
 
-        index   --> /users     [get]    header{token}
+        index   --> /users     [get]    header{token admins only}
                                 [return] {id,f_name,l_name,email,password,birthday,phone,status,created_at,address,coupon_id}
 
-        show    --> /users/:id [get]    header{token}
+        show    --> /users/:id [get]    header{token admin or user itself}
                                 [return] {id,f_name,l_name,email,password,birthday,phone,status,created_at,address,coupon_id}
                                 
-        create  --> /users     [post]   body{f_name, l_name, email, password, birthday, phone, status, city,address}
+        create  --> /users     [post]   body{f_name, l_name, email[required], password[required], birthday, phone, status[required], city,address}
                                 [return] {"resault": [id,f_name,l_name,email,password,birthday,phone,status,created_at,address,coupon_id],"token":""}
                                 
-        update  --> /users/:id [patch]  body{f_name, l_name, email, birthday, phone, city,address} header{token}
+        update  --> /users/:id [patch]  body{f_name, l_name, email, birthday, phone, city,address} header{token user it self except status and coupon_id admins can}
                                 [return] {"resault": [id,f_name,l_name,email,password,birthday,phone,status,created_at,address,coupon_id],"token":""}
                                 
-        delete  --> /users/:id [delete] header{token}
+        delete  --> /users/:id [delete] header{token user itself}
                                 [return] {'deleted'}
                                 
-        login   --> /login     [post]   body{username, password}
-                                [return] {'succeeded'| 'failed'}
+        login   --> /login     [post]   body{email[required], password[required]}
+                                [return] {'succeeded':token| 'failed'}
                                 
-        get_token-> /users/:id/get_token [get] no body content
+        get_token-> /users/:id/get_token [get] no body content admins only
                                 [return] {"token":""}
                                 
         
 
     Orders Table:
         
-        create table orders(id serial primary key, status varchar(20), total float,time_start timestamp, time_arrival timestamp, compelete_at timestamp, user_id bigint references users(id)on delete cascade);
+        table orders(id serial primary key, status varchar(20), total float,time_start timestamp, time_arrival timestamp, compelete_at timestamp, user_id bigint references users(id)on delete cascade);
 
 
         index      --> /users/:user_id/orders           [get] header{token}
@@ -77,7 +78,7 @@ Database Schema:
 
     order_products Table:
 
-        create table order_product (id serial primary key, quantity int ,order_id bigint references orders(id)on delete cascade, product_id bigint references product(id)on delete set null);
+        table order_product (id serial primary key, quantity int ,order_id bigint references orders(id)on delete cascade, product_id bigint references product(id)on delete set null);
 
         addProduct --> /users/:user_id/orders/:order_id/products [post] body{product_id, quantit} header{token}
                                                                  [return] {id,quantity,order_id,product_id}
@@ -85,7 +86,7 @@ Database Schema:
 
     Categoey Table:
 
-        create table catogery(id serial primary key, name varchar(100) unique not null);
+        table catogery(id serial primary key, name varchar(100) unique not null);
 
         index      --> /categories          [get]
                                             [return] {id,name}
@@ -93,13 +94,13 @@ Database Schema:
         show       --> /categories/:id      [get]
                                             [return all products in category] {id,name,price,stock,image,brand_id,category_id}
 
-        create     --> /categories          [post] body{name} header{token}
+        create     --> /categories          [post] body{name[required]} header{token for admins only}
                                             [return] {id,name}
 
-        update     --> /categories/:id      [patch] body{name} header{token}
+        update     --> /categories/:id      [patch] body{name} header{token for admins only}
                                             [return] {id,name}
 
-        delete     --> /categories/:id      [delete] header{token}
+        delete     --> /categories/:id      [delete] header{token for admins only}
                                             [return] {'deleted'}
 
 
@@ -107,7 +108,7 @@ Database Schema:
 
     Brand Table:
 
-        create table brand (id serial primary key, name varchar(100)unique not null, description text);
+        brand (id serial primary key, name varchar(100)unique not null, description text);
 
         index      --> /brands          [get]
                                         [return]{id,name,description}
@@ -115,20 +116,20 @@ Database Schema:
         show       --> /brands/:id      [get]
                                         [return]{id,name,description}
         
-        create     --> /brands          [post] body{name,description} header{token}
+        create     --> /brands          [post] body{name[required],description} header{token for admins only}
                                         [return]{id,name,description}
         
-        update     --> /brands/:id      [patch] body{name,description} header{token}
+        update     --> /brands/:id      [patch] body{name[optional],description[optional]} header{token for admins only}
                                         [return]{id,name,description}
         
-        delete     --> /brands/:id      [delete] header{token}
+        delete     --> /brands/:id      [delete] header{token for admins only}
                                         [return]{'deleted'}
         
 
 
     Coupon Table:
 
-        create table coupon(id serial primary key, code varchar(50)unique not null,value_of_100 int);
+        table coupon(id serial primary key, code varchar(50)unique not null,value_of_100 int);
 
         index      --> /coupons          [get]
                                          [return]{id,code,value_of_100}
@@ -136,20 +137,20 @@ Database Schema:
         show       --> /coupons/:id      [get]
                                          [return]{id,code,value_of_100}
 
-        create     --> /coupons          [post] body{code,value_of_100} header{token}
+        create     --> /coupons          [post] body{code[required],value_of_100[required]} header{token for admins only}
                                          [return]{id,code,value_of_100}
 
-        update     --> /coupons/:id      [patch] body{code,value_of_100} header{token}
+        update     --> /coupons/:id      [patch] body{code,value_of_100} header{token for admins only}
                                          [return]{id,code,value_of_100}
 
-        delete     --> /coupons/:id      [delete] header{token}
+        delete     --> /coupons/:id      [delete] header{token for admins only}
                                          [return]{'deleted'}
 
 
 
     Comment Table:
 
-        create table comment(id serial primary key, subject varchar(200), message text, created_time timestamp, user_id bigint references users(id)on delete cascade, product_id bigint references product(id)on delete cascade);
+        table comment(id serial primary key, subject varchar(200), message text, created_time timestamp, user_id bigint references users(id)on delete cascade, product_id bigint references product(id)on delete cascade);
 
         index      --> products/:product_id/comments         [get]
                                                             [return]{id,subject,message,created_at,user_id,product_id}
@@ -157,13 +158,13 @@ Database Schema:
         show       --> products/:product_id/comments/:id     [get]
                                                             [return]{id,subject,message,created_at,user_id,product_id}
 
-        create     --> products/:product_id/comments         [post] body{subject,message,user_id,product_id} header{token}
+        create     --> products/:product_id/comments         [post] body{subject[required],message,user_id[required]} header{token}
                                                             [return]{id,subject,message,created_at,user_id,product_id}
 
-        update     --> products/:product_id/comments/:id     [patch] body{subject,message,user_id,product_id} header{token}
+        update     --> products/:product_id/comments/:id     [patch] body{subject,message,user_id,product_id} header{token for user who write it only}
                                                             [return]{id,subject,message,created_at,user_id,product_id}
 
-        delete     --> products/:product_id/comments/:id     [delete] header{token}
+        delete     --> products/:product_id/comments/:id     [delete] header{token for admins or user who write it}
                                                             [return]{'deleted'}
 
 
@@ -171,37 +172,4 @@ Database Schema:
 
 
 
-
-{
-    "code": "11fdkbmkkkgf57",
-    "name": "jksn455",
-    "model": "2022",
-    "images": ["none","jkjkj","klmjkj","fdjkgdf"],
-    "description": "misr",
-    "category_id": 1,
-    "price": 2500,
-    "currency": "eg",
-    "vote_count": 5,
-    "vote_total": 20,
-    "stock": 1000,
-    "brand_id": 1,
-    "f_name":"marwan",
-    "l_name":"ahmed",
-    "admin_email":"marwan@gmail.com",
-    "admin_password":"marwan",
-    "birthday":"2022-04-03T17:38:06.684Z",
-    "phone":"01282783116",
-    "status":"open",
-    "city":"menofia",
-    "address":"none",
-    "total":200,
-    "time_arrival":"2022-04-03T17:38:06.684Z",
-    "time_compelete":"2022-04-03T17:38:06.684Z",
-    "product_id":1,
-    "quantity":20,
-    "value_of_100":51,
-    "subject":"no2mne",
-    "message":"helmlo",
-    "user_id":1
-}
 
