@@ -7,7 +7,7 @@ const httpStatusCodes = {
     INTERNAL_SERVER: 500
 };
 
-class BaseError extends Error {
+export class BaseError extends Error {
     statusCode: number;
     isOperational: boolean;
     constructor (name:string, statusCode:number, isOperational:boolean, description:string) {
@@ -21,15 +21,14 @@ class BaseError extends Error {
     }
 }
 
-class Api404Error extends BaseError {
+export class Api404Error extends BaseError {
     constructor (
         name:string,
         statusCode = httpStatusCodes.NOT_FOUND,
-        description = 'Not found.',
+        description = 'URL Not found.',
         isOperational = true
     ) {
         super(name, statusCode, isOperational, description);
     }
 }
 
-exports = {BaseError, Api404Error};
