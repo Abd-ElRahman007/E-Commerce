@@ -1,10 +1,11 @@
 import { Application, Response, Request } from 'express';
-//import { userShema } from '../service/validation';
+import { userSchema } from '../service/validation';
 import nodemailer from 'nodemailer';
 import { User, user } from '../models/users';
 import parseJwt from '../service/jwtParsing';
 import isAdminFun from '../service/isAdmin';
 import jwt from 'jsonwebtoken';
+import {middelware} from '../service/middelware';
 import bcrypt from 'bcrypt';
 import dotenv from 'dotenv';
 
@@ -138,7 +139,7 @@ async function update(req: Request, res: Response) {
 }
 //create user by getting user data from request body
 async function create(req: Request, res: Response) {
-
+    
     //hashin password using round and extra from .env file and password from request.body
     const hash = bcrypt.hashSync(req.body.password + process.env.extra, parseInt(process.env.round as string));
     //create type user with getting data to send to the database
@@ -149,12 +150,12 @@ async function create(req: Request, res: Response) {
         password:hash, //required
         birthday:req.body.birthday, 
         phone:req.body.phone, 
-        status:'active',//the default of status is active 
+        status:req.body.status,//the default of status is active 
         city:req.body.city,
         address:req.body.address,
         coupon_id:req.body.coupon_id
     };
-    //send user type to the database to create
+        //send user type to the database to create
     try {                
         const resault = await user_obj.create(u);
         const token = jwt.sign({ user: resault }, secret);
@@ -162,6 +163,7 @@ async function create(req: Request, res: Response) {
     } catch (e) {
         res.status(400).json(`${e}`);
     }
+    
 }
 //return deleted and delete user using id in request params [only user delete it self]
 async function delete_(req: Request, res: Response) {
@@ -291,14 +293,15 @@ async function get_token(req: Request, res: Response) {
 }
 //main routes of user model
 function mainRoutes(app: Application) {
-    app.get('/auth/login', login);
-    app.get('/auth/forget_password', forget_password);
-    app.post('/auth/reset_password', reset_password);
+    app.get('/auth/login', middelware(userSchema.login), login);
+    app.get('/auth/forget_password',forget_password);
+    app.post('/auth/reset_password',  middelware(userSchema.reset_password), reset_password);
+    //
     app.get('/users', index);
     app.get('/users/:id', show);
-    app.post('/users', create);
+    app.post('/users',  middelware(userSchema.create), create);
     app.get('/users/:id/get_token', get_token);
-    app.patch('/users/:id', update);
+    app.patch('/users/:id',  middelware(userSchema.update), update);
     app.delete('/users/:id', delete_);
 }
 

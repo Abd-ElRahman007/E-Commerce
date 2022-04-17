@@ -1,6 +1,6 @@
 import cloudinary from 'cloudinary';
 import { Application, Response, Request } from 'express';
-
+import { Api404Error } from './errorHandling';
 const cloud = cloudinary.v2;
 
 //return time stamp and signature of an image to front end
@@ -19,9 +19,15 @@ async function api_image(req:Request, res:Response){
     }
 	
 }
+async function not_found(req:Request, res:Response) {
+    const o = new Api404Error('not fund');
+    
+    res.status(404).send(o.message);
+}
 //route for function
 function mainRoutes(app: Application) {
     app.get('/imageSignature',api_image);
+    app.use('*',not_found);
 }
 
 export default mainRoutes;

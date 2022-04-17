@@ -1,6 +1,8 @@
 import { Application, Response, Request } from 'express';
 import { Brand, brand } from '../models/brand';
 import isAdminFun from '../service/isAdmin';
+import { middelware } from '../service/middelware';
+import { brandSchema } from '../service/validation';
 
 
 
@@ -92,8 +94,8 @@ async function delete_(req: Request, res: Response) {
 function mainRoutes(app: Application) {
     app.get('/brands', index);
     app.get('/brands/:id', show);
-    app.post('/brands', create);
-    app.patch('/brands/:id', update);
+    app.post('/brands', middelware(brandSchema.create), create);
+    app.patch('/brands/:id', middelware(brandSchema.create), update);
     app.delete('/brands/:id', delete_);
 }
 

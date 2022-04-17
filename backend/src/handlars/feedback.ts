@@ -4,7 +4,8 @@ import parseJwt from '../service/jwtParsing';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import isAdmin from '../service/isAdmin';
-
+import {middelware} from '../service/middelware';
+import {commentSchema} from '../service/validation';
 dotenv.config();
 
 const {secret} = process.env;
@@ -127,8 +128,8 @@ function mainRoutes(app: Application) {
     
     app.get('/products/:product_id/comments', index);
     app.get('/products/:product_id/comments/:id', show);
-    app.post('/products/:product_id/comments', create);
-    app.patch('/products/:product_id/comments/:id', update);
+    app.post('/products/:product_id/comments', middelware(commentSchema.create), create);
+    app.patch('/products/:product_id/comments/:id', middelware(commentSchema.create), update);
     app.delete('/products/:product_id/comments/:id', delete_);
 
 
