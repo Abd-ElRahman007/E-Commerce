@@ -114,7 +114,7 @@ async function update(req: Request, res: Response) {
             res.status(400).json(`${e}`);
         }
     } else
-        throw new Error('token required.');
+        res.status(400).json('token required.');
 }
 
 async function create(req: Request, res: Response) {
@@ -145,7 +145,7 @@ async function create(req: Request, res: Response) {
         } catch (e) {
             res.status(400).json(`${e}`);
         }
-    } else res.send('Not allowed login first!!');
+    } else res.status(400).json('Not allowed login first!!');
 }
 //delete product using id in request params [only for admins]
 async function delete_(req: Request, res: Response) {
@@ -160,7 +160,7 @@ async function delete_(req: Request, res: Response) {
         } catch (e) {
             res.status(400).json(`${e}`);
         }
-    } else res.send('Not allowed login first!!');
+    } else res.status(400).json('Not allowed login first!!');
 }
 //main routes of product model
 function mainRoutes(app: Application) {

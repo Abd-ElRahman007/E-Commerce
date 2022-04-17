@@ -49,7 +49,7 @@ async function update(req: Request, res: Response) {
         } catch (e) {
             res.status(400).json(`${e}`);
         }
-    } else throw new Error('Not allowed this for you!!');
+    } else res.status(400).json('Not allowed this for you!!');
 }
 //create and return the brand with data in request body
 async function create(req: Request, res: Response) {
@@ -70,7 +70,7 @@ async function create(req: Request, res: Response) {
         } catch (e) {
             res.status(400).json(`${e}`);
         }
-    } else throw new Error('Not allowed this for you!!');
+    } else res.status(400).json('Not allowed this for you!!');
 }
 //delete and return deleted using id in request params
 async function delete_(req: Request, res: Response) {
@@ -86,7 +86,7 @@ async function delete_(req: Request, res: Response) {
         } catch (e) {
             res.status(400).json(`${e}`);
         }
-    } else throw new Error('Not allowed this for you!!');
+    } else res.status(400).json('Not allowed this for you!!');
 }
 
 function mainRoutes(app: Application) {

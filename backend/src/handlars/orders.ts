@@ -59,7 +59,7 @@ async function show(req: Request, res: Response) {
         } catch (e) {
             res.status(400).json(`${e}`);
         }
-    } else res.send('Not allowed login first!!');
+    } else res.status(400).json('Not allowed login first!!');
    
 }
 //update the order using user_id and id in req params [only user it self] 
@@ -94,7 +94,7 @@ async function update(req: Request, res: Response) {
         } catch (e) {
             res.status(400).json(`${e}`);
         }
-    } else res.send('Not allowed login first!!');
+    } else res.status(400).json('Not allowed login first!!');
 }
 
 //create order for a user id in req params
@@ -132,7 +132,7 @@ async function create(req: Request, res: Response) {
         } catch (e) {
             res.status(400).json(`${e}`);
         }
-    } else res.send('Not allowed login first!!');
+    } else res.status(400).json('Not allowed login first!!');
 }
 //delete order using user id and order id in params [admins only]
 async function delete_(req: Request, res: Response) {
@@ -150,7 +150,7 @@ async function delete_(req: Request, res: Response) {
         } catch (e) {
             res.status(400).json(`${e}`);
         }
-    } else res.send('Not allowed login first!!');
+    } else res.status(400).json('Not allowed login first!!');
 }
 //add product to the order using user id and order id in params [user only]
 async function addProduct(req: Request, res: Response) {
@@ -179,7 +179,7 @@ async function addProduct(req: Request, res: Response) {
             res.status(400).json(`${e}`);
         }
     }else 
-        res.send('Not allowed login first!!');
+        res.status(400).json('Not allowed login first!!');
 
 }
 function mainRoutes(app: Application) {

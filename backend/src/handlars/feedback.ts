@@ -38,8 +38,8 @@ async function update(req: Request, res: Response) {
         const permession = jwt.verify(token, secret as string);
         if(permession){
             isTrue = true;
-        }else throw new Error('user not exist.');
-    }else throw new Error('login required.');
+        }else res.status(400).json('user not exist.');
+    }else res.status(400).json('login required.');
 
     if (isTrue) {
 
@@ -63,7 +63,7 @@ async function update(req: Request, res: Response) {
         } catch (e) {
             res.status(400).json(`${e}`);
         }
-    } else throw new Error('user not exist.');
+    } else res.status(400).json('user not exist.');
 }
 //create and return the comment with product_id in request params and data in request body
 async function create(req: Request, res: Response) {
@@ -76,9 +76,9 @@ async function create(req: Request, res: Response) {
         const permession = jwt.verify(token, secret as string);
         if(permession){
             isTrue = true;
-        }else throw new Error('user not exist.');
+        }else res.status(400).json('user not exist.');
 
-    }else throw new Error('login required.');
+    }else res.status(400).json('login required.');
 
     if (isTrue) {
         try {
@@ -95,7 +95,7 @@ async function create(req: Request, res: Response) {
         } catch (e) {
             res.status(400).json(`${e}`);
         }
-    } else throw new Error('user not exist.');
+    } else res.status(400).json('user not exist.');
 }
 //delete and return deleted using id and product_id in request params
 async function delete_(req: Request, res: Response) {
@@ -106,9 +106,9 @@ async function delete_(req: Request, res: Response) {
         const permession = jwt.verify(token, secret as string);
         if(permession){
             isTrue = true;
-        } else throw new Error('user not exist.');
+        } else res.status(400).json('user not exist.');
 
-    } else throw new Error('login required.');
+    } else res.status(400).json('login required.');
 
     const user = parseJwt(token).user;
     //if token is exist will delete the comment with product_id and id in params
@@ -120,7 +120,7 @@ async function delete_(req: Request, res: Response) {
             res.status(400).json(`${e}`);
         }
         
-    } else throw new Error('user not exist.');
+    } else res.status(400).json('user not exist.');
 }
 
 function mainRoutes(app: Application) {

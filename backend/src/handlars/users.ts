@@ -36,7 +36,7 @@ async function index(req: Request, res: Response) {
         } catch (e) {
             res.status(400).json(`${e}`);
         }
-    } else res.send('Not allowed for you!!');//else will return not allowed
+    } else res.status(400).json('Not allowed for you!!');//else will return not allowed
     
 }
 //return json data for a sungle user [allowed only for admins or user it self]
@@ -55,7 +55,7 @@ async function show(req: Request, res: Response) {
             res.status(400).json(`${e}`);
         }
     } else 
-        throw new Error('token required or paramd id error');//else will return not allowed
+        res.status(400).json('token required or paramd id error');//else will return not allowed
 
 }
 /*
@@ -174,9 +174,9 @@ async function delete_(req: Request, res: Response) {
         if(per)
             permession = true; 
         else
-            throw new Error('user not exist.');  
+            res.status(400).json('user not exist.');  
     }else
-        throw new Error('login token required');
+        res.status(400).json('login token required');
 
     //check if the request from super admin?
     //const isTrue = isAdminFun(req.body.admin_email,req.body.admin_password,token);
@@ -188,7 +188,7 @@ async function delete_(req: Request, res: Response) {
             res.status(400).json(`${e}`);
         }
     } else 
-        throw new Error('token required or id params wrong.');//else return error
+        res.status(400).json('token required or id params wrong.');//else return error
 }
 //return token for user and login the user using email and password from request body
 async function login(req: Request, res: Response) {
@@ -207,7 +207,7 @@ async function login(req: Request, res: Response) {
             
         }
         else
-            throw new Error('user not exist.');//else return failed
+            res.status(400).json('user not exist.');//else return failed
     } catch (e) {
         res.status(400).json(`${e}`);
     }
@@ -241,9 +241,9 @@ async function forget_password(req: Request, res: Response) {
                     }
                 });
             }else
-                throw new Error('user suspended');
+                res.status(400).json('user suspended');
         }
-        else throw new Error('user not exist.');
+        else res.status(400).json('user not exist.');
     } catch (e) {
         res.status(400).json(`${e}`);
     }
@@ -263,9 +263,9 @@ async function reset_password(req: Request, res: Response) {
                 const newToken = jwt.sign({ user: result }, secret);
                 res.status(200).json({user:user,token:newToken});
             }else
-                throw new Error('user not exist');
+                res.status(400).json('user not exist');
         }else 
-            throw new Error('token required.');
+            res.status(400).json('token required.');
     } catch (e) {
         res.status(400).json(`${e}`);
     }
