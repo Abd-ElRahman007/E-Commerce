@@ -1,6 +1,8 @@
 import { Application, Response, Request } from 'express';
 import { Catogery, catogery } from '../models/catogery';
 import isAdminFun from '../service/isAdmin';
+import { middelware } from '../service/middelware';
+import { catSchema } from '../service/validation';
 
 
 
@@ -89,8 +91,8 @@ async function delete_(req: Request, res: Response) {
 function mainRoutes(app: Application) {
     app.get('/categories', index);
     app.get('/categories/:id', show);
-    app.post('/categories', create);
-    app.patch('/categories/:id', update);
+    app.post('/categories', middelware(catSchema.create), create);
+    app.patch('/categories/:id', middelware(catSchema.create), update);
     app.delete('/categories/:id', delete_);
 }
 

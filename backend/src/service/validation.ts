@@ -1,17 +1,145 @@
 import joi from 'joi';
 //validation schema file
 
-const userShema = joi.object({
-    f_name:joi.string().min(3).max(30),
-    l_name:joi.string().min(3).max(30),
-    email:joi.string().email().lowercase().required(),
-    admin_email:joi.string().email().lowercase(),
-    password:joi.string().min(8).required(),
-    admin_password:joi.string(),
-    birthday:joi.date().max('1-1-2004').iso(),
-    phone:joi.string(),
-    city:joi.string(),
-    address:joi.string(),
-});
+const userSchema = {
+    create: joi.object({
+        admin_email:joi.string().email().lowercase().optional(),
+        admin_password:joi.string().optional(),
+        f_name:joi.string().min(3).max(30).optional(),
+        l_name:joi.string().min(3).max(30).optional(),
+        email:joi.string().email().lowercase().required(),
+        password:joi.string().min(8).required(),
+        status: joi.string().lowercase().default('active').valid('active','deactive','suspended'),
+        birthday:joi.date().max('1-1-2004').optional(),
+        phone:joi.string().optional(),
+        city:joi.string().optional(),
+        address:joi.string().optional(),
+    }),
+    //
+    update: joi.object({
+        admin_email:joi.string().email().lowercase().optional(),
+        admin_password:joi.string().optional(),
+        f_name:joi.string().min(3).max(30).optional(),
+        l_name:joi.string().min(3).max(30).optional(),
+        email:joi.string().email().lowercase().optional(),
+        password:joi.string().min(8).optional(),
+        status: joi.string().lowercase().default('active').valid('active','deactive','suspended'),
+        birthday:joi.date().max('1-1-2004').optional(),
+        phone:joi.string().optional(),
+        city:joi.string().optional(),
+        address:joi.string().optional(),
+    }),
+    //
+    login: joi.object({
+        email:joi.string().email().lowercase().required(),
+        password:joi.string().required(),
+    }),
+    //
+    reset_password: joi.object({
+        password:joi.string().min(8).required(),
+    }),
+};
 
-export {userShema};
+const brandSchema = {
+    create:joi.object({
+        admin_email:joi.string().email().lowercase().optional(),
+        admin_password:joi.string().optional(),
+        name: joi.string().required(),
+        description:joi.string().optional()
+    }),
+    //
+    update:joi.object({
+        admin_email:joi.string().email().lowercase().optional(),
+        admin_password:joi.string().optional(),
+        name: joi.string().optional(),
+        description:joi.string().optional()
+    })
+};
+
+const catSchema = {
+    create:joi.object({
+        admin_email:joi.string().email().lowercase().optional(),
+        admin_password:joi.string().optional(),
+        name: joi.string().required()
+    }),
+    //
+    update:joi.object({
+        admin_email:joi.string().email().lowercase().optional(),
+        admin_password:joi.string().optional(),
+        name: joi.string().optional()
+    })
+};
+//
+const couponSchema = {
+    create:joi.object({
+        admin_email:joi.string().email().lowercase().optional(),
+        admin_password:joi.string().optional(),
+        code: joi.string().required(),
+        value_of_100:joi.number().max(100).min(0).required()
+    }),
+    //
+    update:joi.object({
+        admin_email:joi.string().email().lowercase().optional(),
+        admin_password:joi.string().optional(),
+        code: joi.string().optional(),
+        value_of_100:joi.number().max(100).min(0).optional()
+    })
+};
+//
+const commentSchema = {
+    create:joi.object({
+        subject: joi.string().max(255).optional(),
+        message:joi.string().max(1000).required(),
+        user_id: joi.number().required(),
+        vote:joi.number().max(5).min(0).optional()
+    }),
+    //
+    update:joi.object({
+        subject: joi.string().max(255).optional(),
+        message:joi.string().max(1000).optional(),
+        user_id: joi.number().optional(),
+        vote:joi.number().max(5).min(0).optional()
+    })
+};
+
+const productSchema = {
+    create: joi.object({
+        admin_email:joi.string().email().lowercase().optional(),
+        admin_password:joi.string().optional(),
+
+        name: joi.string().optional(),
+        price: joi.number().min(0).required(),
+        code:joi.string().required(),
+        model:joi.string().optional(),
+        image:joi.string().required(),
+        images:joi.array().optional(),
+        description:joi.string().optional(),
+        category_id:joi.number().min(0).required(),
+        currency:joi.string().lowercase().required().valid('usd','eg'),
+        vote_count:joi.number().default(0).required(),
+        vote_total:joi.number().default(0).required(),
+        stock:joi.number().min(0).required(),
+        brand_id:joi.number().min(0).required(),
+    }),
+    //
+    update: joi.object({
+        admin_email:joi.string().email().lowercase().optional(),
+        admin_password:joi.string().optional(),
+
+        name: joi.string().optional(),
+        price: joi.number().min(0).optional(),
+        code:joi.string().optional(),
+        model:joi.string().optional(),
+        image:joi.string().optional(),
+        images:joi.array().optional(),
+        description:joi.string().optional(),
+        category_id:joi.number().min(0).optional(),
+        currency:joi.string().optional().valid('usd','eg'),
+        vote_count:joi.number().default(0).optional(),
+        vote_total:joi.number().default(0).optional(),
+        stock:joi.number().min(0).optional(),
+        brand_id:joi.number().min(0).optional(),
+    })
+};
+export {userSchema, brandSchema, catSchema, couponSchema, commentSchema, productSchema};
+

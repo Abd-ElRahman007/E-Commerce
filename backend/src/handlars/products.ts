@@ -3,8 +3,8 @@ import { Product, product } from '../models/products';
 import pagination from '../service/pagination';
 import isTrue from '../service/filtering';
 import isAdminFun from '../service/isAdmin';
-
-
+import { middelware } from '../service/middelware';
+import { productSchema } from '../service/validation';
 const product_obj = new Product();
 
 /*
@@ -166,8 +166,8 @@ async function delete_(req: Request, res: Response) {
 function mainRoutes(app: Application) {
     app.get('/products', index);
     app.get('/products/:id', show);
-    app.post('/products', create);
-    app.patch('/products/:id', update);
+    app.post('/products', middelware(productSchema.create), create);
+    app.patch('/products/:id',  middelware(productSchema.update), update);
     app.delete('/products/:id', delete_);
 }
 

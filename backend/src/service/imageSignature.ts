@@ -21,7 +21,6 @@ async function api_image(req:Request, res:Response){
 }
 async function not_found(req:Request, res:Response) {
     const o = new Api404Error('not fund');
-    console.log(o.message);
     
     res.status(404).send(o.message);
 }

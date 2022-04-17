@@ -1,6 +1,8 @@
 import { Application, Response, Request } from 'express';
 import { Coupon, coupon } from '../models/coupon';
 import isAdminFun from '../service/isAdmin';
+import { middelware } from '../service/middelware';
+import { couponSchema } from '../service/validation';
 
 const coupon_obj = new Coupon();
 //return all coupons in database
@@ -88,8 +90,8 @@ async function delete_(req: Request, res: Response) {
 function mainRoutes(app: Application) {
     app.get('/coupons', index);
     app.get('/coupons/:id', show);
-    app.post('/coupons', create);
-    app.patch('/coupons/:id', update);
+    app.post('/coupons', middelware(couponSchema.create), create);
+    app.patch('/coupons/:id', middelware(couponSchema.create), update);
     app.delete('/coupons/:id', delete_);
 }
 
