@@ -1,16 +1,16 @@
 E-commerce API Project
 
 -Content 
-    .Decription
+    -Decription
         -set up 
         -run project
 
-    .Technologies
-    .Tools 
-    .Resources 
-    .Auther
+    -Technologies
+    -Tools 
+    -Resources 
+    -Auther
 
-.Description 
+-Description 
 
     Create a [RESTful] full functionality API for e-commerce website to be accessible to the other developers. writing test, secured user information with encryption, and provide tokens for integration into the frontend. code contains user authentication and authorization
 
@@ -55,7 +55,8 @@ E-commerce API Project
             npm run dev
 
     
-.Technologies 
+-Technologies 
+'''
     nodejs 
     typescript 
     express 
@@ -64,17 +65,20 @@ E-commerce API Project
     joi
     jwt
     bycrypt
+'''
 
-.Tools 
+-Tools 
     git
     github
     vs code 
     google chrome
 
-.Resources 
-    udacity 
-    community slack and toturs 
-    npmjs.com
-    google
+-Resources 
+```
+udacity 
+community slack and toturs 
+npmjs.com
+google
+```
 
-.Auther: Marwan Ahmed(udacity student)
+-Auther: Marwan Ahmed
