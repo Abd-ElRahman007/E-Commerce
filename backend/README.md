@@ -2,8 +2,8 @@ E-commerce API Project
 
 -Content 
     -Decription
-        -set up 
-        -run project
+        1-set up 
+        2-run project
 
     -Technologies
     -Tools 
