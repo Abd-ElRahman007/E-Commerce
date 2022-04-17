@@ -1,14 +1,11 @@
 # E-commerce API Project
 
 ## Content 
-    ### Decription
-        -set up 
-        -run project
-
-    ### Technologies
-    ### Tools 
-    ### Resources 
-    ### Auther
+    - Decription
+    - Technologies
+    - Tools 
+    - Resources 
+    - Auther
 
 ### Description 
 
