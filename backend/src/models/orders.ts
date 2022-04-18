@@ -64,12 +64,12 @@ export class Order {
         }
     }
 
-    async update(o: order): Promise<order> {
+    async update(status: string, id:number, date:Date|null): Promise<order> {
         try {
             const conn = await Client.connect();
             
-            const sql = 'update orders set status=($1), total=($2), compelete_at=($3),time_arrival=($4),time_start=($5),payment=($6),shipping_address=($7),shipping_cost=($8),taxes=($9) where id=($10) RETURNING *; ';
-            const res = await conn.query(sql, [o.status,o.total,o.compelete_at,o.time_arrival,new Date(), o.payment,o.shipping_address,o.shipping_cost,o.taxes,o.id]);
+            const sql = 'update orders set status=($1), compelete_at=($2) where id=($3) RETURNING *; ';
+            const res = await conn.query(sql, [status,date,id]);
             conn.release();
             return res.rows[0];
             
@@ -91,28 +91,11 @@ export class Order {
         }
     }
 
-    async addProduct(
-        order_id: number,
-        product_id: number,
-        quantity: number
-    ): Promise<order_product> {
+    async addProduct(op:order_product): Promise<order_product> {
         try {
             const conn = await Client.connect();
             const sql =
         'insert into order_product (quantity, order_id, product_id) values($1,$2,$3)RETURNING *;';
-            const res = await conn.query(sql, [quantity, order_id, product_id]);
-            conn.release();
-            return res.rows[0];
-        } catch (e) {
-            throw new Error(`${e}`);
-        }
-    }
-
-    async updateProduct(op:order_product ): Promise<order_product> {
-        try {
-            const conn = await Client.connect();
-            const sql =
-        'update into order_product set quantity=($1)  where  order_id=($2), product_id=($3) RETURNING *;';
             const res = await conn.query(sql, [op.quantity, op.order_id, op.product_id]);
             conn.release();
             return res.rows[0];
@@ -121,16 +104,4 @@ export class Order {
         }
     }
 
-    async deleteProduct(op:order_product ): Promise<string> {
-        try {
-            const conn = await Client.connect();
-            const sql =
-        'delete from order_product where  order_id=($2), product_id=($3) RETURNING *;';
-            await conn.query(sql, [op.quantity, op.order_id, op.product_id]);
-            conn.release();
-            return 'deleted';
-        } catch (e) {
-            throw new Error(`${e}`);
-        }
-    }
 }

@@ -141,5 +141,31 @@ const productSchema = {
         brand_id:joi.number().min(0).optional(),
     })
 };
-export {userSchema, brandSchema, catSchema, couponSchema, commentSchema, productSchema};
+
+const orderSchema = {
+    create: joi.object({
+        admin_email:joi.string().email().lowercase().optional(),
+        admin_password:joi.string().optional(),
+
+        status:joi.string().valid('open','cancled','complete').required(),
+        total:joi.number().required(),
+        time_arrival:joi.date().optional(),
+        compelete_at:joi.date().optional(),
+        payment:joi.string().valid('on_delivary','online').required(),
+        shipping_address:joi.string().required(),
+        shipping_cost:joi.number().min(0).required(),
+        taxes:joi.number().min(0).optional(),
+        products:joi.array(),
+    }),
+    //
+    update: joi.object({
+        admin_email:joi.string().email().lowercase().optional(),
+        admin_password:joi.string().optional(),
+        
+        compelete_at:joi.date().optional(),
+        status:joi.string().valid('open','cancled','complete').required(),
+
+    })
+};
+export {userSchema, brandSchema, catSchema, couponSchema, commentSchema, productSchema, orderSchema};
 
