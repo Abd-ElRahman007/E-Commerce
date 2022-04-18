@@ -4,7 +4,9 @@ import { Product } from '../models/products';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import isAdminFun from '../service/isAdmin';
+import {orderSchema} from '../service/validation';
 import parseJwt from '../service/jwtParsing';
+import { middelware } from '../service/middelware';
 dotenv.config();
 
 const secret: string = process.env.token as unknown as string;
@@ -154,8 +156,8 @@ async function delete_(req: Request, res: Response) {
 function mainRoutes(app: Application) {
     app.get('/users/:user_id/orders', index);
     app.get('/users/:user_id/orders/:order_id', show);
-    app.patch('/users/:user_id/orders/:order_id', update);
-    app.post('/users/:user_id/orders', create);
+    app.patch('/users/:user_id/orders/:order_id', middelware(orderSchema.update), update);
+    app.post('/users/:user_id/orders', middelware(orderSchema.create), create);
     app.delete('/users/:user_id/orders/:order_id', delete_);
 }
 
