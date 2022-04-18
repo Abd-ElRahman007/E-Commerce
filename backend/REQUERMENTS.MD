@@ -2,9 +2,6 @@ Database Schema:
         
     Products Table:
 
-        table product (id serial primary key, code varchar(50)unique,name varchar(50),model varchar(150),image text, images[] text, description text,category_id bigint references catogery(id)on delete set null, price float, currency varchar(20), vote_count int, vote_total int,stock bigint, brand_id bigint references brand(id)on delete set null);
-
-
         index  --> /products?page=&limit=&brand=&category=&name=
 
                 any of the query will return data only should put page and limit together to paginate.
@@ -27,9 +24,6 @@ Database Schema:
                                  [return] {'deleted'}
 
     Users Table:
-
-        table users(id serial primary key, f_name varchar(50), l_name varchar(50), email varchar(500) unique not null, password varchar(500) not null, birthday date, phone varchar(12),status varchar(50), created_at timestamp,city varchar(150),address varchar(500),coupon_id bigint references coupon(id)on delete set null);
-
 
         index   --> /users     [get]    header{token admins only}
                                 [return] {id,f_name,l_name,email,password,birthday,phone,status,created_at,address,coupon_id}
@@ -55,9 +49,6 @@ Database Schema:
         
 
     Orders Table:
-        
-        table orders(id serial primary key, status varchar(20), total float,time_start timestamp, time_arrival timestamp, compelete_at timestamp, user_id bigint references users(id)on delete cascade);
-
 
         index      --> /users/:user_id/orders           [get] header{token}
                                 [return] {id,status,total,time_start,time_arrival,compelete_at,user_id}
@@ -68,25 +59,21 @@ Database Schema:
         create     --> /users/:user_id/orders           [post] body{status,total,time_arrival,compelete_at} header{token}
                                 [return] {id,status,total,time_start,time_arrival,compelete_at,user_id}
                                 
-        update     --> /users/:user_id/orders/:order_id [patch] body{status,total,time_arrival,compelete_at} header{token}
+        update     --> /users/:user_id/orders/:order_id [patch] body{status,total,time_arrival,compelete_at} header{token users only}
                                 [return] {id,status,total,time_start,time_arrival,compelete_at,user_id}
                                 
-        delete     --> /users/:user_id/orders/:order_id [delete] header{token}
+        delete     --> /users/:user_id/orders/:order_id [delete] header{token for admins only}
                                 [return] {'deleted'}
                                 
 
 
     order_products Table:
 
-        table order_product (id serial primary key, quantity int ,order_id bigint references orders(id)on delete cascade, product_id bigint references product(id)on delete set null);
-
-        addProduct --> /users/:user_id/orders/:order_id/products [post] body{product_id, quantit} header{token}
+        addProduct --> /users/:user_id/orders/:order_id/products/product_id [post] body{quantit[required]} header{token user only}
                                                                  [return] {id,quantity,order_id,product_id}
 
 
     Categoey Table:
-
-        table catogery(id serial primary key, name varchar(100) unique not null);
 
         index      --> /categories          [get]
                                             [return] {id,name}
@@ -108,8 +95,6 @@ Database Schema:
 
     Brand Table:
 
-        brand (id serial primary key, name varchar(100)unique not null, description text);
-
         index      --> /brands          [get]
                                         [return]{id,name,description}
         
@@ -129,8 +114,6 @@ Database Schema:
 
     Coupon Table:
 
-        table coupon(id serial primary key, code varchar(50)unique not null,value_of_100 int);
-
         index      --> /coupons          [get]
                                          [return]{id,code,value_of_100}
 
@@ -149,8 +132,6 @@ Database Schema:
 
 
     Comment Table:
-
-        table comment(id serial primary key, subject varchar(200), message text, created_time timestamp, user_id bigint references users(id)on delete cascade, product_id bigint references product(id)on delete cascade);
 
         index      --> products/:product_id/comments         [get]
                                                             [return]{id,subject,message,created_at,user_id,product_id}

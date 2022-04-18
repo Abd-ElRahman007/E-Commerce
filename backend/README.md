@@ -1,19 +1,19 @@
-E-commerce API Project
+# E-commerce API Project
 
--Content 
-    .Decription
-        -set up 
-        -run project
+## Content 
+    - Decription
+    - Technologies
+    - Tools 
+    - Resources 
+    - Auther
 
-    .Technologies
-    .Tools 
-    .Resources 
-    .Auther
+### Description 
 
-.Description 
-
-    Create a [RESTful] full functionality API for e-commerce website to be accessible to the other developers. writing test, secured user information with encryption, and provide tokens for integration into the frontend. code contains user authentication and authorization
-
+    
+    Create a [RESTful] full functionality API for e-commerce website.
+     to be accessible to the other developers. writing test, secured user information with encryption,
+      and provide tokens for integration into the frontend. code contains user authentication and authorization
+    
     -How to run the project
         
         port: 5000
@@ -55,26 +55,31 @@ E-commerce API Project
             npm run dev
 
     
-.Technologies 
-    nodejs 
-    typescript 
-    express 
-    jasmine
-    postgres
-    joi
-    jwt
-    bycrypt
+### Technologies 
+```
+-nodejs 
+-typescript 
+-express 
+-jasmine
+-postgres
+-joi
+-jwt
+-bycrypt
+```
 
-.Tools 
-    git
-    github
-    vs code 
-    google chrome
+### Tools 
+```
+-git
+-github
+-vs code 
+-google chrome
+```
+### Resources 
+```
+-udacity 
+-community slack and toturs 
+-npmjs.com
+-google
+```
 
-.Resources 
-    udacity 
-    community slack and toturs 
-    npmjs.com
-    google
-
-.Auther: Marwan Ahmed(udacity student)
+### Auther: Marwan Ahmed
