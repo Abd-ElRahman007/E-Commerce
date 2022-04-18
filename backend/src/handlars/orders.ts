@@ -34,7 +34,7 @@ async function index(req: Request, res: Response) {
     } else res.status(400).send('Not allowed!!');
     
 }
-///////////////not yet///////////////////////////////////////////////////////
+
 //return one order of a user_id and id in req params [admin and user it self]
 async function show(req: Request, res: Response) {
     
