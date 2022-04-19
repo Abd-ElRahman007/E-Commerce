@@ -51,6 +51,9 @@ async function index(req: Request, res: Response) {
 async function show(req: Request, res: Response) {
     try {
         const result = await product_obj.show(req.params.id as unknown as number);
+        
+        if(result == undefined)
+            return res.status(400).json('row not exist');
         res.status(200).json(result);
     } catch (e) {
         res.status(400).json(`${e}`);
@@ -60,14 +63,17 @@ async function show(req: Request, res: Response) {
 //update product and return the product after changes [only for admin and super admin]
 async function update(req: Request, res: Response) {
     const token = req.headers.token as unknown as string;
-    //check if the request from super admin?
-    const isAdmin = isAdminFun(req.body.admin_email,req.body.admin_password,token);
-    //if admin or super admin the changes will occure to the product
-    if (isAdmin) {
+    
         
-        try {
+    try {
+        //check if the request from super admin?
+        const isAdmin = isAdminFun(req.body.admin_email,req.body.admin_password,token);
+        //if admin or super admin the changes will occure to the product
+        if (isAdmin) {
             const product_ = await product_obj.show(parseInt(req.params.id));
-            
+            if(product_ == undefined)
+                return res.status(400).json('row not exist');
+
             if(req.body.name){
                 product_.name = req.body.name;
             }
@@ -110,20 +116,22 @@ async function update(req: Request, res: Response) {
             //update the product with new data and update changes in database and return to front new updates    
             const result = await product_obj.update(product_);
             res.status(200).json(result);
-        } catch (e) {
-            res.status(400).json(`${e}`);
-        }
-    } else
-        res.status(400).json('token required.');
+        } else
+            res.status(400).json('token required.');
+    } catch (e) {
+        res.status(400).json(`${e}`);
+    }
+    
 }
 
 async function create(req: Request, res: Response) {
     const token = req.headers.token as unknown as string;
-    //check if the request from super admin?
-    const isAdmin = isAdminFun(req.body.admin_email,req.body.admin_password,token);
-    //if admin or super admin the product will be created in database
-    if (isAdmin) {
-        try {
+    
+    try {
+        //check if the request from super admin?
+        const isAdmin = isAdminFun(req.body.admin_email,req.body.admin_password,token);
+        //if admin or super admin the product will be created in database
+        if (isAdmin) {
             const p: product = {
                 name: req.body.name,
                 price: Number(req.body.price),
@@ -142,25 +150,28 @@ async function create(req: Request, res: Response) {
             //create the product in database and return the product to front
             const result = await product_obj.create(p);
             res.status(200).json(result);
-        } catch (e) {
-            res.status(400).json(`${e}`);
-        }
-    } else res.status(400).json('Not allowed login first!!');
+        } else res.status(400).json('Not allowed login first!!');
+
+    } catch (e) {
+        res.status(400).json(`${e}`);
+    }
 }
 //delete product using id in request params [only for admins]
 async function delete_(req: Request, res: Response) {
     const token = req.headers.token as unknown as string;
-    //check if the request from super admin?
-    const isAdmin = isAdminFun(req.body.admin_email,req.body.admin_password,token);
+    
+    try {
+        //check if the request from super admin?
+        const isAdmin = isAdminFun(req.body.admin_email,req.body.admin_password,token);
 
-    if (isAdmin) {//if admin or super admin will return deleted and delete the product
-        try {
+        if (isAdmin) {//if admin or super admin will return deleted and delete the product
             const result = await product_obj.delete(parseInt(req.params.id));
             res.status(200).json(result);
-        } catch (e) {
-            res.status(400).json(`${e}`);
-        }
-    } else res.status(400).json('Not allowed login first!!');
+        } else res.status(400).json('Not allowed login first!!');
+
+    } catch (e) {
+        res.status(400).json(`${e}`);
+    }
 }
 //main routes of product model
 function mainRoutes(app: Application) {

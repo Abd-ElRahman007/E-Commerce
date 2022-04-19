@@ -11,7 +11,8 @@ const dev = process.env.dev||'test';
 let Client:Pool ;
 //test db connection
 if(dev === 'test'){
-
+    console.log(dev);
+    
     Client= new Pool({
         host: test_db_host,
         database: test_db_name,
@@ -21,6 +22,7 @@ if(dev === 'test'){
     });
 
 }else{//the main db connection
+    console.log(dev);
 
     Client= new Pool({
         host: db_host,

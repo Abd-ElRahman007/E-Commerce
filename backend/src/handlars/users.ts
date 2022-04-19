@@ -14,7 +14,7 @@ const secret: string = process.env.token as unknown as string;
 const user_obj = new User();
 
 const transporter = nodemailer.createTransport({
-    service: 'gmail',
+    service: 'gmail', 
     auth: {
         user: 'youremail@gmail.com',
         pass: 'yourpassword'
@@ -25,38 +25,47 @@ const transporter = nodemailer.createTransport({
 //return a json data for all users in database [allowed only for admins]
 async function index(req: Request, res: Response) {
     const token = req.headers.token as unknown as string;
-    //check if the request from super admin?
-    const isAdmin = isAdminFun(req.body.admin_email,req.body.admin_password,token);
+    
+    try {
+        //check if the request from super admin?
+        const isAdmin = isAdminFun(req.body.admin_email,req.body.admin_password,token);
       
-    //if request from admin or super admin will return data
-    if (isAdmin) {
-        try {
+        //if request from admin or super admin will return data
+        if (isAdmin) {
             const resault = await user_obj.index();
                 
             res.status(200).json(resault);
-        } catch (e) {
-            res.status(400).json(`${e}`);
-        }
-    } else res.status(400).json('Not allowed for you!!');//else will return not allowed
+        } else res.status(400).json('Not allowed for you!!');//else will return not allowed
+
+    } catch (e) {
+        res.status(400).json(`${e}`);
+    }
     
 }
 //return json data for a sungle user [allowed only for admins or user it self]
 async function show(req: Request, res: Response) {
     const token = req.headers.token as unknown as string;
-    //check if the request from super admin?
-    const isAdmin = isAdminFun(req.body.admin_email,req.body.admin_password,token);
-       
-    //if admin or user it self will return user data
-    if (isAdmin || (parseInt(req.params.id) == parseInt(parseJwt(token).user.id))) {
-            
+    let id:number;
+    
+    if(token){
         try {
-            const resault = await user_obj.show(parseInt(req.params.id));
-            res.status(200).json(resault);
-        } catch (e) {
-            res.status(400).json(`${e}`);
+            id = parseInt(parseJwt(token).user.id);
+        
+            //check if the request from super admin?
+            const isAdmin = isAdminFun(req.body.admin_email,req.body.admin_password,token);
+            //if admin or user it self will return user data
+            if (isAdmin || (parseInt(req.params.id) == id)) {
+                const resault = await user_obj.show(parseInt(req.params.id));
+                if(resault == undefined)
+                    return res.status(400).json('row not exist');
+                return res.status(200).json(resault);
+            
+            } else return res.status(400).json('paramd id error.');
+        } catch (e) {                
+            return res.status(400).json(`${e}`);
         }
-    } else 
-        res.status(400).json('token required or paramd id error');//else will return not allowed
+    }
+    res.status(400).json('token required.');//else will return not allowed
 
 }
 /*
@@ -72,7 +81,8 @@ async function update(req: Request, res: Response) {
     try {
         const user_ = await user_obj.show(id);//get user from database with id in request params
         //console.log(user_);
-        
+        if(user_ == undefined)
+            return res.status(400).json('row not exist');
         //check if request from super admin 
         if(req.body.admin_email === admin_email && req.body.admin_password === admin_password){
             user_type = 'super_admin';
@@ -85,7 +95,7 @@ async function update(req: Request, res: Response) {
                 if(user.user.status == 'admin')
                     user_type = 'admin'; 
                 else if(id != user.user.id){
-                    throw new Error('not allowed this change');
+                    return res.status(200).json('not allowed this change');
                 }
             }
         }
@@ -276,11 +286,11 @@ async function reset_password(req: Request, res: Response) {
 async function get_token(req: Request, res: Response) {
     
     const token = req.headers.token as unknown as string;
-    //check if the request from super admin?
-    const isAdmin = isAdminFun(req.body.admin_email,req.body.admin_password,token);
 
     try {
 
+        //check if the request from super admin?
+        const isAdmin = isAdminFun(req.body.admin_email,req.body.admin_password,token);
         if(isAdmin){//if request from admin user or super admin will return token for user with id of request id
             const res_user = await user_obj.show(parseInt(req.params.id));
             const res_token = jwt.sign({ user: res_user }, secret);

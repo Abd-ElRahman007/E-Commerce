@@ -65,14 +65,15 @@ export class Brand {
         const product_obj = new Product();
         try {
             const products = await product_obj.search_by_cat_or_brand(id, 'brand');
-            if(!products)
+            
+            if(products.length == 0)
             {
                 const conn = await Client.connect();
                 const sql = 'delete from brand where id =($1);';
                 await conn.query(sql, [id]);
                 conn.release();
                 return 'deleted';
-            }else throw new Error('can not delete the brand');
+            }else throw new Error('can not delete the brand there is products in it');
         } catch (e) {
             throw new Error(`${e}`);
         }

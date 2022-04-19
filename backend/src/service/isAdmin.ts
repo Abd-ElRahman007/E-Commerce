@@ -13,16 +13,20 @@ function isAdmin(email:string, password:string, token:string):boolean{
    
     if(email == admin_email && password == admin_password){
         return true;
-    }else if(token){//if token exist make sure that the token for an admin user
-        
-        const user = parseJwt(token);
-        const permession = jwt.verify(token, secret as string);
+    }else {//if token exist make sure that the token for an admin user
+        try {
+            const permession = jwt.verify(token, secret as string);
 
-        if(permession && user.user.status =='admin'){
-            return true;
+            if(permession ){
+                const user = parseJwt(token);
+                if(user.user.status =='admin')
+                    return true;
+            }
+        } catch (error) {
+            throw new Error('token invalid.');
         }
-    }else
-        throw new Error('token required.');
+        
+    }
     return false;
 }
 

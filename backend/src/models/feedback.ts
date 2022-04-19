@@ -1,4 +1,5 @@
 import Client from '../database';
+import { user } from './users';
 //create table comment(id serial primary key, subject varchar(200), message text, created_time timestamp, user_id bigint references users(id)on delete cascade, product_id bigint references product(id)on delete cascade);
 
 
@@ -65,12 +66,14 @@ export class Comment {
         }
     }
 
-    async delete(product_id:number,id: number, user_id:number): Promise<string> {
+    async delete(product_id:number,id: number): Promise<string> {
         try {
             const conn = await Client.connect();
-            const sql = 'delete from comment where id =($1) and product_id=($2) and user_id=($3);';
-            await conn.query(sql, [id,product_id, user_id]);
+            
+            const sql = 'delete from comment where id =($1) and product_id=($2);';
+            await conn.query(sql, [id,product_id]);
             conn.release();
+                        
             return 'deleted';
         } catch (e) {
             throw new Error(`${e}`);
