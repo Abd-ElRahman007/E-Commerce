@@ -204,7 +204,7 @@ async function delete_(req: Request, res: Response) {
 }
 //return token for user and login the user using email and password from request body
 async function login(req: Request, res: Response) {
-    const { email, password } = req.body;//required
+    const { email, password } = req.params;//required
 
     try {
 
