@@ -16,6 +16,8 @@ import { authState } from "../redux/slices/authSlice"
 import { HashLink } from 'react-router-hash-link';
 import Overview from './Overview';
 import {Image as OverviewImage,Description} from './productOverviewComponents/componentExport'
+import Comments from './productOverviewComponents/Comments';
+import * as api from '../helpers/api'
 
 export default function ProductThumb(props) {
   const { id, name, image, price, currency, stock, vote_count, vote_total, description, model } = props.product
@@ -23,6 +25,7 @@ export default function ProductThumb(props) {
   const [quantity, setQuantity] = useState(1)
   const [currentQuantity, setCurrentQuantity] = useState(0)
   const [full, setFull] = useState(false)
+  const [comment, setComment] = useState('')
   const [type, setType] = useState("thumb")
   console.log("typeeeee", type)
   const user = useSelector(authState)
@@ -98,6 +101,14 @@ export default function ProductThumb(props) {
     })
     setFull(false)
   }
+  async function getComments(id) {
+        const data = await api.getComment(id);
+        setComment(data);
+    }
+
+    useEffect(() => {
+        getComments(id);
+    }, [])
 
   const message = () => {
     if (quantity === 0)
@@ -155,7 +166,6 @@ export default function ProductThumb(props) {
             }
           </Group>
 		  )}
-
   return (
     <>
       <div style={{ width: "90%", margin: 'auto' }}>
@@ -192,6 +202,7 @@ export default function ProductThumb(props) {
 			  </Grid>
 			  </SimpleGrid>
 			  <Description description={props.product.description} label="Description" />
+				  {comment?comment.map((x)=><Comments key={x.id} postedAt={x.created_at} body={x.message} auther={`hello`} /> ):null}
             </>
           }
 
