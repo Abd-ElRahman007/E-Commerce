@@ -141,7 +141,7 @@ async function update(req: Request, res: Response) {
         //update and return the new token of updated user
         const resualt = await user_obj.update(user_);
         const new_token = jwt.sign({user:resualt},secret);
-        res.status(200).json(new_token);
+        res.status(200).json({user:resualt,token:new_token});
 
     } catch (e) {
         res.status(400).send(`${e}`);
@@ -215,7 +215,7 @@ async function login(req: Request, res: Response) {
         if(resault){//if their is user in database with input data will return token for that uer
 
             const user_token = jwt.sign({user:resault},secret);
-            res.status(200).json({token:user_token});
+            res.status(200).json({user:resault,token:user_token});
             
         }
         else

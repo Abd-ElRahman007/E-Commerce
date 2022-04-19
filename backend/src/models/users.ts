@@ -81,17 +81,18 @@ export class User {
         }
     }
 
-    async auth(email: string,pass:string): Promise<user|undefined> {
+    async auth(email: string,password:string): Promise<user|undefined> {
         try {
             const conn = await Client.connect();
             const sql = 'select * from users where email=($1);';
             const res = await conn.query(sql, [email]);
             
-            console.log(res.rows[0]);
             
             
-            if (res.rows.length) {
-                if(pass == res.rows[0].password)
+            if (res.rows.length > 0) {
+                console.log(password === (res.rows[0].password)as string);
+                
+                if(password == res.rows[0].password)
                     return res.rows[0];
                 else throw new Error('email or password wrong.');
             }else throw new Error('email or password wrong.');

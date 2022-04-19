@@ -67,11 +67,6 @@ Database Schema:
                                 
 
 
-    order_products Table:
-
-        addProduct --> /users/:user_id/orders/:order_id/products/product_id [post] body{quantit[required]} header{token user only}
-                                                                 [return] {id,quantity,order_id,product_id}
-
 
     Categoey Table:
 
