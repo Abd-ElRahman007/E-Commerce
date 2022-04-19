@@ -16,8 +16,8 @@ const user_obj = new User();
 const transporter = nodemailer.createTransport({
     service: 'gmail', 
     auth: {
-        user: 'youremail@gmail.com',
-        pass: 'yourpassword'
+        user: process.env.user_email,
+        pass: process.env.user_password
     }
 });
   
@@ -237,8 +237,8 @@ async function forget_password(req: Request, res: Response) {
                 const token = jwt.sign({ user: resault }, secret);
                 const url = ''; //url will provid from front end developer
                 const mailOptions = {
-                    from: 'youremail@gmail.com',
-                    to: 'myfriend@yahoo.com',
+                    from: process.env.user_email,
+                    to: email,
                     subject: 'Reset Possword',
                     text:  `${url}?token=${token}`
                 };

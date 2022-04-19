@@ -1,5 +1,6 @@
 import Client from '../database';
 import dotenv from 'dotenv';
+import bcrypt from 'bcrypt';
 
 dotenv.config();
 export type user = {
@@ -90,9 +91,9 @@ export class User {
             
             
             if (res.rows.length > 0) {
-                console.log(password === (res.rows[0].password)as string);
+                console.log(await bcrypt.compare(password,res.rows[0].password));
                 
-                if(password == res.rows[0].password)
+                if(await bcrypt.compare(password, res.rows[0].password))
                     return res.rows[0];
                 else throw new Error('email or password wrong.');
             }else throw new Error('email or password wrong.');
@@ -100,20 +101,6 @@ export class User {
             throw new Error(`${e}`);
         }
     }
-
-    // async reset_password(u: user): Promise<user|null> {
-    //     try {
-    //         const conn = await Client.connect();
-    //         const sql = 'update users set password=($1) where email=($2)RETURNING*';
-    //         const res = await conn.query(sql, [u.password,u.email]);
-    //         if (res.rows.length) {
-    //             return res.rows[0];
-    //         }
-    //         return null;
-    //     } catch (e) {
-    //         throw new Error(`${e}`);
-    //     }
-    // }
 
     async forget_password(email: string): Promise<user|null> {
         try {
