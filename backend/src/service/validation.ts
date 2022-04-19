@@ -32,6 +32,11 @@ const userSchema = {
         coupon_id:joi.number().optional()
     }),
     //
+    login: joi.object({
+        email:joi.string().email().lowercase().required(),
+        password:joi.string().required(),
+    }),
+    //
     reset_password: joi.object({
         password:joi.string().min(8).required(),
     }),

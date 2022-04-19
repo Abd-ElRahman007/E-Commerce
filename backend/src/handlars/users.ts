@@ -303,7 +303,7 @@ async function get_token(req: Request, res: Response) {
 }
 //main routes of user model
 function mainRoutes(app: Application) {
-    app.get('/auth/login', login);
+    app.post('/auth/login', middelware(userSchema.login), login);
     app.get('/auth/forget_password',forget_password);
     app.post('/auth/reset_password',  middelware(userSchema.reset_password), reset_password);
     //
