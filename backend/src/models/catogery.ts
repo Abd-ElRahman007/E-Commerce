@@ -62,7 +62,7 @@ export class Catogery {
         const product_obj = new Product();
         try {
             const products = await product_obj.search_by_cat_or_brand(id, 'category');
-            if(!products)
+            if(products.length == 0)
             {
                 const conn = await Client.connect();
                 const sql = 'delete from catogery where id =($1);';

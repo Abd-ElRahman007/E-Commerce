@@ -14,6 +14,7 @@ const userSchema = {
         phone:joi.string().optional(),
         city:joi.string().optional(),
         address:joi.string().optional(),
+        coupon_id:joi.number().optional()
     }),
     //
     update: joi.object({
@@ -28,6 +29,7 @@ const userSchema = {
         phone:joi.string().optional(),
         city:joi.string().optional(),
         address:joi.string().optional(),
+        coupon_id:joi.number().optional()
     }),
     //
     login: joi.object({
@@ -88,16 +90,18 @@ const couponSchema = {
 //
 const commentSchema = {
     create:joi.object({
+        admin_email:joi.string().email().lowercase().optional(),
+        admin_password:joi.string().optional(),
         subject: joi.string().max(255).optional(),
         message:joi.string().max(1000).required(),
-        user_id: joi.number().required(),
         vote:joi.number().max(5).min(0).optional()
     }),
     //
     update:joi.object({
+        admin_email:joi.string().email().lowercase().optional(),
+        admin_password:joi.string().optional(),
         subject: joi.string().max(255).optional(),
         message:joi.string().max(1000).optional(),
-        user_id: joi.number().optional(),
         vote:joi.number().max(5).min(0).optional()
     })
 };
@@ -115,7 +119,7 @@ const productSchema = {
         images:joi.array().optional(),
         description:joi.string().optional(),
         category_id:joi.number().min(0).required(),
-        currency:joi.string().lowercase().required().valid('usd','eg'),
+        currency:joi.string().lowercase().required().valid('egp','eur','usd','cad','gbp','aud'),
         vote_count:joi.number().default(0).required(),
         vote_total:joi.number().default(0).required(),
         stock:joi.number().min(0).required(),
@@ -134,12 +138,38 @@ const productSchema = {
         images:joi.array().optional(),
         description:joi.string().optional(),
         category_id:joi.number().min(0).optional(),
-        currency:joi.string().optional().valid('usd','eg'),
+        currency:joi.string().optional().valid('egp','eur','usd','cad','gbp','aud'),
         vote_count:joi.number().default(0).optional(),
         vote_total:joi.number().default(0).optional(),
         stock:joi.number().min(0).optional(),
         brand_id:joi.number().min(0).optional(),
     })
 };
-export {userSchema, brandSchema, catSchema, couponSchema, commentSchema, productSchema};
+
+const orderSchema = {
+    create: joi.object({
+        admin_email:joi.string().email().lowercase().optional(),
+        admin_password:joi.string().optional(),
+
+        status:joi.string().valid('open','canceled','complete').required(),
+        total:joi.number().required(),
+        time_arrival:joi.date().optional(),
+        compelete_at:joi.date().optional(),
+        payment:joi.string().valid('on_delivery','online').required(),
+        shipping_address:joi.string().required(),
+        shipping_cost:joi.number().min(0).required(),
+        taxes:joi.number().min(0).optional(),
+        products:joi.array(),
+    }),
+    //
+    update: joi.object({
+        admin_email:joi.string().email().lowercase().optional(),
+        admin_password:joi.string().optional(),
+        
+        compelete_at:joi.date().optional(),
+        status:joi.string().valid('open','canceled','complete').required(),
+
+    })
+};
+export {userSchema, brandSchema, catSchema, couponSchema, commentSchema, productSchema, orderSchema};
 
