@@ -89,11 +89,12 @@ export class User {
             const res = await conn.query(sql, [email]);
             
             
+           
             
             if (res.rows.length > 0) {
-                console.log(await bcrypt.compare(password,res.rows[0].password));
-                
-                if(await bcrypt.compare(password, res.rows[0].password))
+                const i = await bcrypt.compare(password + process.env.extra, res.rows[0].password);
+
+                if(i)
                     return res.rows[0];
                 else throw new Error('email or password wrong.');
             }else throw new Error('email or password wrong.');

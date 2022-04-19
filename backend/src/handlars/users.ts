@@ -204,13 +204,12 @@ async function delete_(req: Request, res: Response) {
 }
 //return token for user and login the user using email and password from request body
 async function login(req: Request, res: Response) {
-    const { email, password } = req.params;//required
+    const { email, password } = req.body;//required
 
     try {
 
-        const hash = bcrypt.hashSync(password + process.env.extra, parseInt(process.env.round as string));
         //search in database by input data
-        const resault = await user_obj.auth(email,hash);
+        const resault = await user_obj.auth(email,password);
         
         if(resault){//if their is user in database with input data will return token for that uer
 

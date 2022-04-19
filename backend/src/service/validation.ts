@@ -34,7 +34,7 @@ const userSchema = {
     //
     login: joi.object({
         email:joi.string().email().lowercase().required(),
-        password:joi.string().required(),
+        password:joi.string().min(8).required(),
     }),
     //
     reset_password: joi.object({
