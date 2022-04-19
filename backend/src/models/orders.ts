@@ -35,6 +35,18 @@ export class Order {
         }
     }
 
+    async all_index(): Promise<order[]> {
+        try {
+            const conn = await Client.connect();
+            const sql = 'select * from orders;';
+            const res = await conn.query(sql);
+            conn.release();
+            return res.rows;
+        } catch (e) {
+            throw new Error(`${e}`);
+        }
+    }
+
     async show(order_id: number,user_id:number): Promise<{'order':order, 'products': order_product[]}> {
         try {
             const conn = await Client.connect();

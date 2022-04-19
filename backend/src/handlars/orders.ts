@@ -39,7 +39,25 @@ async function index(req: Request, res: Response) {
     }
     
 }
-
+//return orders of a user_id in req params
+async function all_index(req: Request, res: Response) {
+    
+    const token = req.headers.token as unknown as string;
+    
+    try {
+        //check if the request from super admin?
+        const isAdmin = isAdminFun(req.body.admin_email,req.body.admin_password,token);
+        
+        //if admin or super or user admin will return orders of user id
+        if (isAdmin) {
+            const resault = await order_obj.all_index();
+            res.status(200).json(resault);
+        } else res.status(400).send('Not allowed!!');
+    } catch (e) {
+        res.status(400).json(`${e}`);
+    }
+    
+}
 //return one order of a user_id and id in req params [admin and user it self]
 async function show(req: Request, res: Response) {
     
@@ -194,6 +212,7 @@ async function delete_(req: Request, res: Response) {
 
 function mainRoutes(app: Application) {
     app.get('/users/:user_id/orders', index);
+    app.get('/all/orders', all_index);
     app.get('/users/:user_id/orders/:order_id', show);
     app.patch('/users/:user_id/orders/:order_id', middelware(orderSchema.update), update);
     app.post('/users/:user_id/orders', middelware(orderSchema.create), create);
