@@ -16,8 +16,8 @@ const user_obj = new User();
 const transporter = nodemailer.createTransport({
     service: 'gmail', 
     auth: {
-        user: 'youremail@gmail.com',
-        pass: 'yourpassword'
+        user: process.env.user_email,
+        pass: process.env.user_password
     }
 });
   
@@ -141,7 +141,7 @@ async function update(req: Request, res: Response) {
         //update and return the new token of updated user
         const resualt = await user_obj.update(user_);
         const new_token = jwt.sign({user:resualt},secret);
-        res.status(200).json(new_token);
+        res.status(200).json({user:resualt,token:new_token});
 
     } catch (e) {
         res.status(400).send(`${e}`);
@@ -208,14 +208,13 @@ async function login(req: Request, res: Response) {
 
     try {
 
-        const hash = bcrypt.hashSync(password + process.env.extra, parseInt(process.env.round as string));
         //search in database by input data
-        const resault = await user_obj.auth(email,hash);
+        const resault = await user_obj.auth(email,password);
         
         if(resault){//if their is user in database with input data will return token for that uer
 
             const user_token = jwt.sign({user:resault},secret);
-            res.status(200).json({token:user_token});
+            res.status(200).json({user:resault,token:user_token});
             
         }
         else
@@ -237,8 +236,8 @@ async function forget_password(req: Request, res: Response) {
                 const token = jwt.sign({ user: resault }, secret);
                 const url = ''; //url will provid from front end developer
                 const mailOptions = {
-                    from: 'youremail@gmail.com',
-                    to: 'myfriend@yahoo.com',
+                    from: process.env.user_email,
+                    to: email,
                     subject: 'Reset Possword',
                     text:  `${url}?token=${token}`
                 };
@@ -303,7 +302,7 @@ async function get_token(req: Request, res: Response) {
 }
 //main routes of user model
 function mainRoutes(app: Application) {
-    app.get('/auth/login', middelware(userSchema.login), login);
+    app.post('/auth/login', middelware(userSchema.login), login);
     app.get('/auth/forget_password',forget_password);
     app.post('/auth/reset_password',  middelware(userSchema.reset_password), reset_password);
     //

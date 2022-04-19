@@ -34,7 +34,7 @@ const userSchema = {
     //
     login: joi.object({
         email:joi.string().email().lowercase().required(),
-        password:joi.string().required(),
+        password:joi.string().min(8).required(),
     }),
     //
     reset_password: joi.object({
@@ -166,7 +166,6 @@ const orderSchema = {
         admin_email:joi.string().email().lowercase().optional(),
         admin_password:joi.string().optional(),
         
-        compelete_at:joi.date().optional(),
         status:joi.string().valid('open','canceled','complete').required(),
 
     })
