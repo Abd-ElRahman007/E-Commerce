@@ -98,7 +98,7 @@ export class Order {
         try {
             const conn = await Client.connect();
             
-            const sql = 'update orders set status=($2),compelete_at=($3),time_start=($10) where id=($1) RETURNING *; ';
+            const sql = 'update orders set status=($2),compelete_at=($3) where id=($1) RETURNING *; ';
             const res = await conn.query(sql, [id, status,compelete_at]);
             conn.release();
             return res.rows[0];
@@ -141,7 +141,11 @@ export class Order {
             conn.release();
             return res.rows[0];
         } catch (e) {
-            throw new Error(`${e}`);
+            const o:order_product ={
+                quantity: -1,
+                product_id: -1
+            } ;
+            return o;
         }
     }
 
