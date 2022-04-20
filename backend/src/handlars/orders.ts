@@ -86,28 +86,87 @@ async function show(req: Request, res: Response) {
     }
    
 }
-// //update the order using user_id and id in req params [only user it self] 
+//update the order using user_id and id in req params [only user it self] 
 async function update(req: Request, res: Response) {
     const token = req.headers.token as unknown as string;
-    
+    let isExist = false;
     try {
         const isAdmin = isAdminFun(req.body.admin_email,req.body.admin_password,token);   
+
+        if(token){
+            const permession = jwt.verify(token,secret);
+            const user__ = parseJwt(token);
+            if(permession && (parseInt(req.params.user_id) == parseInt(user__.user.id)))
+                isExist = true;
+        }
+        const order__ = await order_obj.show(Number(req.params.order_id),Number(req.params.user_id));
+        const products:order_product[] = order__.products;
         //if user exist will return orders of user id
-        if (isAdmin) {
+        if(isExist){
+                        
+            if(req.body.time_arrival){
+                order__.order.time_arrival = req.body.time_arrival;
+            }
+            if(req.body.taxes){
+                order__.order.taxes = Number(req.body.taxes);
+            }
+            if(req.body.shipping_address){
+                order__.order.shipping_address = req.body.shipping_address;
+            }
+            if(req.body.shipping_cost){
+                order__.order.shipping_cost = parseInt(req.body.shipping_cost);
+            }
+            if(req.body.payment){
+                order__.order.payment = req.body.payment;
+            }
+            if(req.body.total){
+                order__.order.total = parseInt(req.body.total);
+            }
+            
+            //update the product with new data and update changes in database and return to front new updates    
+            const result = await order_obj.update(order__.order);
+
+            for(let i=0;i < products.length; i++){
+                const op = await order_obj.showProduct(Number(result.id), Number(products[i].product_id));
+                const prod_in_db = await pro_obj.show(products[i].product_id);
+                if(!(req.body.pr))
+                    return res.status(400).json('command required.');
+                else if(products[i].command == 'delete'){
+                    prod_in_db.stock = Number(prod_in_db.stock) + Number(op.quantity);
+                    await order_obj.deleteProduct(Number(products[i].order_id), products[i].product_id);
+                }
+                else{
+
+                    let number_of_new_products = Number(products[i].quantity);
+                    if(products[i].command == 'update'){
+                        number_of_new_products = products[i].quantity - Number(op.quantity);
+                    }
+                    prod_in_db.stock = Number(prod_in_db.stock) - Number(number_of_new_products);
+                    
+                    if(prod_in_db.stock < 0)
+                        return res.status(400).json(`stock of ${prod_in_db.name} with id:${prod_in_db.id} has less than quantity.`);
+                    
+                    await order_obj.addProduct(products[i].quantity, Number(products[i].order_id), products[i].product_id);  
+                }
+                await pro_obj.update(prod_in_db);
+
+            }
+            const all = await order_obj.show(Number(req.params.order_id),Number(req.params.user_id));
+            return res.status(200).json(all);
+        }
+        else if (isAdmin) {
         
             const status:string = req.body.status;
             const id = Number(req.params.order_id);
             let date:Date|null = new Date();
-            if(status == 'open'){
+            if(status == 'pendding'){
                 date = null;
             }
             else if(status == 'complete'){
                 date = new Date();
             }
-            else{
+            else if (status == 'canceled'){
                 date = null;
-                const result = await order_obj.show(id,Number(req.params.user_id));
-                const products:order_product[] = result.products;
                 
                 for(let i=0;i < products.length; i++){
                     products[i].order_id = id;
@@ -122,16 +181,21 @@ async function update(req: Request, res: Response) {
                     await pro_obj.update(p);
                     
                 }
+                const d = await order_obj.delete(id,Number(req.params.user_id));
+                return res.status(200).json(d);
     
             }
-            const resault = await order_obj.update(status,id,date);
-            res.json(resault);
+            await order_obj.updateStatus(id,status,date);
+            const all = await order_obj.show(Number(req.params.order_id),Number(req.params.user_id));
+            return res.status(200).json(all);
         } else res.status(400).json('Not allowed.');
+
     } catch (e) {
         res.status(400).json(`${e}`);
     }
     
 }
+
 
 //create order for a user id in req params
 async function create(req: Request, res: Response) {
@@ -145,6 +209,9 @@ async function create(req: Request, res: Response) {
             const permession = jwt.verify(token,secret);
             if(permession && (parseInt(req.params.user_id) == Number(user_.id)))
                 isExist = true;
+            else{
+                return res.status(400).json(`id: ${req.params.id} or token error. `);
+            }
         }
         else 
             return res.status(400).json('token required.');
@@ -152,7 +219,7 @@ async function create(req: Request, res: Response) {
         if (isExist) {
         //const products = req.body.order_products  as order_product;
             const o: order = {
-                status: 'open',
+                status: 'pendding',
                 user_id: Number(user_.id),
                 total: Number(req.body.total),
                 time_arrival: req.body.time_arrival,
@@ -177,7 +244,7 @@ async function create(req: Request, res: Response) {
                     return res.status(400).json(`stock of ${p.name} with id:${p.id} has less than quantity.`);
                 else{
                     await pro_obj.update(p);
-                    await order_obj.addProduct(products[i]);
+                    await order_obj.addProduct(products[i].quantity, Number(products[i].order_id), products[i].product_id);
                 }
                 
             }

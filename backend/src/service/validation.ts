@@ -151,7 +151,7 @@ const orderSchema = {
         admin_email:joi.string().email().lowercase().optional(),
         admin_password:joi.string().optional(),
 
-        status:joi.string().valid('open','canceled','complete').required(),
+        status:joi.string().valid('open','pendding','canceled','complete').required(),
         total:joi.number().required(),
         time_arrival:joi.date().optional(),
         compelete_at:joi.date().optional(),
@@ -159,14 +159,22 @@ const orderSchema = {
         shipping_address:joi.string().required(),
         shipping_cost:joi.number().min(0).required(),
         taxes:joi.number().min(0).optional(),
-        products:joi.array(),
+        products:joi.array().required(),
     }),
     //
     update: joi.object({
         admin_email:joi.string().email().lowercase().optional(),
         admin_password:joi.string().optional(),
         
-        status:joi.string().valid('open','canceled','complete').required(),
+        status:joi.string().valid('open','pendding','canceled','complete').optional(),
+        total:joi.number().optional(),
+        time_arrival:joi.date().optional(),
+        compelete_at:joi.date().optional(),
+        payment:joi.string().valid('on_delivery','online').optional(),
+        shipping_address:joi.string().optional(),
+        shipping_cost:joi.number().min(0).optional(),
+        taxes:joi.number().min(0).optional(),
+        products:joi.array().optional(),
 
     })
 };
