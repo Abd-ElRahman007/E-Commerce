@@ -24,18 +24,18 @@ const transporter = nodemailer.createTransport({
 
 //return a json data for all users in database [allowed only for admins]
 async function index(req: Request, res: Response) {
-    const token = req.headers.token as unknown as string;
+    //const token = req.headers.token as unknown as string;
     
     try {
         //check if the request from super admin?
-        const isAdmin = isAdminFun(req.body.admin_email,req.body.admin_password,token);
+        //const isAdmin = isAdminFun(req.body.admin_email,req.body.admin_password,token);
       
         //if request from admin or super admin will return data
-        if (isAdmin) {
-            const resault = await user_obj.index();
+        // if (isAdmin) {
+        const resault = await user_obj.index();
                 
-            res.status(200).json(resault);
-        } else res.status(400).json('Not allowed for you!!');//else will return not allowed
+        res.status(200).json(resault);
+        // } else res.status(400).json('Not allowed for you!!');//else will return not allowed
 
     } catch (e) {
         res.status(400).json(`${e}`);
