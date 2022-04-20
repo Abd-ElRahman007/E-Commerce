@@ -165,7 +165,7 @@ export class Order {
         try {
             const conn = await Client.connect();
             const sql =
-        'delete from order_product where order_id=($2) and product_id=($3)RETURNING *;';
+        'delete from order_product where order_id=($1) and product_id=($2)RETURNING *;';
             const res = await conn.query(sql, [order_id, product_id]);
             conn.release();
             return res.rows[0];

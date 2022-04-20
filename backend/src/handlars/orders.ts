@@ -120,6 +120,7 @@ async function update(req: Request, res: Response) {
                     {
                         products_in_body[i].command = 'update';
                         products_in_database[j].command = 'update';
+                        
                         products_in_database[j].quantity = Number(products_in_body[i].quantity) - Number(products_in_database[j].quantity);
                     }
                 }
@@ -129,6 +130,7 @@ async function update(req: Request, res: Response) {
                 if(products_in_database[j].command != 'update')
                 {
                     products_in_database[j].command = 'delete';
+
                 }
             }
 
@@ -138,7 +140,7 @@ async function update(req: Request, res: Response) {
                     products_in_body[j].command = 'insert';
                 }
             }
-
+            
 
             for(let j=0;j<products_in_database.length;j++){
                 if(products_in_database[j].command == 'update')
@@ -319,6 +321,7 @@ async function delete_(req: Request, res: Response) {
         //if admin or super or user admin will return orders of user id
         if (isAdmin) {
             const products:order_product[] = (await order_obj.show(parseInt(req.params.order_id),parseInt(req.params.user_id))).products;
+            
             for(let j=0;j<products.length;j++)
             {
                 const p = await pro_obj.show(products[j].product_id);
