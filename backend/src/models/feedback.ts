@@ -8,8 +8,8 @@ export type comment = {
     subject?: string;
     message:string;
     created_time?:Date;
-    user_id:number;
-    product_id:number;
+    user_id?:number;
+    product_id?:number;
     vote?:number;
   };
 

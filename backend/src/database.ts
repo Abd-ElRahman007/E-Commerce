@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const { db_host, db_user, db_password, db_name } = process.env;
+const { dbhost, db_user, db_password, db_name } = process.env;
 const { test_db_host, test_db_user, test_db_password, test_db_name } = process.env;
 
 const dev = process.env.dev||'dev'; 
@@ -25,7 +25,7 @@ if(dev === 'test'){
     console.log(dev);
 
     Client= new Pool({
-        host: db_host,
+        host: dbhost,
         database: db_name,
         user: db_user,
         password: db_password,

@@ -10,16 +10,14 @@ const {admin_email,admin_password} = process.env;
 
 const api = supertest(route);
 
-const b:brand = {
-    name:'kfds',
-    description:'',
-};
+const b = {name:'kfds', description:'jkvnjsnkvfdah',admin_email:admin_email,admin_password:admin_password};
 let res_brand:brand;
 describe('Brand handlars api test',()=>{
 
     it('Brand index route',async ()=>{
        
         const res = await api.get('/brands');
+        
         expect(res.status).toBe(200);
     });
 
@@ -38,15 +36,15 @@ describe('Brand handlars api test',()=>{
 
     it('Brand update route',async ()=>{
         
-        const res = await api.patch(`/brands/${res_brand.id}`).send({'name':'marwan', 'description':'ahmed','admin_password':admin_password,'admin_email':admin_email});
+        const res = await api.patch(`/brands/${res_brand.id}`).send(b);
         expect(res.status).toBe(200);
     });
 
 
     it('Brand delete route',async ()=>{
-        const res = await api.delete(`/brands/${res_brand.id}`).send({'admin_password':admin_password,'admin_email':admin_email});
+        const res = await api.delete(`/brands/${res_brand.id}`).send(b);
         expect(res.status).toBe(200); 
         
     });
- 
+  
 });
