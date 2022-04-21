@@ -8,7 +8,7 @@ export type order = {
   time_start?:Date;
   time_arrival:Date;
   compelete_at?:Date;
-  user_id: number;
+  user_id?: number;
   shipping_cost: number;
   shipping_address: string;
   taxes: number;

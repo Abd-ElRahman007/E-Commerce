@@ -16,6 +16,8 @@ async function index(req: Request, res: Response) {
         const resault = await comment_obj.index(Number(req.params.product_id));
         res.status(200).json(resault);
     } catch (e) {
+        console.log(e);
+
         res.status(400).json(`${e}`);
     }
 }
@@ -27,20 +29,20 @@ async function show(req: Request, res: Response) {
             return res.status(400).json('row not exist');
         res.status(200).json(resault);
     } catch (e) {
+        console.log(e);
+
         res.status(400).json(`${e}`);
     }
 }
 
 //update and return the comment with id and product_id in request params and data in request body
 async function update(req: Request, res: Response) {
-    let id,isTrue = false;
+    let isTrue = false;
     const token = req.headers.token as unknown as string;
     
 
     try {
         if(token){//make sure that token is exist
-            const user = parseJwt(token);
-            id = user.user.id;
             const permession = jwt.verify(token, secret as string);
             if(permession){
                 isTrue = true;
@@ -57,9 +59,6 @@ async function update(req: Request, res: Response) {
             if(req.body.message)  
                 c.message = req.body.message;
 
-            if(req.body.user_id)  
-                c.user_id = id;
-
             if(req.body.vote)  
                 c.vote = Number(req.body.vote);
             //update and return new comment data
@@ -67,6 +66,8 @@ async function update(req: Request, res: Response) {
             res.status(200).json(resault);
         } else res.status(400).json('user not exist.');
     } catch (e) {
+        console.log(e);
+
         res.status(400).json(`${e}`);
     }
     
@@ -76,11 +77,15 @@ async function create(req: Request, res: Response) {
     
     let id,isTrue = false;
     const token = req.headers.token as unknown as string;
+    //console.log(token);
     
     try {
         if(token){//make sure that token is exist
             const user = parseJwt(token);
-            id = user.user.id;
+            
+            id = Number(user.user.id);
+            // console.log(id);
+            
             const permession = jwt.verify(token, secret as string);
             if(permession){
                 isTrue = true;
@@ -94,13 +99,15 @@ async function create(req: Request, res: Response) {
                 message:req.body.message,
                 user_id:id,
                 product_id:Number(req.params.product_id),
-                vote:Number(req.body.vote)
+                vote:req.body.vote
             };
             //update and return new comment data
             const resault = await comment_obj.create(c);
             res.status(200).json(resault);
         } else res.status(400).json('user not exist.');
     } catch (e) {
+        console.log(e);
+
         res.status(400).json(`${e}`);
     }
     
@@ -128,6 +135,8 @@ async function delete_(req: Request, res: Response) {
             return res.status(200).json(resault);
         } else return res.status(400).json('user not exist.');
     } catch (e) {
+        console.log(e);
+        
         res.status(400).json(`${e}`);
     }
         

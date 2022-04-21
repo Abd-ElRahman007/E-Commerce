@@ -196,7 +196,6 @@ async function update(req: Request, res: Response) {
                 }
             }
             const all = await order_obj.show(Number(req.params.order_id),Number(req.params.user_id));
-            console.log(all);
             
             return res.status(200).json(all);
         }
@@ -256,7 +255,7 @@ async function update(req: Request, res: Response) {
 async function create(req: Request, res: Response) {
     let isExist = false;
     const token = req.headers.token as unknown as string;
-    
+        
     try { 
         let user_:user;
         if(token){
@@ -267,6 +266,7 @@ async function create(req: Request, res: Response) {
             else{
                 return res.status(400).json(`id: ${req.params.id} or token error. `);
             }
+            
         }
         else 
             return res.status(400).json('token required.');
@@ -276,12 +276,12 @@ async function create(req: Request, res: Response) {
             const o: order = {
                 status: 'pendding',
                 user_id: Number(user_.id),
-                total: Number(req.body.total),
-                time_arrival: req.body.time_arrival,
-                shipping_cost: parseInt(req.body.shipping_cost),
-                shipping_address: req.body.shipping_address as string,
-                taxes: parseInt(req.body.taxes),
-                payment: req.body.payment as string
+                total: Number(req.body.order.total),
+                time_arrival: req.body.order.time_arrival,
+                shipping_cost: parseInt(req.body.order.shipping_cost),
+                shipping_address: req.body.order.shipping_address as string,
+                taxes: parseInt(req.body.order.taxes),
+                payment: req.body.order.payment as string
             };
             const products = req.body.products as Array<order_product>;           
             const resault = await order_obj.create(o);
@@ -291,8 +291,9 @@ async function create(req: Request, res: Response) {
                 const p = await pro_obj.show(products[i].product_id);
                 
                 if(p == undefined)
+                {   
                     return res.status(400).json(`id:${products[i].product_id} not exist.`);
-
+                }
                 p.stock = Number(p.stock) - Number(products[i].quantity);
 
                 if(p.stock < 0)
@@ -303,10 +304,9 @@ async function create(req: Request, res: Response) {
                 }
                 
             }
-
-            res.json(resault);
+            res.status(200).json(resault);
         } else res.status(400).json('Not allowed login first!!');
-    } catch (e) {
+    } catch (e) {        
         res.status(400).json(`${e}`);
     }
     

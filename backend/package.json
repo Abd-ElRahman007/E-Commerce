@@ -8,9 +8,9 @@
     "lint": "eslint . --ext .ts  --fix",
     "build": "npx tsc",
     "env-variable": "export NODE_TLS_REJECT_UNAUTHORIZED='0'",
-    "up":"env=test db-migrate up",
-    "down":"env=test db-migrate down",
-    "test": "env=test npm run up up && npm run build && jasmine && npm run down",
+    "up":"dev=test db-migrate up",
+    "down":"dev=test db-migrate down",
+    "test": "dev=test npm run up up && npm run build && jasmine && npm run down",
     "start": "npm run build && node build/index.js",
     "dev": "npm run prettier && npm run lint && npm run test && npm run start",
     "dev-server": "tsc-watch --noClear -p ./tsconfig.json --onSuccess \"node ./build/index.js\""

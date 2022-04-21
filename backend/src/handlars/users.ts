@@ -28,7 +28,7 @@ async function index(req: Request, res: Response) {
     
     try {
         //check if the request from super admin?
-        //const isAdmin = isAdminFun(req.body.admin_email,req.body.admin_password,token);
+        //const isAdmin = isAdminFun(token);
       
         //if request from admin or super admin will return data
         // if (isAdmin) {
@@ -164,7 +164,7 @@ async function create(req: Request, res: Response) {
     try {                
         const resault = await user_obj.create(u);
         const token = jwt.sign({ user: resault }, secret);
-        res.status(200).json({resault,token});
+        res.status(200).json({user:resault,token});
     } catch (e) {
         res.status(400).json(`${e}`);
     }
@@ -200,7 +200,7 @@ async function delete_(req: Request, res: Response) {
 //return token for user and login the user using email and password from request body
 async function login(req: Request, res: Response) {
     const { email, password } = req.body;//required
-
+    
     try {
 
         //search in database by input data
@@ -280,11 +280,13 @@ async function reset_password(req: Request, res: Response) {
 async function get_token(req: Request, res: Response) {
     
     const token = req.headers.token as unknown as string;
+    const admin_email = req.headers.admin_email as unknown as string;
+    const admin_password = req.headers.admin_password as unknown as string;
 
     try {
 
         //check if the request from super admin?
-        const isAdmin = isAdminFun(req.body.admin_email,req.body.admin_password,token);
+        const isAdmin = isAdminFun(admin_email,admin_password,token);
         if(isAdmin){//if request from admin user or super admin will return token for user with id of request id
             const res_user = await user_obj.show(parseInt(req.params.id));
             const res_token = jwt.sign({ user: res_user }, secret);

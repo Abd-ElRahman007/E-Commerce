@@ -5,6 +5,8 @@ import { Request, Response, NextFunction } from 'express';
 
 export const middelware = (schema:joi.AnySchema) => { 
     return (req:Request, res:Response, next:NextFunction) => { 
+        //console.log(req.body);
+        
         const { error } = schema.validate(req.body); 
         const valid = error == null; 
     
