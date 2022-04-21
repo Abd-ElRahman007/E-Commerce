@@ -47,7 +47,7 @@ describe('Tests for Coupon model', ()=>{
     });
     it('test update to equal',async()=>{
         const c:coupon={
-            id:1,
+            id:id,
             code:'dss',
             value_of_100:50
         };

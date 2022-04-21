@@ -45,10 +45,13 @@ export class User {
 
     async create(u: user): Promise<user> {
         try {
+
+            //hashin password using round and extra from .env file and password from request.body
+            const hash = bcrypt.hashSync(u.password + process.env.extra, parseInt(process.env.round as string));
             const conn = await Client.connect();
             const sql =
         'insert into users (f_name, l_name, email, password, birthday, phone, status,created_at, city,address) values($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)RETURNING*;';
-            const res = await conn.query(sql, [u.f_name, u.l_name, u.email, u.password, u.birthday, u.phone, u.status, new Date(), u.city,u.address]);
+            const res = await conn.query(sql, [u.f_name, u.l_name, u.email, hash, u.birthday, u.phone, u.status, new Date(), u.city,u.address]);
             conn.release();
             return res.rows[0];
         } catch (e) {
@@ -58,10 +61,13 @@ export class User {
 
     async update(u: user): Promise<user> {
         try {
+
+            //hashin password using round and extra from .env file and password from request.body
+            const hash = bcrypt.hashSync(u.password + process.env.extra, parseInt(process.env.round as string));
             const conn = await Client.connect();
             const sql =
         'update users set f_name=($1), l_name=($2),email=($3),birthday=($4),phone=($5),city=($6),address=($7), status=($9),coupon_id=($10),password=($11) where id=($8)RETURNING*; ';
-            const res = await conn.query(sql, [u.f_name, u.l_name, u.email, u.birthday, u.phone, u.city,u.address, u.id,u.status,u.coupon_id,u.password]);
+            const res = await conn.query(sql, [u.f_name, u.l_name, u.email, u.birthday, u.phone, u.city,u.address, u.id,u.status,u.coupon_id,hash]);
             conn.release();
             return res.rows[0];
         } catch (e) {
@@ -88,15 +94,15 @@ export class User {
             const sql = 'select * from users where email=($1);';
             const res = await conn.query(sql, [email]);
             
-            
-           
-            
             if (res.rows.length > 0) {
                 const i = await bcrypt.compare(password + process.env.extra, res.rows[0].password);
 
                 if(i)
+                {                        
                     return res.rows[0];
-                else throw new Error('email or password wrong.');
+                }else throw new Error('email or password wrong.');
+                
+
             }else throw new Error('email or password wrong.');
         } catch (e) {
             throw new Error(`${e}`);

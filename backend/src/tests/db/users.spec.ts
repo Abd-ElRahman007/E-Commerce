@@ -21,11 +21,12 @@ describe('Tests for User model', ()=>{
         const u:user={
             f_name: '21',
             l_name: '50',
-            password: 'marwan12345',
-            email: 'm@gmail.com',
+            password: 'marwajhhn12345',
+            email: 'mjhj@gmail.com',
             status: 'active'
         };
         us = await user_.create(u);  
+        
         expect(us).not.toThrowError;
 
     });
@@ -43,8 +44,7 @@ describe('Tests for User model', ()=>{
         expect(user_.auth).toBeDefined();
     });
     it('test auth to equal',async()=>{
-        
-        const res = await user_.auth('m@gmail.com','marwan12345');
+        const res = await user_.auth('marwan401@gmail.com','mar');
         expect(res).not.toThrowError;
         
     });
@@ -55,11 +55,12 @@ describe('Tests for User model', ()=>{
     });
     it('test update to equal',async()=>{
         const u:user={
+            id:Number(us.id),
             f_name: '100',
             l_name: '50',
-            password: 'marwan12345',
-            email: 'm@gmail.com',
-            status: ''
+            password: 'marwajhhn12345',
+            email: 'mjhj@gmail.com',
+            status: 'active'
         };
         const res=await user_.update(u);
         expect(res).not.toThrowError;

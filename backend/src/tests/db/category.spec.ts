@@ -46,7 +46,7 @@ describe('Tests for Category model', ()=>{
     });
     it('test update to equal',async()=>{
         const c:catogery={
-            id:1,
+            id:id,
             name:'100'
         };
         const res=await category_.update(c);

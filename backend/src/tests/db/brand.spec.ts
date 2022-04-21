@@ -46,7 +46,7 @@ describe('Tests for Brand model', ()=>{
     });
     it('test update to equal',async()=>{
         const b:brand={
-            id:1,
+            id:id,
             name:'100',
             description:'50'
         };

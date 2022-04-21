@@ -110,10 +110,7 @@ async function update(req: Request, res: Response) {
             if(req.body.email)
                 user_.email=req.body.email;
             if(req.body.password)
-            {
-                const hash = bcrypt.hashSync(req.body.password + process.env.extra, parseInt(process.env.round as string));
-                user_.password=hash;
-            }
+                user_.password=req.body.password;
             if(req.body.birthday)
                 user_.birthday=req.body.birthday;
             if(req.body.phone)
@@ -150,14 +147,12 @@ async function update(req: Request, res: Response) {
 //create user by getting user data from request body
 async function create(req: Request, res: Response) {
     
-    //hashin password using round and extra from .env file and password from request.body
-    const hash = bcrypt.hashSync(req.body.password + process.env.extra, parseInt(process.env.round as string));
     //create type user with getting data to send to the database
     const u: user = {
         f_name:req.body.f_name, 
         l_name:req.body.l_name, 
         email:req.body.email, //required
-        password:hash, //required
+        password:req.body.password, //required
         birthday:req.body.birthday, 
         phone:req.body.phone, 
         status:req.body.status,//the default of status is active 

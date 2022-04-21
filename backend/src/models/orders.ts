@@ -24,11 +24,11 @@ export type order_product = {
 }
 
 export class Order {
-    async index(id: number): Promise<order[]> {
+    async index(user_id: number): Promise<order[]> {
         try {
             const conn = await Client.connect();
             const sql = 'select * from orders where user_id=($1);';
-            const res = await conn.query(sql, [id]);
+            const res = await conn.query(sql, [user_id]);
             conn.release();
             return res.rows;
         } catch (e) {
