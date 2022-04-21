@@ -1,9 +1,7 @@
 import { Catogery , catogery} from '../../models/catogery';
 import {Product,product} from '../../models/products';
-import {User,user} from '../../models/users';
 import { Brand, brand } from '../../models/brand';
 
-const user_ = new User();
 const brand_ = new Brand();
 const category_ = new Catogery();
 
@@ -11,10 +9,10 @@ const product_ = new Product();
 
 
 const b:brand = {
-    name: 'kkl'
+    name: 'kdfg5kl'
 };
 const p:product ={
-    code: 'maom',
+    code: 'maosd6m',
     name: '',
     image: '',
     category_id: 1,
@@ -24,9 +22,9 @@ const p:product ={
     brand_id: 1
 };
 const c:catogery ={
-    name: 'mmm'
+    name: 'jyhvmmm'
 };
-let res_user:user, res_product:product,res_category:catogery, res_brand:brand, id:number;
+let res_product:product,res_category:catogery, res_brand:brand;
 
 describe('Tests for Product model', ()=>{
 
@@ -72,6 +70,7 @@ describe('Tests for Product model', ()=>{
     });
     it('test update to equal',async()=>{
         const p_:product={
+            id:Number(res_product.id),
             code: 'string',
             name: 'string',
             model: 'string',
